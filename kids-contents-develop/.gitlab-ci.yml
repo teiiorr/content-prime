@@ -1,0 +1,33 @@
+before_script:
+  - apt update
+  - apt install -y rsync
+  - cp .env.$CI_ENVIRONMENT_NAME .env
+  - find . -maxdepth 1 -type f -name ".env.*" -delete
+  - mkdir -p ~/.ssh
+  - echo "$PRIV_KEY" > ~/.ssh/privkey
+  - chmod 400 ~/.ssh/privkey
+  - echo -e "Host dest\n\tIdentityFile ~/.ssh/privkey\n\tStrictHostKeyChecking no\n\tPort 50218\n\tUser bolalarkontenti\n\tHostName dev-yii.therealstart.com" > ~/.ssh/config
+  - yarn install
+  - yarn run build
+  - rsync -av ./.next/standalone/ ./public -e ssh dest:~/$APP_NAME
+  - rsync -av ./.next/static -e ssh dest:~/$APP_NAME/.next
+  - rsync -av ./.next/static -e ssh dest:/var/www/$APP_NAME/.next
+  - ssh dest ". ~/.nvm/nvm.sh && cd ~/$APP_NAME && pm2 restart $APP_NAME"
+deploy_staging:
+  image: node:22.13.1
+  environment: staging
+  variables:
+    APP_NAME: bolalarkontenti-staging
+  script:
+    - echo done
+  only:
+    - develop
+deploy_production:
+  image: node:22.13.1
+  environment: production
+  variables:
+    APP_NAME: bolalarkontenti.uz
+  script:
+    - echo done
+  only:
+    - master
