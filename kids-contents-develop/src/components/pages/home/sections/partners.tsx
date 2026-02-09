@@ -162,12 +162,11 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
   return (
     <section
       id="partners"
-      className="relative py-10 lg:py-24 my-10 sm:my-14 md:my-20 bg-green-100"
+      className="relative py-12 sm:py-16 lg:py-24 my-10 sm:my-16 lg:my-20 bg-gradient-to-b from-white to-gray-50"
     >
       <div className="container relative z-10">
-        {/* Header */}
         <div className="text-center mb-8 md:mb-12 lg:mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-base-black">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
             Hamkor tashkilotlar
           </h2>
         </div>
@@ -177,7 +176,7 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
         <Marquee speed={80}>
           {PARTNERS.map((partner) => (
             <div
-              key={partner.src}
+              key={partner.id}
               className="mx-8 flex items-center justify-center"
             >
               <img
@@ -185,17 +184,17 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
                 srcSet={partner.srcSet}
                 width={partner.width}
                 height={partner.height}
-                alt="Partner image"
+                alt={partner.name}
                 loading="lazy"
-                className="h-[135px] w-auto object-contain"
+                className="h-[135px] w-auto object-contain opacity-80 transition-opacity duration-300 hover:opacity-100"
               />
             </div>
           ))}
         </Marquee>
       </div>
 
-      <BgBubbles color="#ffffc7" className="bottom-full" />
-      <BgBubbles color="#ffffc7" className="top-full rotate-180" />
+      <BgBubbles color="#e2e8f0" className="bottom-full" />
+      <BgBubbles color="#dbeafe" className="top-full rotate-180" />
     </section>
   );
 });

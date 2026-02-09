@@ -89,9 +89,9 @@ export const HomeSectionsAnnouncements = memo(
 
     return (
       <section id="announcements" aria-labelledby="announcements-heading">
-        <div className="container py-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-base-black">
+     <div className="container py-12 sm:py-16 lg:py-24">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
               E'lonlar
             </h2>
           </div>
@@ -102,15 +102,15 @@ export const HomeSectionsAnnouncements = memo(
               <>
                 <Button
                   aria-label="Oldingi e'lon"
-                  theme="primary"
-                  className="absolute left-2 md:-left-2 lg:-left-6 top-1/2 -translate-y-1/2 w-12 h-12 announcements-prev-btn z-10 sm:rounded-full"
+                theme="base"
+                  className="absolute left-2 md:-left-2 lg:-left-6 top-1/2 -translate-y-1/2 w-11 h-11 announcements-prev-btn z-10 rounded-full p-0 bg-white/90 backdrop-blur ring-1 ring-black/5"
                 >
                   <ArrowLeft className="w-5 h-5 lg:w-6 lg:h-6" />
                 </Button>
                 <Button
                   aria-label="Keyingi e'lon"
-                  theme="primary"
-                  className="absolute right-2 md:-right-2 lg:-right-6 top-1/2 -translate-y-1/2 w-12 h-12 announcements-next-btn z-10 sm:rounded-full"
+                  theme="base"
+                  className="absolute right-2 md:-right-2 lg:-right-6 top-1/2 -translate-y-1/2 w-11 h-11 announcements-next-btn z-10 rounded-full p-0 bg-white/90 backdrop-blur ring-1 ring-black/5"
                 >
                   <ArrowRight className="w-5 h-5 lg:w-6 lg:h-6" />
                 </Button>
@@ -135,28 +135,23 @@ export const HomeSectionsAnnouncements = memo(
                     <SwiperSlide key={item.id}>
                       <div
                         aria-label={`${item.title}-${item.date_display}`}
-                        className="bg-orange-50 border border-orange-400 rounded-3xl p-5 min-h-[264px] flex flex-col justify-between"
-                      >
+ className="bg-white border border-gray-100 rounded-2xl p-5 min-h-[264px] flex flex-col justify-between shadow-sm ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"                      >
                         <div className="mb-5 flex-1">
-                          <h3 className="mb-2 font-semibold text-xl text-gray-900 line-clamp-2">
-                            {item.title}
+   <h3 className="mb-2 font-semibold text-lg sm:text-xl text-gray-900 line-clamp-2">                            {item.title}
                           </h3>
                           <p
-                            className="line-clamp-3 text-base text-base-black"
-                            dangerouslySetInnerHTML={{
+  className="line-clamp-3 text-sm sm:text-base text-gray-600"                            dangerouslySetInnerHTML={{
                               __html: item.description,
                             }}
                           />
                         </div>
 
                         <div>
-                          <p className="text-error-600 text-sm font-medium mb-5">
-                            {item.date_display}
+                          <p className="text-blue-600 text-sm font-medium mb-5">                            {item.date_display}
                           </p>
                           <button
                             type="button"
-                            className="flex items-center gap-1.5 text-gray-700 font-semibold text-base hover:text-orange-600 transition-colors group"
-                            onClick={() => handleOpenModal(item)}
+ className="flex items-center gap-1.5 text-gray-700 font-semibold text-base hover:text-blue-700 transition-colors group"                            onClick={() => handleOpenModal(item)}
                           >
                             <span>Batafsil</span>{" "}
                             <ArrowRight
@@ -182,8 +177,7 @@ export const HomeSectionsAnnouncements = memo(
           width={794}
         >
           <div className="sm:p-3">
-            <h2 className="text-center text-black font-bold text-xl md:text-2xl mb-4 md:mb-8">
-              DIQQAT, E’LON!
+            <h2 className="text-center text-gray-900 font-bold text-xl md:text-2xl mb-4 md:mb-8">              DIQQAT, E’LON!
             </h2>
             {/* Content */}
             <div>

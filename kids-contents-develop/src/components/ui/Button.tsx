@@ -10,24 +10,24 @@ interface IProps extends ButtonProps {
 
 const variants = {
   base: `
-  text-primary border-transparent
-  bg-primary/5
-  hover:bg-primary/10 active:bg-primary/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/10 dark:active:bg-white/15
+    text-blue-600 border-blue-100
+    bg-blue-50
+    hover:bg-blue-100 active:bg-blue-200
   `,
 
   primary: `
-  bg-green-600 text-white border-green-700 border border-b-2
-  hover:bg-green-700 active:bg-green-800
+    bg-blue-600 text-white border-blue-700 border
+    hover:bg-blue-700 active:bg-blue-800
   `,
 
   outlined: `
-  bg-green-50 text-green-600 border-green-600 border border-b-2
-  hover:bg-green-600 active:bg-green-700 hover:text-white
+    bg-white text-blue-600 border-blue-200 border
+    hover:bg-blue-50 hover:text-blue-700 hover:border-blue-600 active:bg-blue-100
   `,
 
   text: `
-  bg-transparent text-primary border-transparent
-  hover:bg-primary/5 hover:text-green-700 active:text-green-800 dark:hover:bg-primary/10 dark:hover:text-white dark:active:text-white
+    bg-transparent text-blue-600 border-transparent
+    hover:bg-blue-50 hover:text-blue-700 active:text-blue-800
   `,
 };
 
@@ -42,7 +42,7 @@ export const Button: React.FC<IProps> = ({
   ...props
 }) => {
   const baseStyles = clsx(
-    "gap-2 font-semibold rounded-xl shadow-none transition-all duration-300 outline-none active:outline-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 rounded-full active:ring-1 focus:ring-1 ring-gray-400 ring-offset-2 hover:scale-105",
+    "inline-flex items-center justify-center gap-2 font-semibold rounded-full transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-2 ring-offset-white shadow-sm hover:shadow-md active:translate-y-[1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:translate-y-0",
     variants[theme],
     wide && "px-10",
     className

@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
@@ -22,7 +22,7 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
   useEffect(() => {
     let mounted = true;
 
-    async function loadNews() {
+    const loadNews = async () => {
       try {
         const data = await fetchNewsLimited(4);
         if (mounted) setNews(data);
@@ -31,7 +31,7 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
       } finally {
         if (mounted) setIsLoaded(true);
       }
-    }
+    };
 
     loadNews();
 
@@ -40,40 +40,44 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
     };
   }, []);
 
-  const swiperSettings = {
-    spaceBetween: 32,
-    slidesPerView: 3,
-    slidesPerGroup: 1,
-    loop: true,
-    navigation: {
-      nextEl: ".news-next-btn",
-      prevEl: ".news-prev-btn",
-    },
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false,
-    },
-    modules: [Navigation, Autoplay],
-    breakpoints: {
-      1100: { slidesPerView: 3 },
-      768: { slidesPerView: 2 },
-      640: { slidesPerView: 2 },
-      400: { slidesPerView: 1 },
-      350: { slidesPerView: 1 },
-      150: { slidesPerView: 1 },
-    },
-  };
+  const swiperSettings = useMemo(
+    () => ({
+      spaceBetween: 32,
+      slidesPerView: 3,
+      slidesPerGroup: 1,
+      loop: true,
+      navigation: {
+        nextEl: ".news-next-btn",
+        prevEl: ".news-prev-btn",
+      },
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      modules: [Navigation, Autoplay],
+      breakpoints: {
+        1100: { slidesPerView: 3 },
+        768: { slidesPerView: 2 },
+        640: { slidesPerView: 2 },
+        400: { slidesPerView: 1 },
+        350: { slidesPerView: 1 },
+        150: { slidesPerView: 1 },
+      },
+    }),
+    []
+  );
 
   return (
     <section id="news" aria-labelledby="news-heading">
-      <div className="container py-10 md:py-16 lg:py-24">
-        <div className="flex items-center justify-between mb-8 md:mb-10 lg:mb-12">
+      <div className="container py-12 sm:py-16 lg:py-24">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between mb-8 md:mb-10 lg:mb-12">
           <h2
             id="news-heading"
-            className="text-3xl lg:text-4xl font-bold text-base-black"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900"
           >
             Yangiliklar
           </h2>
+
           <Button
             href={ROUTES.NEWS}
             theme="outlined"
@@ -85,18 +89,18 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
         </div>
 
         <div className="mt-8 relative z-10">
-          {/* Navigation Buttons */}
           <Button
             aria-label="Oldingi yangilik"
-            theme="primary"
-            className="absolute left-2 md:-left-2 lg:-left-6 top-1/2 -translate-y-1/2 w-12 h-12 news-prev-btn z-10 sm:rounded-full"
+            theme="base"
+            className="absolute left-2 md:-left-2 lg:-left-6 top-1/2 -translate-y-1/2 w-11 h-11 news-prev-btn z-10 rounded-full p-0 bg-white/90 backdrop-blur ring-1 ring-black/5"
           >
             <ArrowLeft className="w-5 h-5 lg:w-6 lg:h-6" />
           </Button>
+
           <Button
             aria-label="Keyingi yangilik"
-            theme="primary"
-            className="absolute right-2 md:-right-2 lg:-right-6 top-1/2 -translate-y-1/2 w-12 h-12 news-next-btn z-10 sm:rounded-full"
+            theme="base"
+            className="absolute right-2 md:-right-2 lg:-right-6 top-1/2 -translate-y-1/2 w-11 h-11 news-next-btn z-10 rounded-full p-0 bg-white/90 backdrop-blur ring-1 ring-black/5"
           >
             <ArrowRight className="w-5 h-5 lg:w-6 lg:h-6" />
           </Button>
@@ -119,7 +123,7 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
                       aria-label={`${item.title} - ${item.date_display}`}
                       className="block group"
                     >
-                      <article className="cursor-pointer">
+                      <article className="cursor-pointer rounded-2xl bg-white p-4 sm:p-5 shadow-sm ring-1 ring-black/5 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg">
                         <div className="relative aspect-video overflow-hidden rounded-xl">
                           <img
                             src={item.image_src}
@@ -132,9 +136,8 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
                           />
                         </div>
 
-                        {/* Content */}
                         <div className="mt-5">
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-600 transition-colors duration-300">
+                          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-700 transition-colors duration-300">
                             {item.title}
                           </h3>
 
