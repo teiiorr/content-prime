@@ -1,80 +1,65 @@
 .ant-pagination {
   .ant-pagination-item {
-  @apply rounded-full bg-transparent text-gray-500 text-sm sm:w-10 sm:h-10 flex items-center justify-center;
+    @apply rounded-full bg-white/70 border border-slate-200 text-slate-600 text-sm sm:w-10 sm:h-10 flex items-center justify-center backdrop-blur;
+
     &.ant-pagination-item-active {
-      @apply bg-white border border-gray-300 text-gray-900 shadow-sm;    }
+      @apply bg-slate-900 border-slate-900 text-white shadow-lg;
+    }
   }
 }
 
 .ant-steps {
   .ant-steps-item {
     .ant-steps-item-title {
-      @apply text-base font-semibold text-gray-700;
+      @apply text-base font-semibold text-slate-700;
     }
 
     &.ant-steps-item-finish {
       .ant-steps-item-container .ant-steps-item-tail {
-        @apply after:bg-blue-600;
+        @apply after:bg-slate-700;
       }
 
       .ant-steps-item-icon .ant-steps-icon .ant-steps-icon-dot {
-        @apply bg-blue-600;
+        @apply bg-slate-800;
       }
 
       .ant-steps-item-container
         > .ant-steps-item-content
         > .ant-steps-item-title {
-        @apply text-blue-600;
+        @apply text-slate-900;
       }
     }
 
     &.ant-steps-item-active {
       .ant-steps-item-icon .ant-steps-icon .ant-steps-icon-dot {
-        @apply bg-blue-600;
+        @apply bg-slate-800;
       }
-    }
-
-    &.ant-steps-item-process
-      > .ant-steps-item-container
-      > .ant-steps-item-content
-      > .ant-steps-item-title {
-      @apply text-blue-600;
     }
   }
 }
 
 .ant-btn {
-@apply px-5 py-3 h-12 text-base rounded-full font-semibold shadow-sm transition-all duration-200;
-
-  &:hover {
-    @apply shadow-md;
-  }
-
-  &.ant-btn-sm {
-    @apply text-sm px-4 h-10;
-  }
+  @apply px-5 py-3 h-12 text-base rounded-full font-semibold transition-all duration-300;
 }
 
 div.ant-collapse {
-  @apply border-none border-red-500 bg-transparent;
+  @apply border-none bg-transparent;
 
   .ant-collapse-item {
-    @apply border-b last:border-none bg-transparent transition-colors duration-300 border-b-gray-200 first:rounded-t-lg rounded-none last:rounded-b-lg;
-
-    &.ant-collapse-item-active {
-      @apply bg-transparent;
-    }
+    @apply border-b border-b-slate-200 first:rounded-t-lg rounded-none last:rounded-b-lg;
 
     .ant-collapse-header {
-      @apply pt-5 pb-10 px-0 font-semibold text-2xl lg:text-3xl text-gray-900 rounded-t-xl;
+      @apply pt-5 pb-8 px-0 font-semibold text-2xl lg:text-3xl text-slate-900 rounded-t-xl;
+
       .ant-collapse-expand-icon {
-        @apply pt-2 text-black;
+        @apply pt-2 text-slate-700;
       }
     }
   }
 
   .ant-collapse-content {
-    @apply border-t-0 rounded-b-xl bg-transparent text-base md:text-lg text-gray-700;
+    @apply border-t-0 rounded-b-xl bg-transparent text-base md:text-lg text-slate-700;
+
     .ant-collapse-content-box {
       @apply pt-2 pb-6 px-0;
     }
@@ -82,5 +67,5 @@ div.ant-collapse {
 }
 
 div.ant-select.ant-select-outlined div.ant-select-selector {
-  @apply bg-gray-100 border-gray-200;
+  @apply bg-slate-100 border-slate-200;
 }

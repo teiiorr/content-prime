@@ -1,215 +1,176 @@
 "use client";
+
 import { memo, useEffect, useState } from "react";
-import { Modal, Spin } from "antd";
+import { Modal } from "antd";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 
-import { Button } from "@/components";
+import { Button, Card, Container, SectionHeading, Skeleton } from "@/components";
 import { Announcement } from "@/types";
 import { fetchAnnouncementsLimited } from "@/lib";
 
 import "swiper/css";
 import "swiper/css/navigation";
 
-export const HomeSectionsAnnouncements = memo(
-  function HomeSectionsAnnouncements() {
-    const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-    const [isLoaded, setIsLoaded] = useState(false);
+export const HomeSectionsAnnouncements = memo(function HomeSectionsAnnouncements() {
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [announcement, setAnnouncement] = useState<Announcement | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [announcement, setAnnouncement] = useState<Announcement | null>(null);
 
-    const handleOpenModal = (item: Announcement) => {
-      setAnnouncement(item);
-      setIsModalOpen(true);
-    };
+  useEffect(() => {
+    let mounted = true;
 
-    const handleCloseModal = () => {
-      setIsModalOpen(false);
-      setAnnouncement(null);
-    };
-
-    useEffect(() => {
-      let mounted = true;
-
-      async function loadNews() {
-        try {
-          const data = await fetchAnnouncementsLimited(4);
-          if (mounted) setAnnouncements(data);
-        } catch (err) {
-          console.error("Error loading announcements:", err);
-        } finally {
-          if (mounted) setIsLoaded(true);
-        }
+    async function loadNews() {
+      try {
+        const data = await fetchAnnouncementsLimited(4);
+        if (mounted) setAnnouncements(data);
+      } catch (err) {
+        console.error("Error loading announcements:", err);
+      } finally {
+        if (mounted) setIsLoaded(true);
       }
+    }
 
-      loadNews();
+    loadNews();
 
-      return () => {
-        mounted = false;
-      };
-    }, []);
-
-    const swiperSettings = {
-      spaceBetween: 24,
-      slidesPerView: 3,
-      slidesPerGroup: 1,
-      loop: true,
-      navigation: {
-        nextEl: ".announcements-next-btn",
-        prevEl: ".announcements-prev-btn",
-      },
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-      },
-      modules: [Navigation, Autoplay],
-      breakpoints: {
-        1100: {
-          slidesPerView: 3,
-        },
-        768: {
-          slidesPerView: 2,
-        },
-        640: {
-          slidesPerView: 2,
-        },
-        400: {
-          slidesPerView: 1,
-        },
-        350: {
-          slidesPerView: 1,
-        },
-        150: {
-          slidesPerView: 1,
-        },
-      },
+    return () => {
+      mounted = false;
     };
+  }, []);
 
-    return (
-      <section id="announcements" aria-labelledby="announcements-heading">
-     <div className="container py-12 sm:py-16 lg:py-24">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
-              E'lonlar
-            </h2>
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setAnnouncement(null);
+  };
+
+  return (
+    <section id="announcements" aria-labelledby="announcements-heading">
+      <Container className="py-8">
+        <SectionHeading title="E'lonlar" className="mb-8 text-center" />
+
+        {!isLoaded ? (
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-52" />
+            ))}
           </div>
-
+        ) : announcements.length === 0 ? (
+          <p className="py-20 text-center text-gray-500">E'lonlar topilmadi</p>
+        ) : (
           <div className="relative z-10">
-            {/* Navigation Buttons */}
+            {/* Nav buttons */}
             {announcements.length > 3 && (
               <>
                 <Button
                   aria-label="Oldingi e'lon"
-                theme="base"
-                  className="absolute left-2 md:-left-2 lg:-left-6 top-1/2 -translate-y-1/2 w-11 h-11 announcements-prev-btn z-10 rounded-full p-0 bg-white/90 backdrop-blur ring-1 ring-black/5"
+                  theme="primary"
+                  className="announcements-prev-btn absolute -left-3 top-1/2 z-10 h-12 w-12 -translate-y-1/2 sm:rounded-full"
                 >
-                  <ArrowLeft className="w-5 h-5 lg:w-6 lg:h-6" />
+                  <ArrowLeft className="h-5 w-5" />
                 </Button>
+
                 <Button
                   aria-label="Keyingi e'lon"
-                  theme="base"
-                  className="absolute right-2 md:-right-2 lg:-right-6 top-1/2 -translate-y-1/2 w-11 h-11 announcements-next-btn z-10 rounded-full p-0 bg-white/90 backdrop-blur ring-1 ring-black/5"
+                  theme="primary"
+                  className="announcements-next-btn absolute -right-3 top-1/2 z-10 h-12 w-12 -translate-y-1/2 sm:rounded-full"
                 >
-                  <ArrowRight className="w-5 h-5 lg:w-6 lg:h-6" />
+                  <ArrowRight className="h-5 w-5" />
                 </Button>
               </>
             )}
 
-            <div className="relative">
-              {!isLoaded ? (
-                <div className="py-52 flex items-center justify-center">
-                  <Spin aria-label="E'lonlar yuklanmoqda" />
-                </div>
-              ) : announcements.length === 0 ? (
-                <p className="text-center text-gray-500 py-20">
-                  E'lonlar topilmadi
-                </p>
-              ) : (
-                <Swiper
-                  {...swiperSettings}
-                  className="announcements-swiper pt-8 pb-12"
-                >
-                  {announcements.map((item) => (
-                    <SwiperSlide key={item.id}>
-                      <div
-                        aria-label={`${item.title}-${item.date_display}`}
- className="bg-white border border-gray-100 rounded-2xl p-5 min-h-[264px] flex flex-col justify-between shadow-sm ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"                      >
-                        <div className="mb-5 flex-1">
-   <h3 className="mb-2 font-semibold text-lg sm:text-xl text-gray-900 line-clamp-2">                            {item.title}
-                          </h3>
-                          <p
-  className="line-clamp-3 text-sm sm:text-base text-gray-600"                            dangerouslySetInnerHTML={{
-                              __html: item.description,
-                            }}
-                          />
-                        </div>
+            <Swiper
+              spaceBetween={24}
+              slidesPerView={3}
+              loop
+              navigation={{
+                nextEl: ".announcements-next-btn",
+                prevEl: ".announcements-prev-btn",
+              }}
+              autoplay={{ delay: 4000, disableOnInteraction: false }}
+              modules={[Navigation, Autoplay]}
+              breakpoints={{
+                1100: { slidesPerView: 3 },
+                768: { slidesPerView: 2 },
+                150: { slidesPerView: 1 },
+              }}
+              className="pt-8 pb-12"
+            >
+              {announcements.map((item) => (
+                <SwiperSlide key={item.id}>
+                  <Card
+                    aria-label={`${item.title}-${item.date_display}`}
+                    className="flex min-h-[264px] flex-col justify-between border-orange-200 bg-orange-50 p-5"
+                  >
+                    <div className="mb-5 flex-1">
+                      <h3 className="mb-2 line-clamp-2 text-xl font-semibold text-gray-900">
+                        {item.title}
+                      </h3>
+                      <p
+                        className="line-clamp-3 text-base text-base-black"
+                        dangerouslySetInnerHTML={{ __html: item.description }}
+                      />
+                    </div>
 
-                        <div>
-                          <p className="text-blue-600 text-sm font-medium mb-5">                            {item.date_display}
-                          </p>
-                          <button
-                            type="button"
- className="flex items-center gap-1.5 text-gray-700 font-semibold text-base hover:text-blue-700 transition-colors group"                            onClick={() => handleOpenModal(item)}
-                          >
-                            <span>Batafsil</span>{" "}
-                            <ArrowRight
-                              className="group-hover:translate-x-1 transition-transform"
-                              size={20}
-                            />
-                          </button>
-                        </div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              )}
-            </div>
+                    <div>
+                      <p className="mb-5 text-sm font-medium text-rose-600">
+                        {item.date_display}
+                      </p>
+
+                      <button
+                        type="button"
+                        className="group flex items-center gap-1.5 rounded-md text-base font-semibold text-gray-700 transition-colors hover:text-orange-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
+                        onClick={() => {
+                          setAnnouncement(item);
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        <span>Batafsil</span>
+                        <ArrowRight
+                          className="transition-transform group-hover:translate-x-1"
+                          size={20}
+                        />
+                      </button>
+                    </div>
+                  </Card>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
+        )}
+      </Container>
+
+      <Modal centered open={isModalOpen} onCancel={closeModal} footer={null} width={794}>
+        <div className="sm:p-3">
+          <h2 className="mb-4 text-center text-xl font-bold text-black md:mb-8 md:text-2xl">
+            DIQQAT, E’LON!
+          </h2>
+
+          <p
+            className="mb-3 text-sm text-gray-600 sm:text-base md:mb-4 md:text-lg"
+            dangerouslySetInnerHTML={{ __html: announcement?.description || "" }}
+          />
+
+          {announcement?.content && (
+            <div
+              className="rich-text-container mb-5"
+              dangerouslySetInnerHTML={{ __html: announcement.content }}
+            />
+          )}
+
+          {announcement?.footer_text && (
+            <p
+              className="text-sm font-semibold text-gray-900 sm:text-base md:text-lg"
+              dangerouslySetInnerHTML={{ __html: announcement.footer_text }}
+            />
+          )}
         </div>
-
-        <Modal
-          centered
-          open={isModalOpen}
-          onCancel={handleCloseModal}
-          footer={null}
-          width={794}
-        >
-          <div className="sm:p-3">
-            <h2 className="text-center text-gray-900 font-bold text-xl md:text-2xl mb-4 md:mb-8">              DIQQAT, E’LON!
-            </h2>
-            {/* Content */}
-            <div>
-              <p
-                className="text-sm sm:text-base md:text-lg text-gray-600 mb-3 md:mb-4"
-                dangerouslySetInnerHTML={{
-                  __html: announcement?.description || "",
-                }}
-              />
-
-              {announcement?.content && (
-                <div
-                  className="rich-text-container mb-5"
-                  dangerouslySetInnerHTML={{ __html: announcement.content }}
-                />
-              )}
-
-              {/* Footer Info */}
-              {announcement?.footer_text && (
-                <p
-                  className="text-sm sm:text-base md:text-lg text-gray-900 font-semibold"
-                  dangerouslySetInnerHTML={{
-                    __html: announcement.footer_text,
-                  }}
-                />
-              )}
-            </div>
-          </div>
-        </Modal>
-      </section>
-    );
-  }
-);
+      </Modal>
+    </section>
+  );
+});
 
 HomeSectionsAnnouncements.displayName = "HomeSectionsAnnouncements";
