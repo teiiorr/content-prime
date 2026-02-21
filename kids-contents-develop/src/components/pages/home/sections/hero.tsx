@@ -22,7 +22,6 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
             loop
             playsInline
             preload="metadata"
-            poster="/hero-poster.jpg"
             aria-hidden="true"
           >
             <source src={HERO_VIDEO_SRC} type="video/mp4" />
