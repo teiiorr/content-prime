@@ -402,7 +402,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
 
                   <div className="nb-cta-wrap rounded-full">
                     <Button theme="primary" onClick={handleOpenSubmissionModal}>
-                      Sizda g‘oya bormi?
+                      Sizda g'oya bormi?
                     </Button>
                   </div>
                 </div>
