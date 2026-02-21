@@ -5,7 +5,7 @@ import { MainFooter } from "./footer";
 
 export const MainLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className="flex flex-col min-h-screen bg-background text-txt">
+      <div className="flex flex-col min-h-screen bg-background text-foreground">
       <div className="w-full">
         <MainNavbar />
       </div>

@@ -5,9 +5,8 @@ import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Spin } from "antd";
 
-import { Button } from "@/components";
+import { Button, Card, Container, SectionHeading, Skeleton } from "@/components";
 import { ROUTES } from "@/constants";
 import { fetchNewsLimited } from "@/lib";
 import type { NewsItemType } from "@/types";
@@ -40,130 +39,101 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
     };
   }, []);
 
-  const swiperSettings = {
-    spaceBetween: 32,
-    slidesPerView: 3,
-    slidesPerGroup: 1,
-    loop: true,
-    navigation: {
-      nextEl: ".news-next-btn",
-      prevEl: ".news-prev-btn",
-    },
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false,
-    },
-    modules: [Navigation, Autoplay],
-    breakpoints: {
-      1100: { slidesPerView: 3 },
-      768: { slidesPerView: 2 },
-      640: { slidesPerView: 2 },
-      400: { slidesPerView: 1 },
-      350: { slidesPerView: 1 },
-      150: { slidesPerView: 1 },
-    },
-  };
-
   return (
     <section id="news" aria-labelledby="news-heading">
-      <div className="container py-10 md:py-16 lg:py-24">
-        <div className="flex items-center justify-between mb-8 md:mb-10 lg:mb-12">
-          <h2
-            id="news-heading"
-            className="text-3xl lg:text-4xl font-bold text-base-black"
-          >
-            Yangiliklar
-          </h2>
-          <Button
-            href={ROUTES.NEWS}
-            theme="outlined"
-            className="max-md:hidden"
-            aria-label="Barcha yangiliklar sahifasiga o'tish"
-          >
+      <Container className="py-10 md:py-16 lg:py-24">
+        <div className="mb-8 flex items-center justify-between md:mb-10 lg:mb-12">
+          <SectionHeading title="Yangiliklar" className="mb-0" />
+
+          <Button href={ROUTES.NEWS} theme="outlined" className="max-md:hidden">
             Barcha yangiliklar
           </Button>
         </div>
 
-        <div className="mt-8 relative z-10">
-          {/* Navigation Buttons */}
-          <Button
-            aria-label="Oldingi yangilik"
-            theme="primary"
-            className="absolute left-2 md:-left-2 lg:-left-6 top-1/2 -translate-y-1/2 w-12 h-12 news-prev-btn z-10 sm:rounded-full"
-          >
-            <ArrowLeft className="w-5 h-5 lg:w-6 lg:h-6" />
-          </Button>
-          <Button
-            aria-label="Keyingi yangilik"
-            theme="primary"
-            className="absolute right-2 md:-right-2 lg:-right-6 top-1/2 -translate-y-1/2 w-12 h-12 news-next-btn z-10 sm:rounded-full"
-          >
-            <ArrowRight className="w-5 h-5 lg:w-6 lg:h-6" />
-          </Button>
-
-          <div className="relative">
-            {!isLoaded ? (
-              <div className="py-52 flex items-center justify-center">
-                <Spin aria-label="Yangiliklar yuklanmoqda" />
-              </div>
-            ) : news.length === 0 ? (
-              <p className="text-center text-gray-500 py-20">
-                Yangiliklar topilmadi
-              </p>
-            ) : (
-              <Swiper {...swiperSettings} className="news-swiper pt-8 pb-12">
-                {news.map((item) => (
-                  <SwiperSlide key={item.id}>
-                    <Link
-                      href={`${ROUTES.NEWS}/${item.slug}`}
-                      aria-label={`${item.title} - ${item.date_display}`}
-                      className="block group"
-                    >
-                      <article className="cursor-pointer">
-                        <div className="relative aspect-video overflow-hidden rounded-xl">
-                          <img
-                            src={item.image_src}
-                            srcSet={item.image_srcset}
-                            alt={item.title}
-                            width={350}
-                            height={240}
-                            loading="lazy"
-                            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-
-                        {/* Content */}
-                        <div className="mt-5">
-                          <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-600 transition-colors duration-300">
-                            {item.title}
-                          </h3>
-
-                          <time
-                            dateTime={item.date_display}
-                            className="text-sm text-gray-500 font-medium"
-                          >
-                            {item.date_display}
-                          </time>
-                        </div>
-                      </article>
-                    </Link>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            )}
+        {!isLoaded ? (
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-64" />
+            ))}
           </div>
-        </div>
+        ) : news.length === 0 ? (
+          <p className="py-20 text-center text-gray-500">Yangiliklar topilmadi</p>
+        ) : (
+          <div className="relative">
+            {/* Nav buttons */}
+            <Button
+              aria-label="Oldingi yangilik"
+              theme="primary"
+              className="news-prev-btn absolute -left-3 top-1/2 z-10 h-12 w-12 -translate-y-1/2 sm:rounded-full"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
 
-        <div className="mt-8 md:hidden flex justify-center">
-          <Button
-            href={ROUTES.NEWS}
-            theme="outlined"
-            aria-label="Barcha yangiliklar sahifasiga o'tish"
-          >
-            Barcha yangiliklar
-          </Button>
-        </div>
-      </div>
+            <Button
+              aria-label="Keyingi yangilik"
+              theme="primary"
+              className="news-next-btn absolute -right-3 top-1/2 z-10 h-12 w-12 -translate-y-1/2 sm:rounded-full"
+            >
+              <ArrowRight className="h-5 w-5" />
+            </Button>
+
+            <Swiper
+              spaceBetween={24}
+              slidesPerView={3}
+              loop
+              navigation={{ nextEl: ".news-next-btn", prevEl: ".news-prev-btn" }}
+              autoplay={{ delay: 5000, disableOnInteraction: false }}
+              modules={[Navigation, Autoplay]}
+              breakpoints={{
+                1100: { slidesPerView: 3 },
+                768: { slidesPerView: 2 },
+                150: { slidesPerView: 1 },
+              }}
+              className="pt-6 pb-12"
+            >
+              {news.map((item) => (
+                <SwiperSlide key={item.id}>
+                  <Link
+                    href={`${ROUTES.NEWS}/${item.slug}`}
+                    className="group block"
+                    aria-label={`${item.title} - ${item.date_display}`}
+                  >
+                    <Card className="overflow-hidden border-slate-100 p-0 transition hover:-translate-y-1 hover:shadow-[var(--shadow-md)]">
+                      <div className="relative aspect-video overflow-hidden">
+                        <img
+                          src={item.image_src}
+                          srcSet={item.image_srcset}
+                          alt={item.title}
+                          width={350}
+                          height={240}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        />
+                      </div>
+
+                      <div className="p-4">
+                        <h3 className="mb-2 line-clamp-2 text-lg font-semibold text-slate-900 transition-colors group-hover:text-emerald-700">
+                          {item.title}
+                        </h3>
+                        <time className="text-sm font-medium text-slate-500">
+                          {item.date_display}
+                        </time>
+                      </div>
+                    </Card>
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+
+            {/* Mobile CTA */}
+            <div className="mt-2 flex justify-center md:hidden">
+              <Button href={ROUTES.NEWS} theme="outlined">
+                Barcha yangiliklar
+              </Button>
+            </div>
+          </div>
+        )}
+      </Container>
     </section>
   );
 });

@@ -4,10 +4,11 @@
 
 @import "./variables";
 @import "./theme";
+@import "./tokens";
 
 * {
-  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 html {
@@ -15,19 +16,95 @@ html {
 }
 
 body {
-  color: rgba(var(--foreground)) !important;
-  background: rgba(var(--background)) !important;
-  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+   color: rgb(var(--foreground)) !important;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef6ff 100%) !important;
+
+  font-family: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 button {
   outline: none;
 }
 
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2;
+  }
+
 @layer components {
   .container {
-    @apply max-w-[1240px] mx-auto px-4 md:px-5;
+    @apply max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .premium-surface {
+    @apply rounded-[28px] border border-white/65 bg-white/72 backdrop-blur-xl shadow-[0_35px_90px_-55px_rgba(2,6,23,0.85)];
+  }
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    @apply tracking-tight text-slate-950;
+  }
+
+  p {
+    @apply text-slate-600;
+  }
+
+  a,
+  button,
+  [role="button"] {
+    @apply transition-all duration-300;
+  }
+}
+
+main {
+  position: relative;
+}
+
+main > div {
+  @apply relative z-10;
+}
+
+main section {
+  animation: sectionReveal 0.7s ease-out both;
+  animation-timeline: view();
+  animation-range: entry 10% cover 32%;
+}
+
+@supports not (animation-timeline: view()) {
+  main section {
+    animation: sectionRevealFallback 0.8s ease-out both;
+  }
+}
+
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.995);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes sectionRevealFallback {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -39,48 +116,44 @@ button {
 }
 
 .p-link a {
-  @apply text-blue-500 no-underline hover:underline;
+  @apply text-slate-700 no-underline hover:underline;
 }
 
-// Rich text content styles from admin panel RichTextEditor
 .rich-text-container {
-  @apply text-base lg:text-lg text-gray-700 leading-relaxed;
+  @apply text-base lg:text-lg text-slate-700 leading-relaxed;
 
-  // Headings
   h1 {
-    @apply text-2xl lg:text-3xl font-bold text-gray-900 mb-2 mt-2;
+    @apply text-2xl lg:text-3xl font-bold text-slate-950 mb-2 mt-2;
   }
 
   h2 {
-    @apply text-xl lg:text-2xl font-bold text-gray-900 mb-2 mt-2;
+    @apply text-xl lg:text-2xl font-bold text-slate-950 mb-2 mt-2;
   }
 
   h3 {
-    @apply text-lg lg:text-xl font-semibold text-gray-900 mb-2 mt-2;
+    @apply text-lg lg:text-xl font-semibold text-slate-900 mb-2 mt-2;
   }
 
   h4 {
-    @apply text-base lg:text-lg font-semibold text-gray-900 mb-2 mt-2;
+    @apply text-base lg:text-lg font-semibold text-slate-900 mb-2 mt-2;
   }
 
   h5 {
-    @apply text-sm lg:text-base font-semibold text-gray-900 mb-1 mt-1;
+    @apply text-sm lg:text-base font-semibold text-slate-900 mb-1 mt-1;
   }
 
   h6 {
-    @apply text-xs lg:text-sm font-semibold text-gray-900 mb-1 mt-1;
+    @apply text-xs lg:text-sm font-semibold text-slate-900 mb-1 mt-1;
   }
 
-  // Links
   a {
-    @apply text-blue-600 hover:text-blue-700 underline transition-colors;
+    @apply text-slate-800 hover:text-slate-900 underline transition-colors;
   }
 
   p {
     @apply text-base;
   }
 
-  // Lists
   ul {
     @apply list-disc list-inside mb-1 space-y-0.5;
 
@@ -97,16 +170,14 @@ button {
     }
   }
 
-  // Nested lists
   li > ul,
   li > ol {
     @apply mt-1 mb-1;
   }
 
-  // Strong and emphasis
   strong,
   b {
-    @apply font-bold text-gray-900;
+    @apply font-bold text-slate-950;
   }
 
   em,
@@ -114,72 +185,60 @@ button {
     @apply italic;
   }
 
-  // Code
   code {
-    @apply bg-gray-100 text-pink-600 px-2 py-1 rounded text-sm font-mono;
+    @apply bg-slate-100 text-fuchsia-600 px-2 py-1 rounded text-sm font-mono;
   }
 
   pre {
-    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4;
+    @apply bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto mb-4;
 
     code {
-      @apply bg-transparent text-gray-100 p-0;
+      @apply bg-transparent text-slate-100 p-0;
     }
   }
 
-  // Blockquotes
   blockquote {
-    @apply border-l-4 border-blue-500 pl-4 py-2 my-4 italic text-gray-600 bg-blue-50 rounded-r;
+    @apply border-l-4 border-slate-500 pl-4 py-2 my-4 italic text-slate-600 bg-slate-100/70 rounded-r;
   }
 
-  // Tables
   table {
     @apply w-full border-collapse mb-4;
   }
 
   thead {
-    @apply bg-gray-100;
+    @apply bg-slate-100;
   }
 
   th {
-    @apply border border-gray-300 px-4 py-2 text-left font-semibold text-gray-900;
+    @apply border border-slate-300 px-4 py-2 text-left font-semibold text-slate-900;
   }
 
   td {
-    @apply border border-gray-300 px-4 py-2;
+    @apply border border-slate-300 px-4 py-2;
   }
 
   tbody tr:nth-child(even) {
-    @apply bg-gray-50;
+    @apply bg-slate-50;
   }
 
-  // Horizontal rule
   hr {
-    @apply my-6 border-t-2 border-gray-300;
+    @apply my-6 border-t-2 border-slate-300;
   }
 
-  // Images
-  img {
-    @apply max-w-full h-auto rounded-lg my-4;
-  }
-
-  // Video
+  img,
   video {
     @apply max-w-full h-auto rounded-lg my-4;
   }
 
-  // Iframe (for embeds)
   iframe {
     @apply w-full rounded-lg my-4;
     min-height: 400px;
   }
 
-  // Mark/highlight
   mark {
-    @apply bg-yellow-200 px-1;
+    @apply bg-amber-200 px-1;
   }
 
-  // Subscript and superscript
   sub {
     @apply text-xs align-sub;
   }
@@ -188,7 +247,6 @@ button {
     @apply text-xs align-super;
   }
 
-  // Remove default margin from first and last elements
   > *:first-child {
     @apply mt-0;
   }
@@ -197,3 +255,17 @@ button {
     @apply mb-0;
   }
 }
+
+.navbar-popover .ant-popover-inner {
+  border-radius: 16px;
+  border: 1px solid rgba(226, 232, 240, 1);
+  box-shadow: 0 28px 60px -42px rgba(2, 6, 23, 0.95);
+}
+
+.premium-modal .ant-modal-content {
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 35px 80px -45px rgba(2, 6, 23, 0.9);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.96));
+  backdrop-filter: blur(14px);
+}
+        

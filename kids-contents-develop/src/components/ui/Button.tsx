@@ -1,34 +1,27 @@
 import clsx from "clsx";
 import { Button as AntdButton, ButtonProps } from "antd";
 import Link from "next/link";
+import React from "react";
 
 interface IProps extends ButtonProps {
+  href?: string;
+  target?: string;
   theme?: "base" | "primary" | "outlined" | "text";
   centered?: boolean;
   wide?: boolean;
 }
 
 const variants = {
-  base: `
-  text-primary border-transparent
-  bg-primary/5
-  hover:bg-primary/10 active:bg-primary/15 dark:bg-white/10 dark:text-white dark:hover:bg-white/10 dark:active:bg-white/15
-  `,
+  base: "bg-slate-100 text-slate-800 border border-slate-200 hover:bg-slate-200",
 
-  primary: `
-  bg-green-600 text-white border-green-700 border border-b-2
-  hover:bg-green-700 active:bg-green-800
-  `,
+  primary:
+    "bg-emerald-600 text-white border border-emerald-700 hover:bg-emerald-700 active:bg-emerald-800 shadow-[var(--shadow-sm)]",
 
-  outlined: `
-  bg-green-50 text-green-600 border-green-600 border border-b-2
-  hover:bg-green-600 active:bg-green-700 hover:text-white
-  `,
+  outlined:
+    "bg-white text-emerald-700 border border-emerald-700 hover:bg-emerald-700 hover:text-white",
 
-  text: `
-  bg-transparent text-primary border-transparent
-  hover:bg-primary/5 hover:text-green-700 active:text-green-800 dark:hover:bg-primary/10 dark:hover:text-white dark:active:text-white
-  `,
+  text:
+    "bg-transparent text-slate-800 border-transparent hover:bg-slate-100",
 };
 
 export const Button: React.FC<IProps> = ({
@@ -42,20 +35,26 @@ export const Button: React.FC<IProps> = ({
   ...props
 }) => {
   const baseStyles = clsx(
-    "gap-2 font-semibold rounded-xl shadow-none transition-all duration-300 outline-none active:outline-none focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 rounded-full active:ring-1 focus:ring-1 ring-gray-400 ring-offset-2 hover:scale-105",
+    "focus-ring inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 disabled:cursor-not-allowed disabled:opacity-50",
     variants[theme],
     wide && "px-10",
+    block && "w-full",
     className
   );
 
   const wrapperStyles = clsx(centered && "mx-auto", block && "w-full");
 
+  // обычная кнопка
   if (!href) {
     return (
-      <AntdButton {...props} className={clsx(baseStyles, wrapperStyles)} />
+      <AntdButton
+        {...props}
+        className={clsx(baseStyles, wrapperStyles)}
+      />
     );
   }
 
+  // кнопка-ссылка
   return (
     <Link href={href} target={target} className={wrapperStyles}>
       <AntdButton {...props} className={baseStyles} />

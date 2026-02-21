@@ -1,27 +1,26 @@
 "use client";
+
 import Link from "next/link";
 import { memo } from "react";
+import { Card, Container, SectionHeading } from "@/components";
 
 export const HomeSectionsContact = memo(function HomeSectionsContact() {
   return (
     <section id="contact" className="relative">
-      <div className="container py-10 lg:py-24">
-        <div className="text-center mb-8 lg:mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-base-black">
-            Kontaktlar va joylashuv
-          </h2>
-        </div>
+      <Container className="py-10 lg:py-24">
+        <SectionHeading
+          title="Kontaktlar va joylashuv"
+          className="mb-8 text-center lg:mb-16"
+        />
 
-        <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 lg:mb-16">
-          <div className="bg-green-100 flex gap-3 flex-col rounded-[32px] p-6 border border-green-600 border-b-[3px] min-h-[170px] h-full">
-            <div className="flex-shrink-0">
-              <img
-                src="/images/svg/mail.svg"
-                alt="Email icon"
-                width={48}
-                height={48}
-              />
-            </div>
+        <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:mb-16 lg:grid-cols-4">
+          <Card className="flex h-full min-h-[170px] flex-col gap-3 border-green-300 bg-green-100 p-6">
+            <img
+              src="/images/svg/mail.svg"
+              alt="Email icon"
+              width={48}
+              height={48}
+            />
             <div className="text-xl font-semibold text-gray-900">
               Gmail pochta
             </div>
@@ -31,57 +30,49 @@ export const HomeSectionsContact = memo(function HomeSectionsContact() {
             >
               childrenscontentuz@gmail.com
             </Link>
-          </div>
+          </Card>
 
-          <div className="bg-orange-100 flex gap-3 flex-col rounded-[32px] p-6 border border-orange-400 border-b-[3px] min-h-[170px] h-full">
-            <div className="flex-shrink-0">
-              <img
-                src="/images/svg/mail-orange.svg"
-                alt="Mail icon"
-                width={48}
-                height={48}
-              />
-            </div>
+          <Card className="flex h-full min-h-[170px] flex-col gap-3 border-orange-300 bg-orange-100 p-6">
+            <img
+              src="/images/svg/mail-orange.svg"
+              alt="Mail icon"
+              width={48}
+              height={48}
+            />
             <div className="text-xl font-semibold text-gray-900">
               Umail pochta
             </div>
             <Link
               href="mailto:bolalarkontentiuz@umail.uz"
-              className="text-sm font-semibold text-orange-400 no-underline"
+              className="text-sm font-semibold text-orange-500 no-underline"
             >
               bolalarkontentiuz@umail.uz
             </Link>
-          </div>
+          </Card>
 
-          <div className="bg-green-100 flex gap-3 flex-col rounded-[32px] p-6 border border-green-600 border-b-[3px] min-h-[170px] h-full">
-            <div className="flex-shrink-0">
-              <img
-                src="/images/svg/mail.svg"
-                alt="Email icon"
-                width={48}
-                height={48}
-              />
-            </div>
-            <div className="text-xl font-semibold text-gray-900">
-              Exat pochta
-            </div>
+          <Card className="flex h-full min-h-[170px] flex-col gap-3 border-green-300 bg-green-100 p-6">
+            <img
+              src="/images/svg/mail.svg"
+              alt="Email icon"
+              width={48}
+              height={48}
+            />
+            <div className="text-xl font-semibold text-gray-900">Exat pochta</div>
             <Link
               href="mailto:bolalarkontentiuz@exat.uz"
               className="text-sm font-semibold text-green-600 no-underline"
             >
               bolalarkontentiuz@exat.uz
             </Link>
-          </div>
+          </Card>
 
-          <div className="bg-blue-50 flex gap-3 flex-col rounded-[32px] p-6 border border-blue-600 border-b-[3px] min-h-[170px] h-full">
-            <div className="flex-shrink-0">
-              <img
-                src="/images/svg/phone.svg"
-                alt="Phone icon"
-                width={48}
-                height={48}
-              />
-            </div>
+          <Card className="flex h-full min-h-[170px] flex-col gap-3 border-blue-300 bg-blue-50 p-6">
+            <img
+              src="/images/svg/phone.svg"
+              alt="Phone icon"
+              width={48}
+              height={48}
+            />
             <div className="text-xl font-semibold text-gray-900">
               Telefon raqam
             </div>
@@ -91,14 +82,15 @@ export const HomeSectionsContact = memo(function HomeSectionsContact() {
             >
               +998 (55) 511-1505
             </Link>
-          </div>
+          </Card>
         </div>
 
-        <div className="flex max-md:flex-col gap-6">
-          <div className="md:max-w-[456px] w-full">
-            <h3 className="font-bold text-2xl text-base-black mb-4 md:mb-6">
+        <div className="flex gap-6 max-md:flex-col">
+          <div className="w-full md:max-w-[456px]">
+            <h3 className="mb-4 text-2xl font-bold text-base-black md:mb-6">
               Bizning manzil
             </h3>
+
             <div className="flex gap-4">
               <div className="flex-shrink-0">
                 <svg
@@ -116,17 +108,19 @@ export const HomeSectionsContact = memo(function HomeSectionsContact() {
                   />
                 </svg>
               </div>
+
               <div className="flex flex-col gap-2">
-                <div className="text-gray-900 font-semibold text-xl">
+                <div className="text-xl font-semibold text-gray-900">
                   Toshkent shahar
                 </div>
-                <p className="text-gray-600 text-base">
+                <p className="text-base text-gray-600">
                   Olmazor t, Ziyo ko‘chasi 2-A uy
                 </p>
               </div>
             </div>
           </div>
-          <div className="w-full max-md:aspect-square md:min-h-[312px] rounded-3xl overflow-hidden">
+
+          <div className="w-full overflow-hidden rounded-3xl border border-slate-200 max-md:aspect-square md:min-h-[312px]">
             <iframe
               src="https://yandex.uz/map-widget/v1/?ll=69.214267%2C41.354485&z=17&l=map&pt=69.214267%2C41.354485%2Cpm2rdl"
               title="Bizning manzilimiz Yandex xaritasida"
@@ -139,7 +133,7 @@ export const HomeSectionsContact = memo(function HomeSectionsContact() {
             />
           </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 });
