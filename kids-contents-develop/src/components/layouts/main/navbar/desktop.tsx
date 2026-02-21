@@ -235,6 +235,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           onClick?.();
           closeAllPopovers();
         }}
+        
         className={[
           "nb-item group relative inline-flex items-center gap-2 rounded-full px-[14px] py-[10px]",
           "nb-font font-semibold",

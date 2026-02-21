@@ -138,10 +138,10 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
       {/* Top sticky bar */}
       <div className="sticky top-0 z-50 border-b border-white/70 bg-white/80 backdrop-blur-xl shadow-[0_20px_35px_-30px_rgba(2,6,23,1)]">
         <div className="container">
-          <div className="flex items-center justify-between py-4">
+        <div className="flex items-center justify-between py-2.5">
             <Link href={ROUTES.HOME} className="inline-flex items-center">
-              <img src="/logo.svg" alt="Site logo" width={152} height={56} />
-            </Link>
+              <img src="/logo.svg" alt="Site logo" width={172} height={62} />
+                          </Link>
 
             <div className="flex items-center gap-2">
               <button
@@ -227,8 +227,8 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         title={
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <img src="/logo.svg" alt="Site logo" width={150} height={52} />
-            </div>
+              <img src="/logo.svg" alt="Site logo" width={170} height={58} />
+                          </div>
             <button
               onClick={closeDrawer}
               className="nbm-close"
