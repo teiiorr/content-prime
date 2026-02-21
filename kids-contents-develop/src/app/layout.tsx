@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Montserrat } from "next/font/google";
 
 import "@/styles/globals.scss";
 import { MainLayout } from "@/components/layouts";
 import { SplashScreenGate } from "@/components/general";
+
+const montserrat = Montserrat({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-main",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Bolalar kontentini rivojlantirish markazi",
@@ -14,7 +22,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="uz">
-      <body>
+      <body className={montserrat.variable}>
         <SplashScreenGate>
           <MainLayout>{children}</MainLayout>
         </SplashScreenGate>
