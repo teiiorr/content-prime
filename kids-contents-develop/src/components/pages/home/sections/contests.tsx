@@ -42,64 +42,6 @@ export const HomeSectionsContests = memo(function HomeSectionsContests() {
           </div>
         </div>
 
-        <Card className="mt-14 overflow-hidden bg-orange-100 p-6 md:p-8 lg:mt-24">
-          <h3 className="mb-6 text-center text-2xl font-bold text-base-black lg:text-3xl">
-            “Yoʻl-Bars berar dars” multseriali uchun ijodiy tanlov
-          </h3>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:gap-6">
-            <Card className="flex flex-col items-center gap-5 border-orange-300 bg-orange-100 px-4 py-6 text-center">
-              <img
-                src="/images/svg/applicants.svg"
-                alt="Applicants icon"
-                width={48}
-                height={48}
-              />
-              <div>
-                <h4 className="mb-2 text-lg text-gray-600">Yakuniy muddat</h4>
-                <p className="text-gray-600">2025-yil 13-noyabr</p>
-              </div>
-            </Card>
-
-            <Card className="flex flex-col items-center gap-5 border-orange-300 bg-orange-100 px-4 py-6 text-center">
-              <img
-                src="/images/svg/requirements.svg"
-                alt="Applicants icon"
-                width={48}
-                height={48}
-              />
-              <div className="flex flex-col items-center">
-                <h4 className="mb-2 text-lg text-gray-600">
-                  Ijodiy tanlov uchun ariza namunasi (pdf)
-                </h4>
-                <Button onClick={handleDownloadPDF} theme="primary" size="small">
-                  PDF yuklab olish
-                </Button>
-              </div>
-            </Card>
-
-            <Card className="flex flex-col items-center gap-5 border-orange-300 bg-orange-100 px-4 py-6 text-center">
-              <img
-                src="/images/svg/winner.svg"
-                alt="Applicants icon"
-                width={48}
-                height={48}
-              />
-              <div className="flex flex-col items-center">
-                <h4 className="mb-2 text-lg text-gray-600">
-                  Tanlov haqida batafsil
-                </h4>
-                <Button
-                  href={`${ROUTES.CREATIVE_CONTESTS}/yol-bars-berar-dars`}
-                  theme="primary"
-                  size="small"
-                >
-                  Batafsil ma’lumot
-                </Button>
-              </div>
-            </Card>
-          </div>
-        </Card>
       </Container>
     </section>
   );

@@ -36,9 +36,9 @@ interface SearchItem {
 }
 
 const SEARCH_ITEMS: SearchItem[] = [
-  { id: "1", title: "Yangiliklar", href: ROUTES.NEWS, category: "Pages" },
-  { id: "2", title: "Loyihalar", href: ROUTES.PROJECTS, category: "Pages" },
-  { id: "3", title: "Tahlillar", href: ROUTES.ANALYTICS, category: "Pages" },
+  { id: "1", title: "Yangiliklar", href: ROUTES.NEWS, category: "" },
+  { id: "2", title: "Loyihalar", href: ROUTES.PROJECTS, category: "" },
+  { id: "3", title: "Tahlillar", href: ROUTES.ANALYTICS, category: "" },
   {
     id: "4",
     title: "Xalqaro aloqalar",
@@ -235,6 +235,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           onClick?.();
           closeAllPopovers();
         }}
+        
         className={[
           "nb-item group relative inline-flex items-center gap-2 rounded-full px-[14px] py-[10px]",
           "nb-font font-semibold",
@@ -366,7 +367,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
 
                   <DropdownTrigger
                     k="about"
-                    label="Markaz haqida"
+                    label="Markaz"
                     items={aboutItems}
                     title="Markaz"
                     hint="Bo‘limlar"
@@ -401,7 +402,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
 
                   <div className="nb-cta-wrap rounded-full">
                     <Button theme="primary" onClick={handleOpenSubmissionModal}>
-                      Sizda g‘oya bormi?
+                      Sizda g'oya bormi?
                     </Button>
                   </div>
                 </div>

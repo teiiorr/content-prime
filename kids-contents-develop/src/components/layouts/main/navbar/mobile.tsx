@@ -1,21 +1,22 @@
 "use client";
 
-import React, { useCallback, useMemo, useState, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Drawer } from "antd";
 import {
-  Home,
-  Info,
-  Newspaper,
-  Search,
-  MoreHorizontal,
   ChevronDown,
   ChevronUp,
+  Home,
+  Info,
+  MoreHorizontal,
+  Newspaper,
+  Search,
+  Trophy,
   X,
 } from "lucide-react";
 
-import { Button, SubmissionFormModal } from "@/components";
+import { SubmissionFormModal } from "@/components";
 import { ROUTES } from "@/constants";
 
 interface MenuItem {
@@ -28,40 +29,58 @@ interface MainNavbarMobileProps {
   menuItems: MenuItem[];
 }
 
-interface SearchItem {
-  id: string;
-  title: string;
-  href: string;
-  category: string;
-}
+type DrawerMode = "menu" | "search";
 
-const SEARCH_ITEMS: SearchItem[] = [
-  { id: "1", title: "Yangiliklar", href: ROUTES.NEWS, category: "Pages" },
-  { id: "2", title: "Loyihalar", href: ROUTES.PROJECTS, category: "Pages" },
-  { id: "3", title: "Tahlillar", href: ROUTES.ANALYTICS, category: "Pages" },
-  {
-    id: "4",
-    title: "Xalqaro aloqalar",
-    href: `${ROUTES.ABOUT}/#international-cooperation`,
-    category: "Pages",
-  },
-  { id: "5", title: "Biz haqimizda", href: ROUTES.ABOUT, category: "Pages" },
-  { id: "6", title: "Rahbariyat", href: `${ROUTES.ABOUT}/#team`, category: "About" },
-  { id: "7", title: "Faoliyat", href: `${ROUTES.ABOUT}/#center-functions`, category: "About" },
-  { id: "8", title: "Fotogalereya", href: `${ROUTES.NEWS}/#gallery`, category: "Media" },
-  { id: "9", title: "Videoteka", href: `${ROUTES.NEWS}/#videoteka`, category: "Media" },
-  { id: "10", title: "E'lonlar", href: `${ROUTES.HOME}/#announcements`, category: "Home" },
+/** Safe route fallback if ROUTES.CONTESTS doesn't exist */
+const CONTESTS_ROUTE =
+  (ROUTES as unknown as { CONTESTS?: string }).CONTESTS ?? "/creative-contests";
+
+/** Uzbek labels */
+const UI = {
+  home: "Asosiy",
+  about: "Markaz",
+  news: "Yangiliklar",
+  contests: "Tanlovlar",
+  search: "Qidiruv",
+  menu: "Menyu",
+  quickLinks: "Tezkor havolalar",
+  allMenu: "Barcha bo‘limlar",
+  page: "",
+  link: "Havola",
+  submit: "Yuborish",
+  openSearch: "Qidiruvni ochish",
+  searchPlaceholder: "Qidirish...",
+};
+
+const SEARCH_ITEMS: Array<{ title: string; href: string; category: string }> = [
+  { title: UI.home, href: ROUTES.HOME, category: "" },
+  { title: UI.about, href: ROUTES.ABOUT, category: "" },
+  { title: UI.news, href: ROUTES.NEWS, category: "" },
+  { title: UI.contests, href: CONTESTS_ROUTE, category: "" },
 ];
 
 export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [drawerMode, setDrawerMode] = useState<"menu" | "search">("menu");
+  const [drawerMode, setDrawerMode] = useState<DrawerMode>("menu");
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
-  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
+
+  // Submenus inside Drawer (optional)
+  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
+    about: false,
+    news: false,
+    contests: false,
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+
+  const closeDrawer = useCallback(() => {
+    setDrawerOpen(false);
+    setSearchQuery("");
+  }, []);
 
   const openMenu = useCallback(() => {
     setDrawerMode("menu");
@@ -73,41 +92,22 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
     setDrawerOpen(true);
   }, []);
 
-  const closeDrawer = useCallback(() => {
-    setDrawerOpen(false);
-    setSearchQuery("");
+  const handleOpenSubmissionModal = useCallback(() => {
+    setIsSubmissionModalOpen(true);
   }, []);
 
-  const handleOpenSubmissionModal = useCallback(() => setIsSubmissionModalOpen(true), []);
-  const handleCloseSubmissionModal = useCallback(() => setIsSubmissionModalOpen(false), []);
+  const handleCloseSubmissionModal = useCallback(() => {
+    setIsSubmissionModalOpen(false);
+  }, []);
 
-  const toggleSubmenu = (menuKey: string) => {
-    setExpandedMenus((prev) => ({ ...prev, [menuKey]: !prev[menuKey] }));
-  };
-
-  const handleMenuClick = () => {
-    setDrawerOpen(false);
-    setSearchQuery("");
-  };
-
-  const aboutSubItems = [
-    { key: "about-main", label: "Biz haqimizda", href: ROUTES.ABOUT },
-    { key: "team", label: "Rahbariyat", href: `${ROUTES.ABOUT}/#team` },
-    { key: "cooperation", label: "Xalqaro hamkorlik", href: `${ROUTES.ABOUT}/#international-cooperation` },
-    { key: "functions", label: "Faoliyat", href: `${ROUTES.ABOUT}/#center-functions` },
-  ];
-
-  const newsSubItems = [
-    { key: "news-main", label: "Yangiliklar", href: ROUTES.NEWS },
-    { key: "announcements", label: "E'lonlar", href: `${ROUTES.HOME}/#announcements` },
-    { key: "gallery", label: "Fotogalereya", href: `${ROUTES.NEWS}/#gallery` },
-    { key: "videoteka", label: "Videoteka", href: `${ROUTES.NEWS}/#videoteka` },
-  ];
+  const toggleSubmenu = useCallback((key: string) => {
+    setExpandedMenus((prev) => ({ ...prev, [key]: !prev[key] }));
+  }, []);
 
   const isActive = useCallback(
     (href: string) => {
-      const pure = href.split("#")[0];
-      if (pure === ROUTES.HOME) return pathname === ROUTES.HOME;
+      const pure = href.split("?")[0].split("#")[0];
+      if (pure === "/") return pathname === "/";
       return pathname.startsWith(pure);
     },
     [pathname]
@@ -117,7 +117,9 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
     if (!searchQuery.trim()) return SEARCH_ITEMS;
     const q = searchQuery.toLowerCase();
     return SEARCH_ITEMS.filter(
-      (i) => i.title.toLowerCase().includes(q) || i.category.toLowerCase().includes(q)
+      (i) =>
+        i.title.toLowerCase().includes(q) ||
+        i.category.toLowerCase().includes(q)
     );
   }, [searchQuery]);
 
@@ -133,38 +135,81 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
     label,
     icon,
     active,
-    onClick,
   }: {
     label: string;
     icon: React.ReactNode;
     active?: boolean;
-    onClick: () => void;
   }) => (
-    <button
-      onClick={onClick}
-      className={["nbm-tab", active ? "is-active" : ""].join(" ")}
-      aria-label={label}
-      type="button"
-    >
+    <span className={["nbm-tab", active ? "is-active" : ""].join(" ")}>
       <span className="nbm-ico">{icon}</span>
       <span className="nbm-lbl">{label}</span>
-    </button>
+    </span>
+  );
+
+  const DrawerRow = ({
+    title,
+    href,
+    pill,
+    submenuKey,
+    showToggle,
+  }: {
+    title: string;
+    href: string;
+    pill: string;
+    submenuKey?: "about" | "news" | "contests";
+    showToggle?: boolean;
+  }) => {
+    const expanded = submenuKey ? !!expandedMenus[submenuKey] : false;
+
+    return (
+      <div className="nbm-row">
+        {/* Clicking the title ALWAYS navigates (fixes your About/News issue) */}
+        <Link
+          href={href}
+          className="nbm-item nbm-item-main"
+          onClick={closeDrawer}
+        >
+          <span>{title}</span>
+          <span className="nbm-pill">{pill}</span>
+        </Link>
+
+        {/* Separate toggle button for submenu (optional) */}
+        {showToggle && submenuKey ? (
+          <button
+            type="button"
+            className="nbm-toggle"
+            onClick={() => toggleSubmenu(submenuKey)}
+            aria-label={`${title} submenu`}
+          >
+            {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </button>
+        ) : null}
+      </div>
+    );
+  };
+
+  const go = useCallback(
+    (href: string) => {
+      router.push(href);
+    },
+    [router]
   );
 
   return (
     <div className="lg:hidden">
+      {/* Top sticky bar */}
       <div className="sticky top-0 z-50 border-b border-white/70 bg-white/80 backdrop-blur-xl shadow-[0_20px_35px_-30px_rgba(2,6,23,1)]">
         <div className="container">
-          <div className="flex items-center justify-between py-4">
+          <div className="flex items-center justify-between py-2.5">
             <Link href={ROUTES.HOME} className="inline-flex items-center">
-              <img src="/logo.svg" alt="Site logo" width={152} height={56} />
+              <img src="/logo.svg" alt="Site logo" width={172} height={62} />
             </Link>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={openSearch}
                 className="nbm-topicon"
-                aria-label="Search"
+                aria-label={UI.search}
                 type="button"
               >
                 <Search size={18} />
@@ -173,7 +218,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
               <button
                 onClick={openMenu}
                 className="nbm-topicon"
-                aria-label="Menu"
+                aria-label={UI.menu}
                 type="button"
               >
                 <MoreHorizontal size={18} />
@@ -183,68 +228,76 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         </div>
       </div>
 
+      {/* iOS safe-area spacer */}
       <div className="nbm-safe" />
 
+      {/* Bottom tab bar (scrollable so “other buttons should be visible” when swiping) */}
       <div className="nbm-bottom">
         <div className="nbm-bottom-inner">
-          <Link href={ROUTES.HOME} className="nbm-linkwrap" onClick={() => {}}>
-            <Tab
-              label="Home"
-              icon={<Home size={20} />}
-              active={isActive(ROUTES.HOME)}
-              onClick={() => {}}
-            />
-          </Link>
-
           <button
             className="nbm-linkwrap"
-            onClick={() => {
-              setExpandedMenus((p) => ({ ...p, about: false, news: false }));
-              openMenu();
-              setTimeout(() => toggleSubmenu("about"), 0);
-            }}
             type="button"
+            onClick={() => go(ROUTES.HOME)}
           >
             <Tab
-              label="About"
-              icon={<Info size={20} />}
-              active={isActive(ROUTES.ABOUT)}
-              onClick={() => {}}
+              label={UI.home}
+              icon={<Home size={20} />}
+              active={isActive(ROUTES.HOME)}
             />
           </button>
 
           <button
             className="nbm-linkwrap"
-            onClick={() => {
-              setExpandedMenus((p) => ({ ...p, about: false, news: false }));
-              openMenu();
-              setTimeout(() => toggleSubmenu("news"), 0);
-            }}
             type="button"
+            onClick={() => go(ROUTES.ABOUT)}
           >
             <Tab
-              label="News"
+              label={UI.about}
+              icon={<Info size={20} />}
+              active={isActive(ROUTES.ABOUT)}
+            />
+          </button>
+
+          <button
+            className="nbm-linkwrap"
+            type="button"
+            onClick={() => go(ROUTES.NEWS)}
+          >
+            <Tab
+              label={UI.news}
               icon={<Newspaper size={20} />}
               active={isActive(ROUTES.NEWS)}
-              onClick={() => {}}
+            />
+          </button>
+
+          <button
+            className="nbm-linkwrap"
+            type="button"
+            onClick={() => go(CONTESTS_ROUTE)}
+          >
+            <Tab
+              label={UI.contests}
+              icon={<Trophy size={20} />}
+              active={isActive(CONTESTS_ROUTE)}
             />
           </button>
 
           <button className="nbm-linkwrap" onClick={openSearch} type="button">
-            <Tab label="Search" icon={<Search size={20} />} onClick={() => {}} />
+            <Tab label={UI.search} icon={<Search size={20} />} />
           </button>
 
           <button className="nbm-linkwrap" onClick={openMenu} type="button">
-            <Tab label="More" icon={<MoreHorizontal size={20} />} onClick={() => {}} />
+            <Tab label={UI.menu} icon={<MoreHorizontal size={20} />} />
           </button>
         </div>
       </div>
 
+      {/* Drawer */}
       <Drawer
         title={
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <img src="/logo.svg" alt="Site logo" width={150} height={52} />
+              <img src="/logo.svg" alt="Site logo" width={170} height={58} />
             </div>
             <button
               onClick={closeDrawer}
@@ -261,310 +314,404 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         onClose={closeDrawer}
         open={drawerOpen}
         height="82vh"
-        className="mobile-drawer lg:hidden nbm-drawer"
+        className="nbm-drawer"
       >
         {drawerMode === "search" ? (
-          <div className="pb-6">
+          <div className="nbm-sheet">
             <div className="nbm-search">
-              <Search className="text-slate-500" size={18} />
-              <input
-                ref={searchInputRef}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Qidiruv..."
-                className="nbm-search-input"
-              />
-              {searchQuery ? (
-                <button onClick={() => setSearchQuery("")} className="nbm-clear" type="button">
-                  <X size={16} />
-                </button>
-              ) : null}
-            </div>
+              <div className="nbm-searchbox">
+                <Search size={16} />
+                <input
+                  ref={(el) => {
+                    searchInputRef.current = el;
+                  }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={UI.searchPlaceholder}
+                  className="nbm-search-input"
+                  aria-label="Search input"
+                />
+                {searchQuery.trim() ? (
+                  <button
+                    type="button"
+                    className="nbm-clear"
+                    onClick={() => setSearchQuery("")}
+                    aria-label="Clear search"
+                  >
+                    <X size={16} />
+                  </button>
+                ) : null}
+              </div>
 
-            <div className="mt-4">
-              {filteredResults.length === 0 ? (
-                <div className="py-10 text-center text-slate-500">
-                  {searchQuery ? <p>"{searchQuery}" bo'yicha hech narsa topilmadi</p> : <p>Qidiruv uchun matn kiriting</p>}
-                </div>
-              ) : (
-                <div className="flex flex-col gap-2">
-                  {filteredResults.map((item) => (
-                    <Link
-                      key={item.id}
-                      href={item.href}
-                      onClick={handleMenuClick}
-                      className="nbm-row"
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="font-semibold text-slate-900">{item.title}</span>
-                        <span className="rounded-full border border-black/10 bg-white/70 px-2 py-1 text-[11px] text-slate-500">
-                          {item.category}
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
+              <div className="nbm-results">
+                {filteredResults.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="nbm-result"
+                    onClick={closeDrawer}
+                  >
+                    <div className="nbm-result-title">{item.title}</div>
+                    <div className="nbm-result-cat">{item.category}</div>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
-          <div>
-            <div className="flex flex-col gap-2 pb-4">
-              <div className="border-b border-slate-200/60 pb-2">
-                <Link href={ROUTES.HOME} onClick={handleMenuClick} className="nbm-row">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-900">Asosiy</span>
-                    <span className="text-slate-400">→</span>
-                  </div>
-                </Link>
-              </div>
+          <div className="nbm-sheet">
+            <div className="nbm-section">
+              <div className="nbm-title">{UI.quickLinks}</div>
 
-              <div className="border-b border-slate-200/60 pb-2">
-                <button
-                  className="nbm-row w-full text-left"
-                  onClick={() => toggleSubmenu("about")}
-                  type="button"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-900">Markaz haqida</span>
-                    {expandedMenus.about ? (
-                      <ChevronUp className="h-5 w-5 text-slate-500" />
-                    ) : (
-                      <ChevronDown className="h-5 w-5 text-slate-500" />
-                    )}
-                  </div>
-                </button>
+              <div className="nbm-list">
+                <DrawerRow title={UI.home} href={ROUTES.HOME} pill={UI.page} />
 
+                <DrawerRow
+                  title={UI.about}
+                  href={ROUTES.ABOUT}
+                  pill={UI.page}
+                  submenuKey="about"
+                  showToggle
+                />
                 {expandedMenus.about ? (
-                  <div className="mt-1 flex flex-col gap-1 pl-2">
-                    {aboutSubItems.map((item) => (
-                      <Link key={item.key} href={item.href} onClick={handleMenuClick} className="nbm-subrow">
-                        {item.label}
-                      </Link>
-                    ))}
+                  <div className="nbm-sublist">
+                    {/* Extra “about” links from menuItems (if you pass them) */}
+                    {menuItems
+                      .filter((m) => m.key.toLowerCase().includes("about"))
+                      .map((m) => (
+                        <Link
+                          key={m.key}
+                          href={m.href}
+                          className="nbm-subitem"
+                          onClick={closeDrawer}
+                        >
+                          {m.label}
+                        </Link>
+                      ))}
                   </div>
                 ) : null}
-              </div>
 
-              <div className="border-b border-slate-200/60 pb-2">
-                <button
-                  className="nbm-row w-full text-left"
-                  onClick={() => toggleSubmenu("news")}
-                  type="button"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-900">Yangiliklar</span>
-                    {expandedMenus.news ? (
-                      <ChevronUp className="h-5 w-5 text-slate-500" />
-                    ) : (
-                      <ChevronDown className="h-5 w-5 text-slate-500" />
-                    )}
-                  </div>
-                </button>
-
+                <DrawerRow
+                  title={UI.news}
+                  href={ROUTES.NEWS}
+                  pill={UI.page}
+                  submenuKey="news"
+                  showToggle
+                />
                 {expandedMenus.news ? (
-                  <div className="mt-1 flex flex-col gap-1 pl-2">
-                    {newsSubItems.map((item) => (
-                      <Link key={item.key} href={item.href} onClick={handleMenuClick} className="nbm-subrow">
-                        {item.label}
-                      </Link>
-                    ))}
+                  <div className="nbm-sublist">
+                    {menuItems
+                      .filter((m) => m.key.toLowerCase().includes("news"))
+                      .map((m) => (
+                        <Link
+                          key={m.key}
+                          href={m.href}
+                          className="nbm-subitem"
+                          onClick={closeDrawer}
+                        >
+                          {m.label}
+                        </Link>
+                      ))}
+                  </div>
+                ) : null}
+
+                <DrawerRow
+                  title={UI.contests}
+                  href={CONTESTS_ROUTE}
+                  pill={UI.page}
+                  submenuKey="contests"
+                  showToggle
+                />
+                {expandedMenus.contests ? (
+                  <div className="nbm-sublist">
+                    {menuItems
+                      .filter(
+                        (m) =>
+                          m.key.toLowerCase().includes("contest") ||
+                          m.key.toLowerCase().includes("tanlov")
+                      )
+                      .map((m) => (
+                        <Link
+                          key={m.key}
+                          href={m.href}
+                          className="nbm-subitem"
+                          onClick={closeDrawer}
+                        >
+                          {m.label}
+                        </Link>
+                      ))}
                   </div>
                 ) : null}
               </div>
-
-              {menuItems.map((item) => (
-                <div key={item.key} className="border-b border-slate-200/60 pb-2 last:border-b-transparent">
-                  <Link href={item.href} onClick={handleMenuClick} className="nbm-row">
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-900">{item.label}</span>
-                      <span className="text-slate-400">→</span>
-                    </div>
-                  </Link>
-                </div>
-              ))}
             </div>
 
-            <div className="nbm-cta">
-              <Button theme="primary" onClick={handleOpenSubmissionModal} className="w-full !py-3">
-                Sizda g‘oya bormi?
-              </Button>
+            <div className="nbm-section">
+              <div className="nbm-title">{UI.allMenu}</div>
+              <div className="nbm-list">
+                {menuItems.map((m) => (
+                  <Link
+                    key={m.key}
+                    href={m.href}
+                    className="nbm-item"
+                    onClick={closeDrawer}
+                  >
+                    <span>{m.label}</span>
+                    <span className="nbm-pill">{UI.link}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div className="nbm-actions">
+              <button
+                type="button"
+                className="nbm-primary"
+                onClick={() => {
+                  closeDrawer();
+                  handleOpenSubmissionModal();
+                }}
+              >
+                {UI.submit}
+              </button>
+
+              <button
+                type="button"
+                className="nbm-secondary"
+                onClick={openSearch}
+              >
+                {UI.openSearch}
+              </button>
             </div>
           </div>
         )}
       </Drawer>
 
       <style jsx global>{`
-        :root {
-          --nbm-blue: 37, 99, 235;
-          --nbm-font: clamp(12px, 0.45vw + 11px, 14px);
-        }
-
+        /* Base helpers */
         .nbm-safe {
-          height: 78px;
+          height: env(safe-area-inset-top);
         }
 
         .nbm-topicon {
-          width: 44px;
-          height: 44px;
+          width: 40px;
+          height: 40px;
+          border-radius: 14px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          background: rgba(255, 255, 255, 0.65);
           display: inline-flex;
           align-items: center;
           justify-content: center;
+        }
+
+        .nbm-close {
+          width: 40px;
+          height: 40px;
           border-radius: 14px;
-          border: 1px solid rgba(2, 6, 23, 0.12);
-          background: rgba(255, 255, 255, 0.75);
-          backdrop-filter: blur(18px);
-          box-shadow: 0 18px 40px -36px rgba(2, 6, 23, 0.6);
-          color: rgba(2, 6, 23, 0.85);
-          transition: transform 120ms ease, box-shadow 160ms ease;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          background: rgba(2, 6, 23, 0.03);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }
 
-        .nbm-topicon:active {
-          transform: scale(0.98);
-          box-shadow: 0 16px 34px -34px rgba(2, 6, 23, 0.75);
-        }
-
+        /* Bottom bar (scrollable) */
         .nbm-bottom {
           position: fixed;
           left: 0;
           right: 0;
           bottom: 0;
           z-index: 60;
-          padding: 10px 14px max(10px, env(safe-area-inset-bottom));
+          padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+          background: rgba(255, 255, 255, 0.82);
+          backdrop-filter: blur(18px);
+          border-top: 1px solid rgba(2, 6, 23, 0.08);
         }
 
         .nbm-bottom-inner {
-          width: 100%;
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
+          display: flex;
           gap: 8px;
-          padding: 10px;
-          border-radius: 22px;
-          border: 1px solid rgba(2, 6, 23, 0.10);
-          background: rgba(255, 255, 255, 0.82);
-          backdrop-filter: blur(22px);
-          box-shadow: 0 34px 90px -70px rgba(2, 6, 23, 0.95);
+          max-width: 760px;
+          margin: 0 auto;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+        .nbm-bottom-inner::-webkit-scrollbar {
+          display: none;
         }
 
         .nbm-linkwrap {
-          border-radius: 18px;
+          flex: 0 0 auto;
+          width: 92px;
+          border: 0;
+          background: transparent;
+          padding: 0;
+          text-align: left;
         }
 
         .nbm-tab {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
+          display: grid;
+          justify-items: center;
           gap: 6px;
+          padding: 10px 6px;
           border-radius: 18px;
-          padding: 10px 8px;
-          color: rgba(2, 6, 23, 0.70);
-          transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        .nbm-tab:active {
-          background: rgba(2, 6, 23, 0.05);
+          border: 1px solid transparent;
+          color: rgba(2, 6, 23, 0.72);
         }
 
         .nbm-tab.is-active {
-          color: rgb(var(--nbm-blue));
-          background: rgba(var(--nbm-blue), 0.10);
-          box-shadow: inset 0 0 0 1px rgba(var(--nbm-blue), 0.16);
+          border-color: rgba(2, 6, 23, 0.1);
+          background: rgba(2, 6, 23, 0.035);
+          color: rgba(2, 6, 23, 0.92);
         }
 
         .nbm-ico {
           line-height: 0;
+          display: inline-flex;
         }
 
         .nbm-lbl {
-          font-size: var(--nbm-font);
-          font-weight: 700;
-          letter-spacing: -0.01em;
+          font-size: 11px;
+          letter-spacing: 0.01em;
+          text-align: center;
         }
 
-        .nbm-drawer .ant-drawer-content {
-          background: rgba(248, 250, 252, 0.96);
-          backdrop-filter: blur(22px);
-          border-top-left-radius: 22px;
-          border-top-right-radius: 22px;
-          overflow: hidden;
-        }
-
-        .nbm-drawer .ant-drawer-header {
-          background: transparent;
-          border-bottom: 1px solid rgba(148, 163, 184, 0.28);
-          padding: 14px 16px;
-        }
-
+        /* Drawer sheet */
         .nbm-drawer .ant-drawer-body {
-          padding: 16px;
-          padding-bottom: calc(16px + env(safe-area-inset-bottom));
+          padding: 12px 12px 18px;
         }
 
-        .nbm-close {
-          width: 38px;
-          height: 38px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 14px;
-          border: 1px solid rgba(2, 6, 23, 0.10);
-          background: rgba(255, 255, 255, 0.70);
-          color: rgba(2, 6, 23, 0.70);
+        .nbm-sheet {
+          max-width: 720px;
+          margin: 0 auto;
+        }
+
+        .nbm-section {
+          margin-bottom: 14px;
+          padding: 12px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          border-radius: 18px;
+          background: rgba(255, 255, 255, 0.9);
+        }
+
+        .nbm-title {
+          font-size: 12px;
+          font-weight: 700;
+          color: rgba(2, 6, 23, 0.78);
+          margin-bottom: 10px;
+        }
+
+        .nbm-list {
+          display: grid;
+          gap: 8px;
         }
 
         .nbm-row {
-          display: block;
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 8px;
+          align-items: stretch;
+        }
+
+        .nbm-item {
           width: 100%;
-          border-radius: 18px;
-          padding: 14px 14px;
-          border: 1px solid rgba(2, 6, 23, 0.07);
-          background: rgba(255, 255, 255, 0.72);
-          box-shadow: 0 24px 60px -55px rgba(2, 6, 23, 0.85);
-          transition: transform 120ms ease, box-shadow 160ms ease, border-color 160ms ease;
-          -webkit-tap-highlight-color: transparent;
-        }
-
-        .nbm-row:active {
-          transform: scale(0.99);
-          box-shadow: 0 18px 44px -44px rgba(2, 6, 23, 0.95);
-          border-color: rgba(37, 99, 235, 0.22);
-        }
-
-        .nbm-subrow {
-          display: block;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          padding: 12px 12px;
           border-radius: 16px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          background: rgba(2, 6, 23, 0.02);
+          color: rgba(2, 6, 23, 0.92);
+        }
+
+        .nbm-item-main {
+          text-decoration: none;
+        }
+
+        .nbm-toggle {
+          width: 46px;
+          border-radius: 16px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          background: rgba(255, 255, 255, 0.6);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: rgba(2, 6, 23, 0.65);
+        }
+
+        .nbm-pill {
+          font-size: 11px;
+          padding: 4px 8px;
+          border-radius: 999px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          color: rgba(2, 6, 23, 0.65);
+          background: rgba(255, 255, 255, 0.6);
+          white-space: nowrap;
+        }
+
+        .nbm-sublist {
+          margin-top: 8px;
+          margin-left: 6px;
+          padding-left: 10px;
+          border-left: 1px solid rgba(2, 6, 23, 0.08);
+          display: grid;
+          gap: 8px;
+        }
+
+        .nbm-subitem {
+          display: block;
           padding: 10px 12px;
-          color: rgba(2, 6, 23, 0.74);
+          border-radius: 14px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          background: rgba(255, 255, 255, 0.75);
+          color: rgba(2, 6, 23, 0.9);
+          text-decoration: none;
+        }
+
+        .nbm-actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          margin-top: 12px;
+        }
+
+        .nbm-primary {
+          height: 44px;
+          border-radius: 16px;
+          border: 1px solid rgba(2, 6, 23, 0.1);
+          background: rgba(2, 6, 23, 0.92);
+          color: white;
+          font-weight: 700;
+        }
+
+        .nbm-secondary {
+          height: 44px;
+          border-radius: 16px;
+          border: 1px solid rgba(2, 6, 23, 0.1);
           background: rgba(2, 6, 23, 0.03);
-          border: 1px solid rgba(2, 6, 23, 0.06);
-          -webkit-tap-highlight-color: transparent;
+          color: rgba(2, 6, 23, 0.88);
+          font-weight: 700;
         }
 
-        .nbm-subrow:active {
-          border-color: rgba(37, 99, 235, 0.22);
-          background: rgba(37, 99, 235, 0.08);
-          color: rgba(2, 6, 23, 0.90);
-        }
-
-        .nbm-cta {
-          margin-top: 14px;
-          padding-top: 14px;
-          border-top: 1px solid rgba(148, 163, 184, 0.34);
-        }
-
+        /* Search UI */
         .nbm-search {
+          padding: 12px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          border-radius: 18px;
+          background: rgba(255, 255, 255, 0.9);
+        }
+
+        .nbm-searchbox {
           display: flex;
           align-items: center;
           gap: 10px;
-          padding: 12px 12px;
-          border-radius: 18px;
-          border: 1px solid rgba(2, 6, 23, 0.10);
-          background: rgba(255, 255, 255, 0.75);
-          backdrop-filter: blur(18px);
-          box-shadow: 0 24px 60px -55px rgba(2, 6, 23, 0.85);
+          padding: 10px 12px;
+          border-radius: 16px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          background: rgba(2, 6, 23, 0.02);
+          margin-bottom: 12px;
         }
 
         .nbm-search-input {
@@ -587,9 +734,38 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           background: rgba(2, 6, 23, 0.03);
           color: rgba(2, 6, 23, 0.65);
         }
+
+        .nbm-results {
+          display: grid;
+          gap: 8px;
+        }
+
+        .nbm-result {
+          display: grid;
+          gap: 4px;
+          padding: 12px 12px;
+          border-radius: 16px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          background: rgba(255, 255, 255, 0.75);
+          color: rgba(2, 6, 23, 0.9);
+          text-decoration: none;
+        }
+
+        .nbm-result-title {
+          font-weight: 700;
+          font-size: 13px;
+        }
+
+        .nbm-result-cat {
+          font-size: 11px;
+          color: rgba(2, 6, 23, 0.6);
+        }
       `}</style>
 
-      <SubmissionFormModal isModalOpen={isSubmissionModalOpen} onClose={handleCloseSubmissionModal} />
+      <SubmissionFormModal
+        isModalOpen={isSubmissionModalOpen}
+        onClose={handleCloseSubmissionModal}
+      />
     </div>
   );
 }

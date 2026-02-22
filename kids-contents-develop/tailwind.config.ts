@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 
+
 export default {
   important: true,
   darkMode: "class",
@@ -197,5 +198,10 @@ export default {
       },
     },
   },
+  extend: {
+  fontFamily: {
+    sans: ["var(--font-main)", "system-ui", "sans-serif"],
+  },
+},
   plugins: [],
 } satisfies Config;
