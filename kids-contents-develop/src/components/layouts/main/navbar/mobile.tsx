@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Drawer } from "antd";
 import {
   ChevronDown,
@@ -12,6 +12,7 @@ import {
   MoreHorizontal,
   Newspaper,
   Search,
+  Trophy,
   X,
 } from "lucide-react";
 
@@ -28,34 +29,49 @@ interface MainNavbarMobileProps {
   menuItems: MenuItem[];
 }
 
-/**
- * NOTE:
- * - This file assumes ROUTES has at least: HOME, ABOUT, NEWS.
- * - If you have more routes, add them into SEARCH_ITEMS.
- */
-const SEARCH_ITEMS: Array<{
-  title: string;
-  href: string;
-  category: string;
-}> = [
-  { title: "Home", href: ROUTES.HOME, category: "Pages" },
-  { title: "About", href: ROUTES.ABOUT, category: "Pages" },
-  { title: "News", href: ROUTES.NEWS, category: "Pages" },
-];
-
 type DrawerMode = "menu" | "search";
+
+/** Safe route fallback if ROUTES.CONTESTS doesn't exist */
+const CONTESTS_ROUTE =
+  (ROUTES as unknown as { CONTESTS?: string }).CONTESTS ?? "/creative-contests";
+
+/** Uzbek labels */
+const UI = {
+  home: "Asosiy",
+  about: "Markaz",
+  news: "Yangiliklar",
+  contests: "Tanlovlar",
+  search: "Qidiruv",
+  menu: "Menyu",
+  quickLinks: "Tezkor havolalar",
+  allMenu: "Barcha bo‘limlar",
+  page: "",
+  link: "Havola",
+  submit: "Yuborish",
+  openSearch: "Qidiruvni ochish",
+  searchPlaceholder: "Qidirish...",
+};
+
+const SEARCH_ITEMS: Array<{ title: string; href: string; category: string }> = [
+  { title: UI.home, href: ROUTES.HOME, category: "" },
+  { title: UI.about, href: ROUTES.ABOUT, category: "" },
+  { title: UI.news, href: ROUTES.NEWS, category: "" },
+  { title: UI.contests, href: CONTESTS_ROUTE, category: "" },
+];
 
 export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerMode, setDrawerMode] = useState<DrawerMode>("menu");
-
   const [isSubmissionModalOpen, setIsSubmissionModalOpen] = useState(false);
 
+  // Submenus inside Drawer (optional)
   const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({
     about: false,
     news: false,
+    contests: false,
   });
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -124,13 +140,59 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
     icon: React.ReactNode;
     active?: boolean;
   }) => (
-    <span
-      className={["nbm-tab", active ? "is-active" : ""].join(" ")}
-      aria-label={label}
-    >
+    <span className={["nbm-tab", active ? "is-active" : ""].join(" ")}>
       <span className="nbm-ico">{icon}</span>
       <span className="nbm-lbl">{label}</span>
     </span>
+  );
+
+  const DrawerRow = ({
+    title,
+    href,
+    pill,
+    submenuKey,
+    showToggle,
+  }: {
+    title: string;
+    href: string;
+    pill: string;
+    submenuKey?: "about" | "news" | "contests";
+    showToggle?: boolean;
+  }) => {
+    const expanded = submenuKey ? !!expandedMenus[submenuKey] : false;
+
+    return (
+      <div className="nbm-row">
+        {/* Clicking the title ALWAYS navigates (fixes your About/News issue) */}
+        <Link
+          href={href}
+          className="nbm-item nbm-item-main"
+          onClick={closeDrawer}
+        >
+          <span>{title}</span>
+          <span className="nbm-pill">{pill}</span>
+        </Link>
+
+        {/* Separate toggle button for submenu (optional) */}
+        {showToggle && submenuKey ? (
+          <button
+            type="button"
+            className="nbm-toggle"
+            onClick={() => toggleSubmenu(submenuKey)}
+            aria-label={`${title} submenu`}
+          >
+            {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+          </button>
+        ) : null}
+      </div>
+    );
+  };
+
+  const go = useCallback(
+    (href: string) => {
+      router.push(href);
+    },
+    [router]
   );
 
   return (
@@ -138,16 +200,16 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
       {/* Top sticky bar */}
       <div className="sticky top-0 z-50 border-b border-white/70 bg-white/80 backdrop-blur-xl shadow-[0_20px_35px_-30px_rgba(2,6,23,1)]">
         <div className="container">
-        <div className="flex items-center justify-between py-2.5">
+          <div className="flex items-center justify-between py-2.5">
             <Link href={ROUTES.HOME} className="inline-flex items-center">
               <img src="/logo.svg" alt="Site logo" width={172} height={62} />
-                          </Link>
+            </Link>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={openSearch}
                 className="nbm-topicon"
-                aria-label="Search"
+                aria-label={UI.search}
                 type="button"
               >
                 <Search size={18} />
@@ -156,7 +218,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
               <button
                 onClick={openMenu}
                 className="nbm-topicon"
-                aria-label="Menu"
+                aria-label={UI.menu}
                 type="button"
               >
                 <MoreHorizontal size={18} />
@@ -169,28 +231,28 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
       {/* iOS safe-area spacer */}
       <div className="nbm-safe" />
 
-      {/* Bottom tab bar */}
+      {/* Bottom tab bar (scrollable so “other buttons should be visible” when swiping) */}
       <div className="nbm-bottom">
         <div className="nbm-bottom-inner">
-          <Link href={ROUTES.HOME} className="nbm-linkwrap">
+          <button
+            className="nbm-linkwrap"
+            type="button"
+            onClick={() => go(ROUTES.HOME)}
+          >
             <Tab
-              label="Home"
+              label={UI.home}
               icon={<Home size={20} />}
               active={isActive(ROUTES.HOME)}
             />
-          </Link>
+          </button>
 
           <button
             className="nbm-linkwrap"
-            onClick={() => {
-              setExpandedMenus((p) => ({ ...p, about: false, news: false }));
-              openMenu();
-              setTimeout(() => toggleSubmenu("about"), 0);
-            }}
             type="button"
+            onClick={() => go(ROUTES.ABOUT)}
           >
             <Tab
-              label="About"
+              label={UI.about}
               icon={<Info size={20} />}
               active={isActive(ROUTES.ABOUT)}
             />
@@ -198,26 +260,34 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
 
           <button
             className="nbm-linkwrap"
-            onClick={() => {
-              setExpandedMenus((p) => ({ ...p, about: false, news: false }));
-              openMenu();
-              setTimeout(() => toggleSubmenu("news"), 0);
-            }}
             type="button"
+            onClick={() => go(ROUTES.NEWS)}
           >
             <Tab
-              label="News"
+              label={UI.news}
               icon={<Newspaper size={20} />}
               active={isActive(ROUTES.NEWS)}
             />
           </button>
 
+          <button
+            className="nbm-linkwrap"
+            type="button"
+            onClick={() => go(CONTESTS_ROUTE)}
+          >
+            <Tab
+              label={UI.contests}
+              icon={<Trophy size={20} />}
+              active={isActive(CONTESTS_ROUTE)}
+            />
+          </button>
+
           <button className="nbm-linkwrap" onClick={openSearch} type="button">
-            <Tab label="Search" icon={<Search size={20} />} />
+            <Tab label={UI.search} icon={<Search size={20} />} />
           </button>
 
           <button className="nbm-linkwrap" onClick={openMenu} type="button">
-            <Tab label="More" icon={<MoreHorizontal size={20} />} />
+            <Tab label={UI.menu} icon={<MoreHorizontal size={20} />} />
           </button>
         </div>
       </div>
@@ -228,7 +298,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <img src="/logo.svg" alt="Site logo" width={170} height={58} />
-                          </div>
+            </div>
             <button
               onClick={closeDrawer}
               className="nbm-close"
@@ -257,7 +327,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
                   }}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search pages..."
+                  placeholder={UI.searchPlaceholder}
                   className="nbm-search-input"
                   aria-label="Search input"
                 />
@@ -291,42 +361,21 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         ) : (
           <div className="nbm-sheet">
             <div className="nbm-section">
-              <div className="nbm-title">Quick links</div>
+              <div className="nbm-title">{UI.quickLinks}</div>
 
               <div className="nbm-list">
-                <Link
-                  href={ROUTES.HOME}
-                  className="nbm-item"
-                  onClick={closeDrawer}
-                >
-                  <span>Home</span>
-                  <span className="nbm-pill">Page</span>
-                </Link>
+                <DrawerRow title={UI.home} href={ROUTES.HOME} pill={UI.page} />
 
-                <button
-                  type="button"
-                  className="nbm-item"
-                  onClick={() => toggleSubmenu("about")}
-                >
-                  <span>About</span>
-                  <span className="nbm-aux">
-                    {expandedMenus.about ? (
-                      <ChevronUp size={18} />
-                    ) : (
-                      <ChevronDown size={18} />
-                    )}
-                  </span>
-                </button>
-
+                <DrawerRow
+                  title={UI.about}
+                  href={ROUTES.ABOUT}
+                  pill={UI.page}
+                  submenuKey="about"
+                  showToggle
+                />
                 {expandedMenus.about ? (
                   <div className="nbm-sublist">
-                    <Link
-                      href={ROUTES.ABOUT}
-                      className="nbm-subitem"
-                      onClick={closeDrawer}
-                    >
-                      About page
-                    </Link>
+                    {/* Extra “about” links from menuItems (if you pass them) */}
                     {menuItems
                       .filter((m) => m.key.toLowerCase().includes("about"))
                       .map((m) => (
@@ -342,32 +391,45 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
                   </div>
                 ) : null}
 
-                <button
-                  type="button"
-                  className="nbm-item"
-                  onClick={() => toggleSubmenu("news")}
-                >
-                  <span>News</span>
-                  <span className="nbm-aux">
-                    {expandedMenus.news ? (
-                      <ChevronUp size={18} />
-                    ) : (
-                      <ChevronDown size={18} />
-                    )}
-                  </span>
-                </button>
-
+                <DrawerRow
+                  title={UI.news}
+                  href={ROUTES.NEWS}
+                  pill={UI.page}
+                  submenuKey="news"
+                  showToggle
+                />
                 {expandedMenus.news ? (
                   <div className="nbm-sublist">
-                    <Link
-                      href={ROUTES.NEWS}
-                      className="nbm-subitem"
-                      onClick={closeDrawer}
-                    >
-                      News page
-                    </Link>
                     {menuItems
                       .filter((m) => m.key.toLowerCase().includes("news"))
+                      .map((m) => (
+                        <Link
+                          key={m.key}
+                          href={m.href}
+                          className="nbm-subitem"
+                          onClick={closeDrawer}
+                        >
+                          {m.label}
+                        </Link>
+                      ))}
+                  </div>
+                ) : null}
+
+                <DrawerRow
+                  title={UI.contests}
+                  href={CONTESTS_ROUTE}
+                  pill={UI.page}
+                  submenuKey="contests"
+                  showToggle
+                />
+                {expandedMenus.contests ? (
+                  <div className="nbm-sublist">
+                    {menuItems
+                      .filter(
+                        (m) =>
+                          m.key.toLowerCase().includes("contest") ||
+                          m.key.toLowerCase().includes("tanlov")
+                      )
                       .map((m) => (
                         <Link
                           key={m.key}
@@ -384,7 +446,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
             </div>
 
             <div className="nbm-section">
-              <div className="nbm-title">All menu</div>
+              <div className="nbm-title">{UI.allMenu}</div>
               <div className="nbm-list">
                 {menuItems.map((m) => (
                   <Link
@@ -394,7 +456,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
                     onClick={closeDrawer}
                   >
                     <span>{m.label}</span>
-                    <span className="nbm-pill">Link</span>
+                    <span className="nbm-pill">{UI.link}</span>
                   </Link>
                 ))}
               </div>
@@ -409,7 +471,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
                   handleOpenSubmissionModal();
                 }}
               >
-                Submit
+                {UI.submit}
               </button>
 
               <button
@@ -417,7 +479,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
                 className="nbm-secondary"
                 onClick={openSearch}
               >
-                Open search
+                {UI.openSearch}
               </button>
             </div>
           </div>
@@ -452,7 +514,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           justify-content: center;
         }
 
-        /* Bottom bar */
+        /* Bottom bar (scrollable) */
         .nbm-bottom {
           position: fixed;
           left: 0;
@@ -466,15 +528,21 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         }
 
         .nbm-bottom-inner {
-          display: grid;
-          grid-template-columns: repeat(5, minmax(0, 1fr));
+          display: flex;
           gap: 8px;
-          max-width: 680px;
+          max-width: 760px;
           margin: 0 auto;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+        .nbm-bottom-inner::-webkit-scrollbar {
+          display: none;
         }
 
         .nbm-linkwrap {
-          width: 100%;
+          flex: 0 0 auto;
+          width: 92px;
           border: 0;
           background: transparent;
           padding: 0;
@@ -505,6 +573,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         .nbm-lbl {
           font-size: 11px;
           letter-spacing: 0.01em;
+          text-align: center;
         }
 
         /* Drawer sheet */
@@ -537,6 +606,13 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           gap: 8px;
         }
 
+        .nbm-row {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 8px;
+          align-items: stretch;
+        }
+
         .nbm-item {
           width: 100%;
           display: flex;
@@ -550,7 +626,15 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           color: rgba(2, 6, 23, 0.92);
         }
 
-        .nbm-aux {
+        .nbm-item-main {
+          text-decoration: none;
+        }
+
+        .nbm-toggle {
+          width: 46px;
+          border-radius: 16px;
+          border: 1px solid rgba(2, 6, 23, 0.08);
+          background: rgba(255, 255, 255, 0.6);
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -583,6 +667,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           border: 1px solid rgba(2, 6, 23, 0.08);
           background: rgba(255, 255, 255, 0.75);
           color: rgba(2, 6, 23, 0.9);
+          text-decoration: none;
         }
 
         .nbm-actions {
@@ -663,6 +748,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           border: 1px solid rgba(2, 6, 23, 0.08);
           background: rgba(255, 255, 255, 0.75);
           color: rgba(2, 6, 23, 0.9);
+          text-decoration: none;
         }
 
         .nbm-result-title {

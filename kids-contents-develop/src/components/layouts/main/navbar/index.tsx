@@ -11,7 +11,7 @@ export function MainNavbar() {
     { key: "projects", label: "Loyihalar", href: ROUTES.PROJECTS },
     {
       key: "contests",
-      label: "Ijodiy tanlovlar",
+      label: "Tanlovlar",
       href: ROUTES.CREATIVE_CONTESTS,
     },
   ];
