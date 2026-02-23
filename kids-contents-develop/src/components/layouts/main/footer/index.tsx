@@ -1,11 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import { Facebook, Instagram, Send, MapPin, Phone, Mail, Twitter } from "lucide-react";
+import { Facebook, Instagram, Send, MapPin, Phone, Mail } from "lucide-react";
 import { BgBubbles } from "@/components/general";
 import { FooterLink } from "@/components/ui";
 import { LINKS } from "@/constants";
 import { useMemo } from "react";
+
+function XBrandIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M18.9 2H21.9L15.35 9.49L23.06 22H17.02L12.29 14.43L5.66 22H2.66L9.67 13.99L2.28 2H8.47L12.75 8.92L18.9 2ZM17.85 20.1H19.51L7.57 3.79H5.79L17.85 20.1Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
 
 const SOCIAL_LINKS = [
   {
@@ -25,7 +36,7 @@ const SOCIAL_LINKS = [
   },
   {
     href: LINKS.twitterUrl,
-    icon: <Twitter size={18} strokeWidth={2.1} />,
+    icon: <XBrandIcon />,
     label: "X",
   },
 ];

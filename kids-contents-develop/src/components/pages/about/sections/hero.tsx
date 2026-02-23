@@ -25,8 +25,8 @@ export const AboutSectionsHero = memo(function AboutSectionsHero() {
                 Markaz haqida
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white/80 p-3 sm:p-4">
-                <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
+              <div className="hidden rounded-2xl border border-slate-200 bg-white/80 p-3 lg:block lg:p-4">
+                <div className="grid gap-2 lg:grid-cols-2 lg:gap-3">
                   <div className="rounded-xl bg-slate-50 px-3 py-2.5 text-center sm:text-left">
                     <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
                       Asos
@@ -66,7 +66,7 @@ export const AboutSectionsHero = memo(function AboutSectionsHero() {
                     src="/videos/intro_video.mp4"
                     controls
                     preload="metadata"
-                    poster="/images/about-video-poster.avif"
+
                     autoPlay={!reduceMotion}
                     muted
                     playsInline
