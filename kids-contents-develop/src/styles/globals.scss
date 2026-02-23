@@ -297,7 +297,7 @@ main > div > section:first-child {
   place-items: center;
   overflow: hidden;
   pointer-events: none;
-  transition: opacity 0.45s ease, visibility 0.45s ease;
+  transition: opacity 0.9s ease, visibility 0.9s ease;
   background: #ffffff;
 }
 
@@ -336,7 +336,7 @@ main > div > section:first-child {
   );
   transform: translateX(-165%);
   filter: blur(9px);
-  animation: splashShineSweep 1.35s ease-out 0.45s forwards;
+  animation: splashShineSweep 2.7s ease-out 0.9s forwards;
 }
 
 .splash-screen__logo {
@@ -346,7 +346,7 @@ main > div > section:first-child {
   filter: blur(8px);
   transform: scale(0.9);
   transform-origin: center;
-  animation: splashLogoReveal 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+  animation: splashLogoReveal 2.3s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
 }
 
 @keyframes splashLogoReveal {
