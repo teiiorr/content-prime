@@ -1,7 +1,7 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
-import { GraduationCap, ShieldCheck, Sparkles } from "lucide-react";
+import { memo, useEffect, useRef, useState } from "react";
+import { GraduationCap, ShieldCheck, Sparkles, Volume2 } from "lucide-react";
 import { ROUTES } from "@/constants";
 import { BgBubbles, Button, Card, Container } from "@/components";
 import { FadeIn } from "@/components/effects/FadeIn";
@@ -26,6 +26,10 @@ const ABOUT_HIGHLIGHTS = [
 
 export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
   const [reduceMotion, setReduceMotion] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [heroFinished, setHeroFinished] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -35,8 +39,58 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
     return () => media.removeEventListener?.("change", update);
   }, []);
 
+  useEffect(() => {
+    try {
+      setHeroFinished(window.sessionStorage.getItem("home-hero-video-finished") === "1");
+    } catch {}
+
+    const onHeroFinished = () => setHeroFinished(true);
+    window.addEventListener("home-hero-video-finished", onHeroFinished as EventListener);
+    return () =>
+      window.removeEventListener("home-hero-video-finished", onHeroFinished as EventListener);
+  }, []);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.35 }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (reduceMotion) {
+      video.pause();
+      return;
+    }
+
+    if (heroFinished && isVisible) {
+      video.muted = true;
+      void video.play().catch(() => {});
+    }
+  }, [heroFinished, isVisible, reduceMotion]);
+
+  const handleEnableSound = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    try {
+      video.currentTime = 0;
+      video.muted = false;
+      await video.play();
+    } catch {
+      video.muted = true;
+    }
+  };
+
   return (
     <section
+      ref={sectionRef}
       id="about"
       className="relative mb-0 mt-10 overflow-hidden bg-[#dfe9ef] py-12 md:mt-16 md:py-20"
     >
@@ -88,22 +142,30 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
                 <div className="pointer-events-none absolute -bottom-6 -right-4 h-32 w-32 rounded-full bg-[#c8b39a]/25 blur-2xl" />
 
                 <Card className="relative h-full overflow-hidden rounded-[28px] border-white/70 bg-white/90 p-0 shadow-[0_34px_70px_-36px_rgba(2,6,23,0.45)]">
-                  <div className="relative aspect-[4/5] min-h-[320px] sm:aspect-[16/10] sm:min-h-[380px] lg:h-full lg:min-h-0 lg:aspect-auto">
+                  <div className="relative aspect-[4/5] min-h-[320px] overflow-hidden bg-slate-950 sm:aspect-[16/10] sm:min-h-[380px] lg:h-full lg:min-h-0 lg:aspect-auto">
                     <video
-                      className="absolute inset-0 h-full w-full object-cover object-center"
-                      autoPlay={!reduceMotion}
+                      ref={videoRef}
+                      className="absolute inset-0 h-full w-full object-contain object-center bg-slate-950"
+                      autoPlay={false}
                       muted
                       playsInline
-                      preload="metadata"
+                      preload="auto"
                       poster="/images/about-video-poster.avif"
-                      onEnded={(event) => {
-                        const video = event.currentTarget;
-                        video.currentTime = 0;
-                        void video.play();
-                      }}
                     >
                       <source src="/videos/intro.mp4" type="video/mp4" />
                     </video>
+
+                    {!reduceMotion ? (
+                      <button
+                        type="button"
+                        onClick={handleEnableSound}
+                        className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/45 px-3 py-2 text-xs font-semibold text-white backdrop-blur-md transition hover:bg-black/60 sm:bottom-5 sm:right-5"
+                        aria-label="Ovoz bilan ijro etish"
+                      >
+                        <Volume2 className="h-4 w-4" />
+                        <span>Ovoz bilan</span>
+                      </button>
+                    ) : null}
                   </div>
                 </Card>
               </div>
