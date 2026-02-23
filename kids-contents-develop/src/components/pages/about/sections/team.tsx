@@ -1,5 +1,7 @@
 import { memo } from "react";
-import { BgBubbles } from "@/components";
+import Image from "next/image";
+import { Mail, Phone } from "lucide-react";
+import { BgBubbles, HomeSectionShell } from "@/components";
 
 interface MemberItem {
   id: number;
@@ -45,110 +47,79 @@ export const AboutSectionsTeam = memo(function AboutSectionsTeam() {
   return (
     <section
       id="team"
-      className="pt-8 pb-16 md:pt-16 md:pb-24 lg:pt-24 lg:pb-36 relative"
+      className="relative bg-gradient-to-b from-[#eef2ed] to-transparent pb-16 pt-8 md:pb-24 md:pt-16 lg:pb-36 lg:pt-24"
     >
-      <div className="container">
-        {/* Header */}
-        <div className="md:text-center mb-8 md:mb-10 lg:mb-14">
-          <h2 className="text-3xl lg:text-4xl font-bold text-base-black">
-            Rahbariyat
-          </h2>
-        </div>
-
-        {/* Team Members */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {team.map((member) => (
-            <div
-              key={member.id}
-              className="bg-green-50 rounded-3xl border border-green-600 p-6 md:p-8"
-            >
-              {/* Avatar */}
-              <div className="w-20 h-20 md:w-24 md:h-24 lg:w-[140px] lg:h-[140px] rounded-full overflow-hidden mb-4 md:mb-6">
-                <img
-                  src={member.avatar}
-                  alt={member.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Info */}
-              <div className="mb-5 md:mb-6">
-                <h3 className="text-xl lg:text-2xl font-semibold text-gray-900 mb-2 md:mb-3">
-                  {member.name}
-                </h3>
-
-                <p className="text-green-600 text-lg lg:text-xl font-medium">
-                  {member.position}
-                </p>
-              </div>
-
-              {/* Contact Info */}
-              <div className="flex flex-col gap-2 md:gap-3.5 text-sm md:text-base text-gray-900">
-                <div className="flex items-center gap-2.5">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M15.6 14.5215C13.205 17.0421 7.09582 10.9878 9.49995 8.45753C10.9678 6.91263 9.30963 5.14707 8.3918 3.84934C6.66924 1.41378 2.88771 4.77641 3.00256 6.91544C3.36473 13.6609 10.6615 21.6546 17.7275 20.9574C19.9381 20.7393 22.4778 16.7471 19.9423 15.2882C18.6745 14.5587 16.9342 13.1172 15.6 14.5215Z"
-                      stroke="#027AA2"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-
-                  <span>{member.phone}</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <svg
-                    width="24"
-                    height="25"
-                    viewBox="0 0 24 25"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M2.35742 8.11419L9.33772 12.7677C10.3 13.4092 10.7811 13.73 11.3012 13.8546C11.7607 13.9647 12.2398 13.9647 12.6994 13.8546C13.2194 13.73 13.7006 13.4092 14.6628 12.7677L21.6431 8.11419M7.15742 19.8999H16.8431C18.5233 19.8999 19.3634 19.8999 20.0051 19.5729C20.5696 19.2853 21.0285 18.8264 21.3162 18.2619C21.6431 17.6201 21.6431 16.7801 21.6431 15.0999V9.6999C21.6431 8.01974 21.6431 7.17967 21.3162 6.53793C21.0285 5.97344 20.5696 5.5145 20.0051 5.22688C19.3634 4.8999 18.5233 4.8999 16.8431 4.8999H7.15742C5.47726 4.8999 4.63719 4.8999 3.99545 5.22688C3.43096 5.5145 2.97202 5.97344 2.6844 6.53793C2.35742 7.17967 2.35742 8.01974 2.35742 9.6999V15.0999C2.35742 16.7801 2.35742 17.6201 2.6844 18.2619C2.97202 18.8264 3.43096 19.2853 3.99545 19.5729C4.63719 19.8999 5.47726 19.8999 7.15742 19.8999Z"
-                      stroke="#027AA2"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-
-                  <span className="break-all">{member.email}</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <svg
-                    width="24"
-                    height="25"
-                    viewBox="0 0 24 25"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 21.4001C16.9706 21.4001 21 17.3707 21 12.4001C21 7.42958 16.9706 3.40015 12 3.40015M12 21.4001C7.02944 21.4001 3 17.3707 3 12.4001C3 7.42958 7.02944 3.40015 12 3.40015M12 21.4001C14.7614 21.4001 15.9413 16.2371 15.9413 12.4001C15.9413 8.56318 14.7614 3.40015 12 3.40015M12 21.4001C9.23858 21.4001 8.05895 16.2371 8.05895 12.4001C8.05895 8.56322 9.23858 3.40015 12 3.40015M3.49988 9.40012C10.1388 9.40012 13.861 9.40012 20.4999 9.40012M3.49988 15.4002C10.1388 15.4002 13.861 15.4002 20.4999 15.4002"
-                      stroke="#027AA2"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-
-                  <span className="break-all">{member.website}</span>
-                </div>
-              </div>
+      <div className="container max-w-[1508px] 2xl:max-w-[88%]">
+        <HomeSectionShell className="border-[#cfd8cf] bg-[#fbfcfa] p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(55,78,49,0.16)]">
+          <div className="mb-6 flex justify-center md:mb-8">
+            <div className="inline-flex items-center rounded-full border border-slate-300/80 bg-white px-5 py-2.5 text-base font-bold tracking-[-0.01em] text-slate-900 shadow-sm sm:px-6 sm:py-3 sm:text-lg md:px-7 md:py-3.5 md:text-xl">
+              Rahbariyat
             </div>
-          ))}
-        </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:gap-5">
+            {team.map((member) => {
+              const isShortPosition = member.position.length <= 20;
+              const isMediumPosition = member.position.length > 20 && member.position.length <= 36;
+
+              return (
+                <article
+                  key={member.id}
+                  className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.2)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_rgba(15,23,42,0.22)] sm:p-5"
+                >
+                  <div className="mb-4 flex items-start gap-4">
+                  <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 md:h-24 md:w-24 lg:h-28 lg:w-28">
+                    <Image
+                      src={member.avatar}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 112px, 96px"
+                    />
+                  </div>
+                  <div className="min-w-0 flex flex-1 flex-col">
+                    <div className="flex min-h-[52px] items-start md:min-h-[56px]">
+                      <h3 className="line-clamp-2 text-lg font-semibold leading-6 tracking-[-0.01em] text-slate-900 lg:text-xl">
+                        {member.name}
+                      </h3>
+                    </div>
+
+                    <div className="mt-2 border-t border-slate-200/90 pt-2">
+                      <p
+                        className={[
+                          "flex min-h-[48px] w-full items-center justify-center rounded-lg bg-slate-50 px-2.5 py-1.5 text-center text-slate-600 ring-1 ring-inset ring-slate-200",
+                          "line-clamp-2",
+                          isShortPosition
+                            ? "text-[15px] font-semibold leading-5 lg:text-base"
+                            : isMediumPosition
+                              ? "text-sm font-medium leading-5 lg:text-[15px]"
+                              : "text-[13px] font-medium leading-5 lg:text-sm",
+                        ].join(" ")}
+                      >
+                        {member.position}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2.5 border-t border-slate-100 pt-4 text-sm text-slate-700">
+                  <div className="flex items-center gap-2.5">
+                    <Phone size={16} className="shrink-0 text-slate-500" />
+                    <span>{member.phone}</span>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <Mail size={16} className="shrink-0 text-slate-500" />
+                    <span className="break-all">{member.email}</span>
+                  </div>
+                </div>
+                </article>
+              );
+            })}
+          </div>
+        </HomeSectionShell>
       </div>
 
-      <BgBubbles color="#fff" className="bottom-full" />
+      <BgBubbles color="#eef2ed" className="bottom-full" />
     </section>
   );
 });

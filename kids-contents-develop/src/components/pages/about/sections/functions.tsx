@@ -1,4 +1,7 @@
 import { memo } from "react";
+import { Sparkles } from "lucide-react";
+
+import { HomeSectionShell } from "@/components";
 
 export const AboutSectionsFunctions = memo(function AboutSectionsFunctions() {
   const functions = [
@@ -47,42 +50,44 @@ export const AboutSectionsFunctions = memo(function AboutSectionsFunctions() {
   return (
     <section
       id="center-functions"
-      className="relative py-10 md:py-16 lg:py-24 mt-12 md:mt-16 lg:mt-20"
+      className="relative mt-12 bg-gradient-to-b from-[#eef1f5] via-[#f2f4f7] to-transparent py-10 md:mt-16 md:py-16 lg:mt-20 lg:py-24"
     >
-      <div className="container">
-        {/* Header */}
-        <div className="md:text-center mb-8 md:mb-12 lg:mb-14">
-          <h2 className="text-3xl lg:text-4xl font-bold text-base-black">
-            Faoliyat
-          </h2>
-        </div>
-
-        {/* Functions Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          {functions.map((func, index) => (
-            <div
-              key={func.number}
-              className={`relative group border border-orange-400 bg-orange-50 p-5 rounded-3xl ${func.className}`}
-            >
-              <div className="relative mb-5">
-                <div className="relative w-14 h-14">
-                  <div className="absolute inset-0 bg-golden-gradient rounded-full"></div>
-                  <div className="absolute inset-0.5 bg-orange-50 rounded-full flex items-center justify-center">
-                    <div className="w-9 h-9 bg-orange-400 rounded-full flex items-center justify-center relative z-[2]">
-                      <span className="text-white font-bold text-2xl relative z-[3]">
-                        {func.number}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-base-black leading-relaxed text-base">
-                {func.text}
-              </p>
+      <div className="container max-w-[1508px] 2xl:max-w-[88%]">
+        <HomeSectionShell className="border-[#d3dae3] bg-[#f8fafc] p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(30,41,59,0.16)]">
+          <div className="mb-6 flex justify-center md:mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white px-5 py-2.5 text-base font-bold tracking-[-0.01em] text-slate-900 shadow-sm sm:px-6 sm:py-3 sm:text-lg md:gap-2.5 md:px-7 md:py-3.5 md:text-xl">
+              <Sparkles size={18} className="text-slate-600 md:h-5 md:w-5" />
+              Faoliyat
             </div>
-          ))}
-        </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-6 xl:gap-5 2xl:gap-6">
+            {functions.map((func) => (
+              <article
+                key={func.number}
+                className={[
+                  "group relative overflow-hidden rounded-2xl border border-[#dbe2ea] bg-white p-4 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.18)] transition duration-200",
+                  "hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-[0_18px_40px_-26px_rgba(15,23,42,0.18)]",
+                  "sm:p-5 lg:p-5 xl:p-6",
+                  func.className,
+                ].join(" ")}
+              >
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[#c8d2df] via-[#94a3b8] to-[#c8d2df] opacity-85" />
+
+                <div className="mb-4 flex items-center gap-3 xl:mb-5">
+                  <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-sm font-bold text-slate-900 shadow-sm sm:h-11 sm:w-11 sm:text-[15px] xl:h-12 xl:w-12 xl:text-base">
+                    {String(func.number).padStart(2, "0")}
+                  </div>
+                  <div className="h-px flex-1 bg-slate-200" />
+                </div>
+
+                <p className="text-[15px] font-medium leading-7 text-slate-800 sm:text-base sm:leading-7 lg:text-[17px] lg:leading-8 xl:text-[18px] xl:leading-9">
+                  {func.text.trim()}
+                </p>
+              </article>
+            ))}
+          </div>
+        </HomeSectionShell>
       </div>
     </section>
   );

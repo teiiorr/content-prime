@@ -1,8 +1,12 @@
 "use client";
-import { memo, useMemo } from "react";
+
+import { memo, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Breadcrumb } from "antd";
+import { ArrowLeft, ChevronLeft, ChevronRight, Copy, Share2 } from "lucide-react";
 
+import { HomeSectionShell } from "@/components";
 import { ROUTES } from "@/constants";
 import { AnalyticsItemType } from "@/types";
 
@@ -11,256 +15,336 @@ export const AnalyticsSlugPage = memo(function AnalyticsSlugPage({
 }: {
   analyticsItem: AnalyticsItemType;
 }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [copied, setCopied] = useState(false);
+
   const gallery = useMemo(() => {
     if (!analyticsItem?.gallery_images) return null;
-
     return analyticsItem.gallery_images
       .split(",")
       .map((src) => src.trim())
       .filter(Boolean);
   }, [analyticsItem?.gallery_images]);
 
+  const articleText = useMemo(() => {
+    const raw = (analyticsItem.content || analyticsItem.description || "")
+      .replace(/<[^>]*>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    return raw;
+  }, [analyticsItem.content, analyticsItem.description]);
+
+  const readingMinutes = Math.max(1, Math.ceil(articleText.split(" ").filter(Boolean).length / 220));
+
+  useEffect(() => {
+    setActiveSlide(0);
+  }, [analyticsItem.slug]);
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1400);
+    } catch (e) {
+      console.error("Failed to copy link", e);
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: analyticsItem.title,
+          text: analyticsItem.description || analyticsItem.title,
+          url: window.location.href,
+        });
+      } else {
+        handleCopyLink();
+      }
+    } catch (e) {
+      console.error("Share action cancelled/failed", e);
+    }
+  };
+
+  const goPrevSlide = () => {
+    if (!gallery?.length) return;
+    setActiveSlide((prev) => (prev > 0 ? prev - 1 : gallery.length - 1));
+  };
+
+  const goNextSlide = () => {
+    if (!gallery?.length) return;
+    setActiveSlide((prev) => (prev < gallery.length - 1 ? prev + 1 : 0));
+  };
+
   return (
-    <div className="bg-background">
-      <section
-        id="analytics-hero"
-        className="overflow-hidden min-h-screen relative z-10"
-      >
-        <div className="container py-10 lg:py-16">
-          <div className="mb-8 lg:mb-14">
-            <Breadcrumb
-              items={[
-                {
-                  title: (
-                    <Link
-                      href={ROUTES.HOME}
-                      className="text-gray-600 font-semibold text-sm px-2"
-                    >
-                      Asosiy
-                    </Link>
-                  ),
-                },
-                {
-                  title: (
-                    <Link
-                      href={ROUTES.ANALYTICS}
-                      className="text-gray-600 font-semibold text-sm px-2"
-                    >
-                      Tahlillar
-                    </Link>
-                  ),
-                },
-                {
-                  title: (
-                    <Link
-                      href={`${ROUTES.ANALYTICS}/${analyticsItem.slug}`}
-                      className="text-orange-400 font-semibold text-sm px-2"
-                    >
-                      {analyticsItem.title}
-                    </Link>
-                  ),
-                },
-              ]}
-              className="mb-8 md:mb-10 lg:mb-12"
-            />
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-4 lg:mb-6">
-              {analyticsItem.title}
-            </h1>
-            {analyticsItem.description && (
-              <p
-                className="text-lg lg:text-xl text-gray-700 mb-4 lg:mb-6 rich-text-container"
-                dangerouslySetInnerHTML={{ __html: analyticsItem.description }}
-              />
-            )}
-            {analyticsItem.tag && (
-              <div className="h-6 border border-blue-200 bg-blue-50 font-bold text-sm text-blue-700 rounded-2xl py-px px-2.5 inline-block">
-                {analyticsItem.tag}
+    <div className="relative bg-gradient-to-b from-[#eef1f5] via-[#f5f7fa] to-white">
+      <section id="analytics-hero" className="relative z-10 overflow-hidden py-8 md:py-12 lg:py-16">
+        <div className="container max-w-[1508px] 2xl:max-w-[88%]">
+          <HomeSectionShell className="border-transparent bg-white/90 p-4 sm:p-5 lg:p-6 xl:p-8 shadow-[0_30px_70px_-50px_rgba(15,23,42,0.18)]">
+            <div className="mb-5 flex flex-col gap-3 md:mb-6">
+              <div className="flex flex-wrap items-center gap-3">
+                <Breadcrumb
+                  items={[
+                    {
+                      title: (
+                        <Link href={ROUTES.HOME} className="text-slate-500 text-sm font-medium">
+                          Asosiy
+                        </Link>
+                      ),
+                    },
+                    {
+                      title: (
+                        <Link href={ROUTES.ANALYTICS} className="text-slate-600 text-sm font-semibold">
+                          Tahlillar
+                        </Link>
+                      ),
+                    },
+                    {
+                      title: <span className="text-slate-400 text-sm">{analyticsItem.title}</span>,
+                    },
+                  ]}
+                  className="min-w-0"
+                />
               </div>
-            )}
-          </div>
 
-          {gallery ? (
-            <div className="relative mb-16 lg:mb-24">
-              <div className="carousel-container overflow-hidden rounded-3xl sm:rounded-[30px] lg:rounded-[36px] border-4 sm:border-6 lg:border-[8px] border-blue-600 shadow-2xl">
-                <div className="carousel-track flex transition-transform duration-500 ease-in-out">
-                  {gallery.map((image, index) => (
-                    <div
-                      key={index}
-                      className="carousel-slide flex-shrink-0 w-full aspect-video relative"
-                    >
-                      <img
-                        src={image}
-                        alt={`${analyticsItem.title} - ${index + 1}`}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
+              <Link
+                href={ROUTES.ANALYTICS}
+                className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+              >
+                <ArrowLeft size={15} />
+                Tahlillarga qaytish
+              </Link>
+
+              <div className="space-y-2.5">
+                <h1 className="max-w-5xl text-2xl font-bold leading-tight tracking-[-0.02em] text-slate-900 sm:text-3xl md:text-4xl lg:text-5xl">
+                  {analyticsItem.title}
+                </h1>
+
+                {analyticsItem.description ? (
+                  <div
+                    className="news-article-body max-w-4xl text-base text-slate-600 md:text-lg"
+                    dangerouslySetInnerHTML={{ __html: analyticsItem.description }}
+                  />
+                ) : null}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                {analyticsItem.date_display ? (
+                  <div className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-800">
+                    {analyticsItem.date_display}
+                  </div>
+                ) : null}
+                {analyticsItem.tag ? (
+                  <div className="rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-sm font-semibold text-sky-800">
+                    {analyticsItem.tag}
+                  </div>
+                ) : null}
+                <div className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600">
+                  ~ {readingMinutes} daqiqa o‘qish
+                </div>
+              </div>
+            </div>
+
+            <div className="min-w-0">
+              {gallery ? (
+                <div className="mb-8 lg:mb-10">
+                  <div className="relative overflow-hidden rounded-3xl bg-white p-2 shadow-[0_20px_50px_-38px_rgba(15,23,42,0.22)] sm:rounded-[30px] lg:rounded-[34px]">
+                    <div className="relative aspect-video overflow-hidden rounded-2xl bg-slate-100 sm:rounded-[22px]">
+                      <div
+                        className="flex h-full transition-transform duration-500 ease-out"
+                        style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+                      >
+                        {gallery.map((image, index) => (
+                          <div key={index} className="relative h-full w-full shrink-0">
+                            <Image
+                              src={image}
+                              alt={`${analyticsItem.title} - ${index + 1}`}
+                              fill
+                              sizes="(min-width: 1280px) 70vw, 100vw"
+                              className="h-full w-full object-contain bg-slate-100"
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      {gallery.length > 1 ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={goPrevSlide}
+                            className="absolute left-3 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/50 bg-white/75 text-slate-800 backdrop-blur-md transition hover:bg-white"
+                            aria-label="Oldingi rasm"
+                          >
+                            <ChevronLeft size={18} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={goNextSlide}
+                            className="absolute right-3 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/50 bg-white/75 text-slate-800 backdrop-blur-md transition hover:bg-white"
+                            aria-label="Keyingi rasm"
+                          >
+                            <ChevronRight size={18} />
+                          </button>
+                        </>
+                      ) : null}
                     </div>
-                  ))}
+                  </div>
+
+                  {gallery.length > 1 ? (
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        {gallery.map((_, index) => (
+                          <button
+                            key={index}
+                            type="button"
+                            onClick={() => setActiveSlide(index)}
+                            className={[
+                              "h-2.5 rounded-full transition-all duration-200",
+                              index === activeSlide ? "w-5 bg-slate-700" : "w-2.5 bg-slate-300 hover:bg-slate-400",
+                            ].join(" ")}
+                            aria-label={`${index + 1}-rasm`}
+                            aria-pressed={index === activeSlide}
+                          />
+                        ))}
+                      </div>
+                      <div className="text-sm text-slate-500">
+                        {activeSlide + 1} / {gallery.length}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
-              </div>
-
-              {gallery?.length > 1 && (
-                <div className="flex justify-center space-x-2 absolute bottom-3 md:bottom-5 lg:bottom-10 left-1/2 -translate-x-1/2 z-10 p-2 h-7 rounded-full bg-white/20 backdrop-blur-md">
-                  {gallery.map((_, index) => (
-                    <button
-                      key={index}
-                      className="carousel-dot w-2.5 h-2.5 rounded-full bg-white/50 hover:bg-blue-600 transition-colors duration-200"
-                      onClick={() => {
-                        const track = document.querySelector(
-                          ".carousel-track"
-                        ) as HTMLElement;
-                        if (track) {
-                          track.style.transform = `translateX(-${
-                            index * 100
-                          }%)`;
-                          // Update active dot
-                          document
-                            .querySelectorAll(".carousel-dot")
-                            .forEach((dot, i) => {
-                              dot.classList.toggle("bg-blue-600", i === index);
-                              dot.classList.toggle("bg-white/50", i !== index);
-                            });
-                        }
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {gallery.length > 1 && (
-                <>
-                  <button
-                    className="carousel-prev absolute left-6 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white/70 text-white p-3 rounded-full transition-all duration-200 z-10"
-                    onClick={() => {
-                      const track = document.querySelector(
-                        ".carousel-track"
-                      ) as HTMLElement;
-                      const dots = document.querySelectorAll(".carousel-dot");
-                      const currentIndex = Array.from(dots).findIndex((dot) =>
-                        dot.classList.contains("bg-blue-600")
-                      );
-                      const prevIndex =
-                        currentIndex > 0
-                          ? currentIndex - 1
-                          : gallery!.length - 1;
-
-                      if (track) {
-                        track.style.transform = `translateX(-${
-                          prevIndex * 100
-                        }%)`;
-                        dots.forEach((dot, i) => {
-                          dot.classList.toggle("bg-blue-600", i === prevIndex);
-                          dot.classList.toggle("bg-gray-300", i !== prevIndex);
-                        });
-                      }
-                    }}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                  </button>
-
-                  <button
-                    className="carousel-next absolute right-6 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white/70 text-white p-3 rounded-full transition-all duration-200 z-10"
-                    onClick={() => {
-                      const track = document.querySelector(
-                        ".carousel-track"
-                      ) as HTMLElement;
-                      const dots = document.querySelectorAll(".carousel-dot");
-                      const currentIndex = Array.from(dots).findIndex((dot) =>
-                        dot.classList.contains("bg-blue-600")
-                      );
-                      const nextIndex =
-                        currentIndex < gallery!.length - 1
-                          ? currentIndex + 1
-                          : 0;
-
-                      if (track) {
-                        track.style.transform = `translateX(-${
-                          nextIndex * 100
-                        }%)`;
-                        dots.forEach((dot, i) => {
-                          dot.classList.toggle("bg-blue-600", i === nextIndex);
-                          dot.classList.toggle("bg-gray-300", i !== nextIndex);
-                        });
-                      }
-                    }}
-                  >
-                    <svg
-                      className="w-6 h-6"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-                </>
-              )}
-            </div>
-          ) : (
-            <div className="rounded-3xl z-10 sm:rounded-[30px] lg:rounded-[36px] w-full aspect-video border-4 sm:border-6 lg:border-[8px] border-blue-600 overflow-hidden relative flex items-center justify-center shadow-2xl mb-16 lg:mb-24">
-              {analyticsItem.video_src ? (
-                <video
-                  src={analyticsItem.video_src}
-                  controls
-                  preload="metadata"
-                  className="w-full h-full absolute inset-0 object-cover"
-                  poster={analyticsItem.poster_src || analyticsItem.image_src}
-                />
               ) : (
-                <img
-                  src={analyticsItem.image_src}
-                  alt={analyticsItem.title}
-                  className="w-full h-full absolute inset-0 object-cover"
-                  loading="lazy"
-                />
+                <div className="mb-8 overflow-hidden rounded-3xl bg-white p-2 shadow-[0_20px_50px_-38px_rgba(15,23,42,0.22)] lg:mb-10">
+                  <div className="relative aspect-video overflow-hidden rounded-2xl bg-slate-100">
+                    {analyticsItem.video_src ? (
+                      <video
+                        src={analyticsItem.video_src}
+                        controls
+                        preload="metadata"
+                        className="absolute inset-0 h-full w-full object-contain bg-slate-100"
+                        poster={analyticsItem.poster_src || analyticsItem.image_src}
+                      />
+                    ) : (
+                      <Image
+                        src={analyticsItem.image_src}
+                        alt={analyticsItem.title}
+                        fill
+                        sizes="(min-width: 1280px) 70vw, 100vw"
+                        className="h-full w-full object-contain bg-slate-100"
+                      />
+                    )}
+                  </div>
+                </div>
               )}
-            </div>
-          )}
 
-          <div className="w-full text-base lg:text-lg text-gray-600 flex flex-col gap-4">
-            {analyticsItem.content ? (
-              <p
-                dangerouslySetInnerHTML={{ __html: analyticsItem.content }}
-                className="rich-text-container"
-              />
-            ) : analyticsItem.description ? (
-              <p
-                dangerouslySetInnerHTML={{ __html: analyticsItem.description }}
-                className="rich-text-container"
-              />
-            ) : (
-              <p>Ushbu tahlil haqida qo'shimcha ma'lumot mavjud emas.</p>
-            )}
-          </div>
+              <article id="analytics-article-content" className="max-w-none">
+                <div className="news-article-body text-slate-700">
+                  {analyticsItem.content ? (
+                    <div dangerouslySetInnerHTML={{ __html: analyticsItem.content }} className="rich-text-container" />
+                  ) : analyticsItem.description ? (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: analyticsItem.description }}
+                      className="rich-text-container"
+                    />
+                  ) : (
+                    <p>Ushbu tahlil haqida qo&apos;shimcha ma&apos;lumot mavjud emas.</p>
+                  )}
+                </div>
+              </article>
+
+              <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-slate-200/80 pt-4">
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
+                >
+                  <Share2 size={16} />
+                  Ulashish
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
+                >
+                  <Copy size={16} />
+                  {copied ? "Nusxalandi" : "Havolani nusxalash"}
+                </button>
+              </div>
+            </div>
+          </HomeSectionShell>
         </div>
       </section>
 
-      <img
+      <Image
         src="/images/bg.avif"
-        srcSet="/images/bg@2x.avif 2x"
-        width="1920"
-        height="663"
         alt="Hero background image"
-        loading="lazy"
-        className="absolute -top-20 left-0 right-0 object-cover object-center w-full h-auto z-0"
+        width={1920}
+        height={663}
+        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-auto w-full object-cover object-center opacity-40"
       />
+
+      <style jsx global>{`
+        .news-article-body {
+          font-size: 16px;
+          line-height: 1.75;
+        }
+        .news-article-body > * + * {
+          margin-top: 0.8rem;
+        }
+        .news-article-body h2,
+        .news-article-body h3,
+        .news-article-body h4 {
+          color: rgb(15 23 42);
+          font-weight: 700;
+          line-height: 1.25;
+          letter-spacing: -0.01em;
+          margin-top: 1.6rem;
+          margin-bottom: 0.5rem;
+        }
+        .news-article-body h2 {
+          font-size: 1.35rem;
+        }
+        .news-article-body h3 {
+          font-size: 1.15rem;
+        }
+        .news-article-body p,
+        .news-article-body li {
+          color: rgb(71 85 105);
+        }
+        .news-article-body ul,
+        .news-article-body ol {
+          padding-left: 1.2rem;
+        }
+        .news-article-body a {
+          color: rgb(15 23 42);
+          text-decoration: underline;
+          text-decoration-color: rgb(203 213 225);
+          text-underline-offset: 4px;
+          font-weight: 600;
+        }
+        .news-article-body blockquote {
+          margin: 1.25rem 0;
+          border-left: 3px solid rgb(148 163 184);
+          padding-left: 1rem;
+          color: rgb(51 65 85);
+          font-style: italic;
+        }
+        .news-article-body img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 14px;
+          margin-top: 1rem;
+        }
+        @media (min-width: 1024px) {
+          .news-article-body {
+            font-size: 17px;
+            line-height: 1.8;
+          }
+        }
+      `}</style>
     </div>
   );
 });
+
+AnalyticsSlugPage.displayName = "AnalyticsSlugPage";
+

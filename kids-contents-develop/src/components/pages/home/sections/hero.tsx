@@ -1,10 +1,20 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 
 const HERO_VIDEO_SRC = "/videos/intro_video.mp4";
 
 export const HomeSectionsHero = memo(function HomeSectionsHero() {
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduceMotion(media.matches);
+    update();
+    media.addEventListener?.("change", update);
+    return () => media.removeEventListener?.("change", update);
+  }, []);
+
   return (
     <section
       id="hero"
@@ -22,15 +32,16 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
             "bg-black",
           ].join(" ")}
         >
-          {/* ✅ Keep real mp4 ratio, avoid stretch */}
-          <div className="relative w-full aspect-[16/9]">
+          {/* Adaptive hero frame: taller on mobile, balanced on desktop */}
+          <div className="relative w-full aspect-[4/5] sm:aspect-[16/10] lg:aspect-[16/8] min-h-[360px] sm:min-h-[420px] lg:min-h-[520px] xl:min-h-[600px]">
             <video
-              className="absolute inset-0 h-full w-full object-cover"
-              autoPlay
+              className="absolute inset-0 h-full w-full object-cover object-center lg:object-[center_38%]"
+              autoPlay={!reduceMotion}
               muted
               loop
               playsInline
               preload="metadata"
+              poster="/images/hero-video-poster.avif"
               aria-hidden="true"
             >
               <source src={HERO_VIDEO_SRC} type="video/mp4" />

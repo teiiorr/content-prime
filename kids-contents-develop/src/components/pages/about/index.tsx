@@ -27,7 +27,7 @@ const SectionLoader = () => (
 
 export const AboutPage = memo(function AboutPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="relative isolate min-h-screen bg-background">
       <AboutSectionsHero />
 
       <Suspense fallback={<SectionLoader />}>
