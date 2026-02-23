@@ -404,7 +404,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
                     <Button
                       theme="outlined"
                       onClick={handleOpenSubmissionModal}
-                      className="border-[#5f7151] bg-[#526446] text-white shadow-[0_14px_28px_-18px_rgba(56,70,45,0.55)] hover:border-[#708463] hover:bg-[#5c6f4f] hover:text-white"
+                      className="!border-[#5f7151] !bg-[#526446] !text-white shadow-[0_14px_28px_-18px_rgba(56,70,45,0.55)] hover:!border-[#708463] hover:!bg-[#5c6f4f] hover:!text-white"
                     >
                       <Lightbulb size={16} className="idea-bulb mr-1.5" />
                       Sizda g'oya bormi?
