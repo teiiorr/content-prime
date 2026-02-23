@@ -1,35 +1,84 @@
 "use client";
+
 import { memo, useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Spin } from "antd";
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 
 import "swiper/css";
-import "swiper/css/navigation";
+import "swiper/css/pagination";
+
 import { ROUTES } from "@/constants";
 import { NewsItemType } from "@/types";
 import { fetchInternationalNews } from "@/lib";
-import { BgBubbles, Button } from "@/components";
+import {
+  BgBubbles,
+  HomeCard,
+  HomeSectionHeader,
+  HomeSectionShell,
+  HomeSliderDotsStyles,
+  HomeStatePanel,
+  SiteLoader,
+} from "@/components";
+
+const PARTNERS = [
+  {
+    key: "unesco",
+    src: "/images/international/unesco.avif",
+    srcSet: "/images/international/unesco@2x.avif 1.5x",
+    width: 327,
+    height: 70,
+    alt: "UNESCO logo image",
+    className: "w-[92%] sm:w-[95%] lg:w-full",
+  },
+  {
+    key: "unicef",
+    src: "/images/international/unicef.avif",
+    srcSet: "/images/international/unicef@2x.avif 1.5x",
+    width: 280,
+    height: 70,
+    alt: "UNICEF logo image",
+    className: "w-[88%] sm:w-[92%] lg:w-[94%]",
+  },
+  {
+    key: "lafs",
+    src: "/images/international/los-angeles.avif",
+    srcSet: "/images/international/los-angeles@2x.avif 1.5x",
+    width: 270,
+    height: 70,
+    alt: "The Los Angeles film school logo image",
+    className: "w-[90%] sm:w-[94%] lg:w-[96%]",
+  },
+  {
+    key: "trt",
+    src: "/images/international/cocuk.avif",
+    srcSet: "/images/international/cocuk@2x.avif 1.5x",
+    width: 101,
+    height: 70,
+    alt: "TRT cocuk logo image",
+    className: "h-[84px] sm:h-[96px] lg:h-[112px] xl:h-[122px] w-auto",
+  },
+];
 
 export const AboutSectionsInternationalPartnership = memo(
-  function AboutSectionsInternationalPartnership(å) {
-    const [internationalNews, setInternationalNews] = useState<NewsItemType[]>(
-      []
-    );
-
+  function AboutSectionsInternationalPartnership() {
+    const [internationalNews, setInternationalNews] = useState<NewsItemType[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [hasError, setHasError] = useState(false);
+    const [reduceMotion, setReduceMotion] = useState(false);
 
     useEffect(() => {
       let mounted = true;
 
       async function loadNews() {
         try {
+          setHasError(false);
           const data = await fetchInternationalNews();
           if (mounted) setInternationalNews(data);
         } catch (err) {
           console.error("Error loading news:", err);
+          if (mounted) setHasError(true);
         } finally {
           if (mounted) setIsLoaded(true);
         }
@@ -42,166 +91,142 @@ export const AboutSectionsInternationalPartnership = memo(
       };
     }, []);
 
-    const swiperSettings = {
-      spaceBetween: 32,
-      slidesPerView: 3,
-      slidesPerGroup: 1,
-      loop: true,
-      navigation: {
-        nextEl: ".news-next-btn",
-        prevEl: ".news-prev-btn",
-      },
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false,
-      },
-      modules: [Navigation, Autoplay],
-      breakpoints: {
-        1100: {
-          slidesPerView: 3,
-        },
-        768: {
-          slidesPerView: 2,
-        },
-        640: {
-          slidesPerView: 2,
-        },
-        400: {
-          slidesPerView: 1,
-        },
-        350: {
-          slidesPerView: 1,
-        },
-        150: {
-          slidesPerView: 1,
-        },
-      },
-    };
+    useEffect(() => {
+      const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const update = () => setReduceMotion(media.matches);
+      update();
+      media.addEventListener?.("change", update);
+      return () => media.removeEventListener?.("change", update);
+    }, []);
 
     return (
       <section
         id="international-cooperation"
-        className="relative py-10 md:py-16 lg:py-24 bg-orange-100"
+        className="relative bg-gradient-to-b from-[#f1ede7] to-transparent py-10 md:py-16 lg:py-24"
       >
-        <div className="container">
-          {/* Header */}
-          <div className="md:text-center mb-8 md:mb-12 lg:mb-14">
-            <h2 className="text-3xl lg:text-4xl font-bold text-base-black">
-              Xalqaro hamkorlik
-            </h2>
-          </div>
-
-          <div className="grid place-content-center place-items-center grid-cols-2 gap-12 lg:gap-14 bg-white min-h-[220px] rounded-[32px] py-16 px-12">
-            <img
-              src="/images/international/unesco.avif"
-              srcSet="/images/international/unesco@2x.avif 1.5x"
-              width="327"
-              height="70"
-              alt="UNESCO logo image"
-              className="max-sm:w-full max-sm:h-auto"
-              loading="lazy"
-            />
-            <img
-              src="/images/international/unicef.avif"
-              srcSet="/images/international/unicef@2x.avif 1.5x"
-              width="280"
-              height="70"
-              alt="UNICEF logo image"
-              className="max-sm:w-full max-sm:h-auto"
-              loading="lazy"
-            />
-            <img
-              src="/images/international/los-angeles.avif"
-              srcSet="/images/international/los-angeles@2x.avif 1.5x"
-              width="270"
-              height="70"
-              alt="The Los Angeles film school logo image"
-              className="max-sm:w-full max-sm:h-auto"
-              loading="lazy"
-            />
-            <img
-              src="/images/international/cocuk.avif"
-              srcSet="/images/international/cocuk@2x.avif 1.5x"
-              width="101"
-              height="70"
-              alt="TRT cocuk logo image"
-              className="max-sm:w-full max-sm:h-auto"
-              loading="lazy"
-            />
-          </div>
-
-          <div className="mt-8 relative z-10">
-            {/* Navigation Button - positioned at right center of slides */}
-            <Button
-              aria-label="Oldingi yangilik"
-              theme="primary"
-              className="absolute left-2 md:-left-2 lg:-left-6 top-1/2 -translate-y-1/2 w-12 h-12 news-prev-btn z-10 sm:rounded-full"
-            >
-              <ArrowLeft className="w-5 h-5 lg:w-6 lg:h-6" />
-            </Button>
-            <Button
-              aria-label="Keyingi yangilik"
-              theme="primary"
-              className="absolute right-2 md:-right-2 lg:-right-6 top-1/2 -translate-y-1/2 w-12 h-12 news-next-btn z-10 sm:rounded-full"
-            >
-              <ArrowRight className="w-5 h-5 lg:w-6 lg:h-6" />
-            </Button>
-
-            <div className="relative">
-              {!isLoaded ? (
-                <div className="py-52 flex items-center justify-center">
-                  <Spin aria-label="Yangiliklar yuklanmoqda" />
+        <div className="container max-w-[1508px] 2xl:max-w-[88%]">
+          <HomeSectionShell className="border-[#d6cec3] bg-[#fdfcf9] p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(99,83,64,0.16)]">
+            <HomeSectionHeader>
+              <div className="flex justify-center">
+                <div className="inline-flex items-center rounded-full border border-slate-300/80 bg-white px-5 py-2.5 text-base font-bold tracking-[-0.01em] text-slate-900 shadow-sm sm:px-6 sm:py-3 sm:text-lg md:px-7 md:py-3.5 md:text-xl">
+                  Xalqaro hamkorlik
                 </div>
+              </div>
+            </HomeSectionHeader>
+
+            <div className="grid grid-cols-2 place-content-center place-items-center gap-12 rounded-[32px] border border-slate-200 bg-white px-12 py-16 min-h-[220px] lg:gap-14">
+              {PARTNERS.map((partner) => (
+                <div
+                  key={partner.key}
+                  className="flex w-full items-center justify-center"
+                >
+                  <Image
+                    src={partner.src}
+                    alt={partner.alt}
+                    width={partner.width}
+                    height={partner.height}
+                    className="max-sm:h-auto max-sm:w-full"
+                    sizes="(min-width: 1024px) 327px, 45vw"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 lg:mt-8">
+              {!isLoaded ? (
+                <div className="rounded-2xl border border-slate-200 bg-white py-24">
+                  <div className="flex items-center justify-center">
+                    <SiteLoader label="Yangiliklar yuklanmoqda" />
+                  </div>
+                </div>
+              ) : hasError ? (
+                <HomeStatePanel tone="error">
+                  Xalqaro hamkorlik yangiliklarini yuklab bo‘lmadi.
+                </HomeStatePanel>
               ) : internationalNews.length === 0 ? (
-                <p className="text-center text-gray-500 py-20">
-                  Yangiliklar topilmadi
-                </p>
+                <HomeStatePanel>Yangiliklar topilmadi</HomeStatePanel>
               ) : (
-                <Swiper {...swiperSettings} className="news-swiper pt-8 pb-12">
-                  {internationalNews.map((item) => (
-                    <SwiperSlide key={item.id}>
-                      <Link
-                        href={`${ROUTES.internatiolPartnership}/${item.slug}`}
-                        aria-label={`${item.title} - ${item.date_display}`}
-                        className="block group"
-                      >
-                        <article className="cursor-pointer">
-                          <div className="relative aspect-video overflow-hidden rounded-xl">
-                            <img
-                              src={item.image_src}
-                              srcSet={item.image_srcset}
-                              alt={item.title}
-                              width={350}
-                              height={240}
-                              loading="lazy"
-                              className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
-                            />
-                          </div>
+                <>
+                  <Swiper
+                    spaceBetween={16}
+                    slidesPerView={1.08}
+                    speed={700}
+                    loop={internationalNews.length > 1}
+                    pagination={{
+                      el: ".about-intl-pagination",
+                      clickable: true,
+                      bulletClass: "about-intl-bullet",
+                      bulletActiveClass: "is-active",
+                    }}
+                    autoplay={
+                      reduceMotion
+                        ? false
+                        : {
+                            delay: 4200,
+                            disableOnInteraction: false,
+                            pauseOnMouseEnter: true,
+                          }
+                    }
+                    modules={[Autoplay, Pagination]}
+                    breakpoints={{
+                      640: { slidesPerView: 1.25, spaceBetween: 18 },
+                      768: { slidesPerView: 2, spaceBetween: 20 },
+                      1200: { slidesPerView: 3, spaceBetween: 22 },
+                      1700: { slidesPerView: 3.2, spaceBetween: 26 },
+                    }}
+                    className="pb-2"
+                  >
+                    {internationalNews.map((item) => (
+                      <SwiperSlide key={item.id}>
+                        <Link
+                          href={`${ROUTES.internatiolPartnership}/${item.slug}`}
+                          aria-label={`${item.title} - ${item.date_display}`}
+                          className="group block focus:outline-none"
+                        >
+                          <HomeCard className="overflow-hidden p-0 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-26px_rgba(15,23,42,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-slate-400/60 group-focus-visible:ring-offset-2">
+                            <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                              <Image
+                                src={item.image_src}
+                                alt={item.title}
+                                width={420}
+                                height={260}
+                                className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.03]"
+                                sizes="(min-width: 1700px) 24vw, (min-width: 1200px) 30vw, (min-width: 768px) 44vw, 92vw"
+                              />
+                            </div>
+                            <div className="flex h-[96px] flex-col p-3.5 sm:h-[106px] sm:p-4">
+                              <h3 className="line-clamp-2 text-[14px] font-semibold tracking-[-0.01em] leading-5 text-slate-900 transition-colors group-hover:text-slate-700 sm:text-[15px] sm:leading-5 xl:text-base xl:leading-6">
+                                {item.title}
+                              </h3>
+                              <time className="mt-auto truncate whitespace-nowrap pt-2 text-xs leading-none font-medium text-slate-500 sm:text-sm">
+                                {item.date_display}
+                              </time>
+                            </div>
+                          </HomeCard>
+                        </Link>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
 
-                          {/* Content */}
-                          <div className="mt-5">
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-600 transition-colors duration-300">
-                              {item.title}
-                            </h3>
-
-                            <time
-                              dateTime={item.date_display}
-                              className="text-sm text-gray-500 font-medium"
-                            >
-                              {item.date_display}
-                            </time>
-                          </div>
-                        </article>
-                      </Link>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                  <div className="mt-3 flex items-center justify-center sm:hidden">
+                    <div className="about-intl-pagination flex items-center justify-center gap-2" />
+                  </div>
+                </>
               )}
             </div>
-          </div>
+          </HomeSectionShell>
         </div>
-        <BgBubbles color="#ffeec6" className="bottom-full" />
-        <BgBubbles color="#ffeec6" className="top-full rotate-180" />
+
+        <BgBubbles color="#ebe1d4" className="bottom-full" />
+        <BgBubbles color="#ebe1d4" className="top-full rotate-180" />
+
+        <HomeSliderDotsStyles bulletClass="about-intl-bullet" />
+        <style jsx global>{`
+          .about-intl-bullet.is-active {
+            width: 20px;
+            background: rgb(71 85 105);
+          }
+        `}</style>
       </section>
     );
   }

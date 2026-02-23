@@ -1,12 +1,11 @@
 "use client";
 import { memo } from "react";
 import Link from "next/link";
-import { Spin } from "antd";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { ArrowRight } from "lucide-react";
 
-import { Button } from "@/components";
+import { Button, SiteLoader } from "@/components";
 import { ROUTES } from "@/constants";
 import { useSwiperPadding } from "@/hooks";
 
@@ -159,7 +158,7 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
         <div className="relative">
           {!isLoaded ? (
             <div className="py-28 flex items-center justify-center">
-              <Spin />
+              <SiteLoader label="Yangiliklar yuklanmoqda" size="sm" />
             </div>
           ) : (
             <Swiper {...swiperSettings} className="news-swiper pt-8 pb-12">

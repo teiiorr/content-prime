@@ -1,6 +1,8 @@
 "use client";
 import { memo } from "react";
-import { BgBubbles } from "@/components";
+import Image from "next/image";
+import { ImageIcon } from "lucide-react";
+import { BgBubbles, HomeSectionShell } from "@/components";
 
 export const NewsSectionsGallery = memo(function NewsSectionsGallery() {
   const galleryItems = [
@@ -57,36 +59,38 @@ export const NewsSectionsGallery = memo(function NewsSectionsGallery() {
   return (
     <section
       id="gallery"
-      className="relative py-10 md:py-16 lg:py-24 bg-orange-100 my-12 md:my-16 lg:my-24"
+      className="relative my-12 bg-gradient-to-b from-[#f3efe8] to-transparent py-10 md:my-16 md:py-16 lg:my-24 lg:py-24"
     >
-      <div className="container relative z-10 mx-auto px-4">
-        {/* Header */}
-        <div className="md:text-center mb-8 md:mb-12 lg:mb-14">
-          <h2 className="text-3xl lg:text-4xl font-bold text-base-black">
-            Fotogalereya
-          </h2>
-        </div>
-
-        {/* Grid */}
-        <div className="gallery-grid">
-          {galleryItems.map((item) => (
-            <div
-              key={item.id}
-              className={`gallery-item gallery-item-${item.id} group cursor-pointer overflow-hidden rounded-lg lg:rounded-[33px]`}
-            >
-              <img
-                src={item.src}
-                srcSet={item.srcSet}
-                alt={item.alt}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-              />
+      <div className="container relative z-10 mx-auto max-w-[1508px] 2xl:max-w-[88%]">
+        <HomeSectionShell className="border-[#ddd5c9] bg-white/90 p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(99,83,64,0.16)]">
+          <div className="mb-6 flex justify-center md:mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white px-5 py-2.5 text-base font-bold tracking-[-0.01em] text-slate-900 shadow-sm sm:px-6 sm:py-3 sm:text-lg md:px-7 md:py-3.5 md:text-xl">
+              <ImageIcon size={18} className="text-slate-600 md:h-5 md:w-5" />
+              Fotogalereya
             </div>
-          ))}
-        </div>
+          </div>
+
+          <div className="gallery-grid">
+            {galleryItems.map((item) => (
+              <div
+                key={item.id}
+                className={`gallery-item gallery-item-${item.id} group relative cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 lg:rounded-[28px]`}
+              >
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  sizes="(min-width: 1024px) 30vw, 50vw"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                />
+              </div>
+            ))}
+          </div>
+        </HomeSectionShell>
       </div>
 
-      <BgBubbles color="#ffeec6" className="bottom-full" />
-      <BgBubbles color="#ffeec6" className="top-full rotate-180" />
+      <BgBubbles color="#ebe1d4" className="bottom-full" />
+      <BgBubbles color="#ebe1d4" className="top-full rotate-180" />
 
       <style jsx>{`
         .gallery-grid {
@@ -94,7 +98,7 @@ export const NewsSectionsGallery = memo(function NewsSectionsGallery() {
           gap: 16px;
           grid-template-columns: repeat(2, 1fr);
           grid-template-rows: repeat(8, 1fr);
-          height: 800px;
+          height: 720px;
         }
 
         /* Mobile layout (2 columns) */
@@ -140,6 +144,7 @@ export const NewsSectionsGallery = memo(function NewsSectionsGallery() {
             gap: 24px;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(6, 1fr);
+            height: 860px;
           }
 
           .gallery-item-1 {

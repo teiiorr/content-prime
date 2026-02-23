@@ -80,9 +80,28 @@ main section {
   animation-range: entry 10% cover 32%;
 }
 
+/* Hero / first-screen sections must be visible immediately (no scroll-trigger reveal). */
+main section.hero-section,
+main section#contests-hero,
+main > section:first-child,
+main > div > section:first-child {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 @supports not (animation-timeline: view()) {
   main section {
     animation: sectionRevealFallback 0.8s ease-out both;
+  }
+
+  main section.hero-section,
+  main section#contests-hero,
+  main > section:first-child,
+  main > div > section:first-child {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

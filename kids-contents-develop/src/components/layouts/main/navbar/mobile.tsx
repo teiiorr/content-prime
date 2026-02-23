@@ -9,7 +9,8 @@ import {
   ChevronUp,
   Home,
   Info,
-  MoreHorizontal,
+  LayoutGrid,
+  Lightbulb,
   Newspaper,
   Search,
   Trophy,
@@ -41,6 +42,7 @@ const UI = {
   about: "Markaz",
   news: "Yangiliklar",
   contests: "Tanlovlar",
+  projects: "Loyihalar",
   search: "Qidiruv",
   menu: "Menyu",
   quickLinks: "Tezkor havolalar",
@@ -62,6 +64,7 @@ const SEARCH_ITEMS: Array<{ title: string; href: string; category: string }> = [
 export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const isHomePage = pathname === ROUTES.HOME;
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerMode, setDrawerMode] = useState<DrawerMode>("menu");
@@ -131,6 +134,12 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
     return undefined;
   }, [drawerOpen, drawerMode]);
 
+  useEffect(() => {
+    // Ensure Drawer mask never persists after client-side navigation.
+    setDrawerOpen(false);
+    setSearchQuery("");
+  }, [pathname]);
+
   const Tab = ({
     label,
     icon,
@@ -197,36 +206,30 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
 
   return (
     <div className="lg:hidden">
-      {/* Top sticky bar */}
-      <div className="sticky top-0 z-50 border-b border-white/70 bg-white/80 backdrop-blur-xl shadow-[0_20px_35px_-30px_rgba(2,6,23,1)]">
-        <div className="container">
-          <div className="flex items-center justify-between py-2.5">
-            <Link href={ROUTES.HOME} className="inline-flex items-center">
-              <img src="/logo.svg" alt="Site logo" width={172} height={62} />
-            </Link>
+      {/* Top sticky bar is shown only on homepage */}
+      {isHomePage ? (
+        <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl shadow-[0_20px_35px_-30px_rgba(2,6,23,1)]">
+          <div className="container">
+            <div className="flex items-center justify-between py-2.5">
+              <Link href={ROUTES.HOME} className="inline-flex items-center">
+                <img src="/logo.svg" alt="Site logo" width={172} height={62} />
+              </Link>
 
-            <div className="flex items-center gap-2">
-              <button
-                onClick={openSearch}
-                className="nbm-topicon"
-                aria-label={UI.search}
-                type="button"
-              >
-                <Search size={18} />
-              </button>
-
-              <button
-                onClick={openMenu}
-                className="nbm-topicon"
-                aria-label={UI.menu}
-                type="button"
-              >
-                <MoreHorizontal size={18} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleOpenSubmissionModal}
+                  className="inline-flex h-9 items-center gap-1.5 rounded-full border border-[#8a6429] bg-[#6d4d1f] px-3 text-[12px] font-semibold text-white shadow-[0_12px_22px_-16px_rgba(88,60,24,0.6)] transition hover:bg-[#7a5826] active:scale-[0.99]"
+                  type="button"
+                  aria-label="Sizda g'oya bormi?"
+                >
+                  <Lightbulb size={14} className="nbm-idea-bulb" />
+                  <span className="max-[360px]:hidden">G'oya</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : null}
 
       {/* iOS safe-area spacer */}
       <div className="nbm-safe" />
@@ -282,13 +285,18 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
             />
           </button>
 
-          <button className="nbm-linkwrap" onClick={openSearch} type="button">
-            <Tab label={UI.search} icon={<Search size={20} />} />
+          <button
+            className="nbm-linkwrap"
+            type="button"
+            onClick={() => go(ROUTES.PROJECTS)}
+          >
+            <Tab
+              label={UI.projects}
+              icon={<LayoutGrid size={20} />}
+              active={isActive(ROUTES.PROJECTS)}
+            />
           </button>
 
-          <button className="nbm-linkwrap" onClick={openMenu} type="button">
-            <Tab label={UI.menu} icon={<MoreHorizontal size={20} />} />
-          </button>
         </div>
       </div>
 
@@ -315,6 +323,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         open={drawerOpen}
         height="82vh"
         className="nbm-drawer"
+        destroyOnClose
       >
         {drawerMode === "search" ? (
           <div className="nbm-sheet">
@@ -501,6 +510,28 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           display: inline-flex;
           align-items: center;
           justify-content: center;
+        }
+        .nbm-idea-bulb {
+          color: #fcd34d;
+          filter: drop-shadow(0 0 0 rgba(252, 211, 77, 0));
+          animation: nbm-bulb-glow 2s ease-in-out infinite;
+        }
+        @keyframes nbm-bulb-glow {
+          0%,
+          35%,
+          100% {
+            color: #a16207;
+            filter: drop-shadow(0 0 0 rgba(253, 230, 138, 0));
+            transform: scale(1);
+            opacity: 0.75;
+          }
+          48%,
+          72% {
+            color: #fde047;
+            filter: drop-shadow(0 0 8px rgba(250, 204, 21, 0.55));
+            transform: scale(1.08);
+            opacity: 1;
+          }
         }
 
         .nbm-close {

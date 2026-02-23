@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Modal, Popover } from "antd";
 import {
   ChevronDown,
+  Lightbulb,
   Search,
   X,
   Home,
@@ -13,6 +14,7 @@ import {
   Info,
   LayoutGrid,
   BarChart3,
+  Trophy,
 } from "lucide-react";
 
 import { Button, SubmissionFormModal } from "@/components";
@@ -62,6 +64,8 @@ const NAV_ICONS: Record<string, React.ReactNode> = {
   home: <Home size={18} />,
   about: <Info size={18} />,
   news: <Newspaper size={18} />,
+  contests: <Trophy size={18} />,
+  "creative-contests": <Trophy size={18} />,
   projects: <LayoutGrid size={18} />,
   analytics: <BarChart3 size={18} />,
 };
@@ -103,7 +107,9 @@ function PopoverContent({
           <div className="mt-3 h-px w-full bg-black/5" />
         </div>
       )}
-      <div className="flex flex-col gap-1 px-2 pb-3">{children}</div>
+      <div className={["flex flex-col gap-1 px-2 pb-3", title || hint ? "" : "pt-2"].join(" ")}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -186,6 +192,13 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
   }, [isSearchModalOpen]);
 
   useEffect(() => {
+    // Route changes should always clear transient overlays/masks.
+    setOpenPopovers({});
+    setIsSearchModalOpen(false);
+    setSearchQuery("");
+  }, [pathname]);
+
+  useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         closeAllPopovers();
@@ -237,7 +250,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
         }}
         
         className={[
-          "nb-item group relative inline-flex items-center gap-2 rounded-full px-[14px] py-[10px]",
+          "nb-item group relative inline-flex items-center gap-2 rounded-full px-[14px] py-[9px]",
           "nb-font font-semibold",
           active ? "text-gray-900" : "text-gray-700",
         ].join(" ")}
@@ -287,6 +300,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
         open={open}
         onOpenChange={(o) => handlePopoverOpenChange(k, o)}
         overlayClassName="navbar-popover-wow"
+        overlayInnerStyle={{ transformOrigin: "top center" }}
         content={
           <PopoverContent title={title} hint={hint}>
             <DropdownPanel
@@ -296,7 +310,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           </PopoverContent>
         }
       >
-        <div className="nb-item group relative inline-flex cursor-pointer select-none items-center gap-2 rounded-full px-[14px] py-[10px] nb-font font-semibold text-gray-700">
+        <div className="nb-item group relative inline-flex cursor-pointer select-none items-center gap-2 rounded-full px-[14px] py-[9px] nb-font font-semibold text-gray-700">
           <span
             className={[
               "nb-icon transition-colors",
@@ -330,15 +344,14 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
   return (
     <div className="relative z-50 hidden lg:block">
       <div className="sticky top-0 z-50 pt-4">
-        <div className="container max-w-[1508px] 2xl:max-w-[85%]">
+        <div className="container max-w-[1508px] 2xl:max-w-[88%]">
           <div
             className={[
               "nb-shell mx-auto w-full",
               "rounded-[28px]",
-              "border border-black/10",
-              "backdrop-blur-2xl",
-              "shadow-[0_30px_80px_-60px_rgba(0,0,0,.85)]",
-              scrolled ? "bg-white/85" : "bg-white/75",
+              "backdrop-blur-xl",
+              "shadow-[0_20px_50px_-34px_rgba(15,23,42,0.22)]",
+              scrolled ? "bg-white/86" : "bg-white/72",
             ].join(" ")}
             onMouseLeave={closeAllPopovers}
           >
@@ -350,7 +363,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
                 <div className="flex items-center gap-3">
                   <Link
                     href={ROUTES.HOME}
-                    className="nb-logo inline-flex items-center rounded-2xl px-2 py-2"
+                    className="nb-logo inline-flex items-center rounded-2xl px-2 py-1.5"
                   >
                     <img
                       src="/logo.svg"
@@ -369,15 +382,11 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
                     k="about"
                     label="Markaz"
                     items={aboutItems}
-                    title="Markaz"
-                    hint="Bo‘limlar"
                   />
                   <DropdownTrigger
                     k="news"
                     label="Yangiliklar"
                     items={newsItems}
-                    title="Yangiliklar"
-                    hint="Media & e’lonlar"
                   />
 
                   {menuItems.map((item) => (
@@ -391,17 +400,13 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
                 </nav>
 
                 <div className="flex shrink-0 items-center gap-2">
-                  <button
-                    onClick={handleOpenSearchModal}
-                    className="nb-icon-btn inline-flex items-center justify-center rounded-full border border-black/10 bg-white/70 shadow-sm backdrop-blur-xl transition active:scale-[0.98]"
-                    style={{ width: "var(--nav-btn)", height: "var(--nav-btn)" }}
-                    aria-label="Open search"
-                  >
-                    <Search className="text-gray-800" size={18} />
-                  </button>
-
                   <div className="nb-cta-wrap rounded-full">
-                    <Button theme="primary" onClick={handleOpenSubmissionModal}>
+                    <Button
+                      theme="outlined"
+                      onClick={handleOpenSubmissionModal}
+                      className="!border-[#5f7151] !bg-[#526446] !text-white shadow-[0_14px_28px_-18px_rgba(56,70,45,0.55)] hover:!border-[#708463] hover:!bg-[#5c6f4f] hover:!text-white"
+                    >
+                      <Lightbulb size={16} className="idea-bulb mr-1.5" />
                       Sizda g'oya bormi?
                     </Button>
                   </div>
@@ -409,7 +414,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
               </div>
             </div>
 
-            <div className="h-px w-full bg-black/5" />
+            <div className="h-px w-full bg-black/5 opacity-60" />
           </div>
         </div>
       </div>
@@ -498,9 +503,9 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
       <style jsx>{`
         :global(:root) {
           --nav-font: clamp(14px, 0.35vw + 13px, 18px);
-          --nav-height: clamp(82px, 2.0vw + 70px, 112px);
+          --nav-height: clamp(72px, 1.2vw + 66px, 88px);
           --nav-btn: clamp(38px, 0.8vw + 34px, 46px);
-          --nav-glow: 59, 130, 246;
+          --nav-glow: 15, 23, 42;
         }
 
         :global(.nb-font) {
@@ -520,27 +525,40 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           padding: 0;
           overflow: hidden;
           border: 1px solid rgba(17, 24, 39, 0.12);
-          background: rgba(255, 255, 255, 0.94);
+          background: rgba(255, 255, 255, 0.96);
           backdrop-filter: blur(20px);
-          box-shadow: 0 60px 140px -95px rgba(0, 0, 0, 0.95);
+          box-shadow: 0 30px 80px -56px rgba(15, 23, 42, 0.28);
+          transform-origin: top center;
+          animation: nb-popover-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
         }
         :global(.navbar-popover-wow .ant-popover-inner-content) {
           padding: 0;
         }
+        :global(.navbar-popover-wow.ant-popover-hidden .ant-popover-inner) {
+          animation: nb-popover-out 120ms ease-in forwards;
+        }
+        :global(.navbar-popover-wow .ant-popover-content) {
+          filter: drop-shadow(0 10px 18px rgba(15, 23, 42, 0.05));
+        }
 
         :global(.nb-dd-item) {
-          transition: background-color 160ms ease, box-shadow 160ms ease, color 160ms ease;
+          transition: background-color 160ms ease, box-shadow 160ms ease, color 160ms ease,
+            transform 160ms ease;
         }
         :global(.nb-dd-item:hover) {
-          background: rgba(17, 24, 39, 0.04);
-          box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.06);
+          background: rgba(148, 163, 184, 0.08);
+          box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.12);
+          transform: translateX(2px);
         }
         :global(.nb-dd-item:hover .nb-dd-arrow) {
           opacity: 1;
         }
         :global(.nb-dd-arrow) {
-          transition: opacity 160ms ease;
+          transition: opacity 160ms ease, transform 160ms ease;
           color: rgba(17, 24, 39, 0.55);
+        }
+        :global(.nb-dd-item:hover .nb-dd-arrow) {
+          transform: translateX(2px);
         }
 
         :global(.nb-plate) {
@@ -548,17 +566,17 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
         }
         :global(.nb-item:hover .nb-plate) {
-          background: rgba(255, 255, 255, 0.70);
-          border-color: rgba(17, 24, 39, 0.12);
-          box-shadow: 0 18px 46px -38px rgba(0, 0, 0, 0.70),
-            inset 0 1px 0 rgba(255, 255, 255, 0.65);
+          background: rgba(255, 255, 255, 0.82);
+          border-color: rgba(148, 163, 184, 0.18);
+          box-shadow: 0 10px 24px -18px rgba(15, 23, 42, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.72);
           backdrop-filter: blur(18px);
         }
         :global(.nb-plate-active) {
-          background: rgba(255, 255, 255, 0.78) !important;
-          border-color: rgba(17, 24, 39, 0.14) !important;
-          box-shadow: 0 22px 56px -42px rgba(0, 0, 0, 0.75),
-            inset 0 1px 0 rgba(255, 255, 255, 0.70);
+          background: rgba(255, 255, 255, 0.92) !important;
+          border-color: rgba(148, 163, 184, 0.22) !important;
+          box-shadow: 0 12px 30px -22px rgba(15, 23, 42, 0.22),
+            inset 0 1px 0 rgba(255, 255, 255, 0.86);
           backdrop-filter: blur(18px);
         }
 
@@ -569,27 +587,25 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
         }
         :global(.nb-item:hover .nb-glow) {
           opacity: 1;
-          box-shadow: 0 0 0 1px rgba(17, 24, 39, 0.06),
-            0 26px 68px -54px rgba(0, 0, 0, 0.95);
+          box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.12),
+            0 18px 44px -34px rgba(15, 23, 42, 0.2);
         }
 
         :global(.nb-item:hover .nb-text),
         :global(.nb-item:hover .nb-text.nb-text) {
           color: rgb(var(--nav-glow)) !important;
-          text-shadow: 0 0 12px rgba(var(--nav-glow), 0.22),
-            0 0 28px rgba(var(--nav-glow), 0.12);
+          text-shadow: none;
         }
         :global(.nb-item:hover .nb-icon),
         :global(.nb-item:hover .nb-icon.nb-icon) {
           color: rgb(var(--nav-glow)) !important;
-          filter: drop-shadow(0 0 10px rgba(var(--nav-glow), 0.22));
+          filter: none;
         }
 
         :global(.nb-dd-item:hover .nb-dd-text),
         :global(.nb-dd-item:hover .nb-dd-text.nb-dd-text) {
           color: rgb(var(--nav-glow)) !important;
-          text-shadow: 0 0 10px rgba(var(--nav-glow), 0.18),
-            0 0 22px rgba(var(--nav-glow), 0.10);
+          text-shadow: none;
         }
 
         :global(.nb-shell) {
@@ -601,19 +617,64 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           transition: box-shadow 160ms ease, background-color 160ms ease;
         }
         :global(.nb-logo:hover) {
-          background: rgba(17, 24, 39, 0.03);
-          box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.06);
+          background: rgba(148, 163, 184, 0.08);
+          box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.12);
         }
 
         :global(.nb-cta-wrap) {
           border: 1px solid rgba(17, 24, 39, 0.12);
-          background: rgba(255, 255, 255, 0.55);
+          background: rgba(255, 255, 255, 0.68);
           backdrop-filter: blur(18px);
           padding: 2px;
-          box-shadow: 0 24px 60px -52px rgba(0, 0, 0, 0.75);
+          box-shadow: 0 16px 36px -28px rgba(15, 23, 42, 0.18);
         }
         :global(.nb-icon-btn:hover) {
-          box-shadow: 0 22px 52px -46px rgba(0, 0, 0, 0.85);
+          box-shadow: 0 12px 28px -20px rgba(15, 23, 42, 0.16);
+        }
+        :global(.idea-bulb) {
+          color: #fcd34d;
+          filter: drop-shadow(0 0 0 rgba(252, 211, 77, 0));
+          animation: idea-bulb-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes idea-bulb-glow {
+          0%,
+          35%,
+          100% {
+            color: #a16207;
+            filter: drop-shadow(0 0 0 rgba(253, 230, 138, 0));
+            transform: scale(1);
+            opacity: 0.75;
+          }
+          48%,
+          72% {
+            color: #fde047;
+            filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.6));
+            transform: scale(1.08);
+            opacity: 1;
+          }
+        }
+
+        @keyframes nb-popover-in {
+          from {
+            opacity: 0;
+            transform: translateY(-4px) scale(0.985);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes nb-popover-out {
+          from {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+          to {
+            opacity: 0;
+            transform: translateY(-2px) scale(0.99);
+          }
         }
       `}</style>
     </div>

@@ -12,16 +12,17 @@ interface IProps extends ButtonProps {
 }
 
 const variants = {
-  base: "bg-slate-100 text-slate-800 border border-slate-200 hover:bg-slate-200",
+  base:
+    "border border-slate-200 bg-white text-slate-800 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.45)] hover:border-slate-300 hover:bg-slate-50 hover:shadow-[0_14px_28px_-18px_rgba(15,23,42,0.35)]",
 
   primary:
-    "bg-emerald-600 text-white border border-emerald-700 hover:bg-emerald-700 active:bg-emerald-800 shadow-[var(--shadow-sm)]",
+    "border border-emerald-700 bg-gradient-to-b from-emerald-500 to-emerald-700 text-white shadow-[0_18px_34px_-18px_rgba(5,150,105,0.75)] hover:from-emerald-500 hover:to-emerald-600 hover:shadow-[0_20px_38px_-18px_rgba(5,150,105,0.85)] active:from-emerald-600 active:to-emerald-700",
 
   outlined:
-    "bg-white text-emerald-700 border border-emerald-700 hover:bg-emerald-700 hover:text-white",
+    "border border-emerald-600 bg-white/90 text-emerald-700 shadow-[0_8px_24px_-18px_rgba(5,150,105,0.35)] hover:bg-emerald-600 hover:text-white hover:shadow-[0_16px_30px_-16px_rgba(5,150,105,0.5)]",
 
   text:
-    "bg-transparent text-slate-800 border-transparent hover:bg-slate-100",
+    "border border-transparent bg-transparent text-slate-800 hover:bg-white/70 hover:text-slate-900",
 };
 
 export const Button: React.FC<IProps> = ({
@@ -35,7 +36,19 @@ export const Button: React.FC<IProps> = ({
   ...props
 }) => {
   const baseStyles = clsx(
-    "focus-ring inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition duration-200 disabled:cursor-not-allowed disabled:opacity-50",
+    [
+      "focus-ring inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold",
+      "relative overflow-hidden whitespace-nowrap",
+      "transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-out",
+      "motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0",
+      "active:scale-[0.985]",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 focus-visible:ring-offset-2",
+      "disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:active:scale-100",
+      "before:pointer-events-none before:absolute before:inset-0 before:rounded-full",
+      "before:bg-gradient-to-r before:from-white/0 before:via-white/20 before:to-white/0",
+      "before:translate-x-[-140%] before:transition-transform before:duration-500",
+      "motion-safe:hover:before:translate-x-[140%]",
+    ],
     variants[theme],
     wide && "px-10",
     block && "w-full",
