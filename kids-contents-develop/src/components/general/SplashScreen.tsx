@@ -30,8 +30,8 @@ export function SplashScreenGate({ children }: PropsWithChildren) {
   const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
-    const hideTimer = setTimeout(() => setIsVisible(false), 1700);
-    const unmountTimer = setTimeout(() => setIsMounted(false), 2200);
+    const hideTimer = setTimeout(() => setIsVisible(false), 3400);
+    const unmountTimer = setTimeout(() => setIsMounted(false), 4400);
 
     return () => {
       clearTimeout(hideTimer);
