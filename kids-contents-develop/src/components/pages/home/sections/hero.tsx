@@ -60,7 +60,6 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
           muted
           playsInline
           preload="auto"
-          poster="/images/hero-video-poster.avif"
           aria-hidden="true"
           onEnded={handleHeroEnded}
         >
