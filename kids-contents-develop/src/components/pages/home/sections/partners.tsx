@@ -3,7 +3,7 @@
 import { memo, useEffect, useState } from "react";
 import Image from "next/image";
 import Marquee from "react-fast-marquee";
-import { BgBubbles, Container, HomeSectionShell } from "@/components";
+import { Container, HomeSectionShell } from "@/components";
 import { ScrollCard } from "@/components/motion/ScrollCard";
 
 export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
@@ -128,8 +128,6 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
         </HomeSectionShell>
       </Container>
 
-      <BgBubbles color="#ffffc7" className="bottom-full" />
-      <BgBubbles color="#ffffc7" className="top-full rotate-180" />
     </section>
   );
 });

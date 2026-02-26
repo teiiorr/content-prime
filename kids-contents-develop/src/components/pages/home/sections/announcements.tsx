@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useState } from "react";
 import { Modal } from "antd";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 
@@ -197,40 +197,69 @@ export const HomeSectionsAnnouncements = memo(function HomeSectionsAnnouncements
         </HomeSectionShell>
       </Container>
 
-      <Modal centered open={isModalOpen} onCancel={closeModal} footer={null} width={794}>
-        <div className="sm:p-3">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 md:mb-6">
-            <div className="inline-flex items-center rounded-full border border-[#e2cfbd] bg-[#f7efe6] px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-[#7a5232]">
-              E'lon
+      <Modal
+        centered
+        open={isModalOpen}
+        onCancel={closeModal}
+        footer={null}
+        width="min(92vw, 860px)"
+        closeIcon={
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white/95 text-slate-700 transition hover:border-slate-300 hover:bg-white hover:text-slate-900">
+            <X className="h-[18px] w-[18px]" strokeWidth={2.25} />
+          </span>
+        }
+        styles={{
+          content: {
+            padding: 0,
+            overflow: "hidden",
+            borderRadius: 24,
+            border: "1px solid rgba(226, 207, 189, 0.7)",
+            background: "linear-gradient(180deg, rgba(255,253,249,1) 0%, rgba(255,255,255,1) 100%)",
+            boxShadow: "0 30px 80px -34px rgba(15,23,42,0.28)",
+          },
+          body: { padding: 0 },
+          mask: { backgroundColor: "rgba(15, 23, 42, 0.5)" },
+        }}
+      >
+        <div className="relative">
+          <div className="h-1.5 w-full bg-gradient-to-r from-[#9a6a43] via-[#c08b60] to-[#e2cfbd]" />
+
+          <div className="px-4 pb-4 pt-12 sm:px-6 sm:pb-6 sm:pt-14 md:px-8 md:pb-8">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3 md:mb-5">
+              <div className="inline-flex items-center rounded-full border border-[#e2cfbd] bg-[#f7efe6] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#7a5232] sm:text-xs">
+                E&apos;lon
+              </div>
+              <p className="rounded-full border border-slate-200/80 bg-white/90 px-3 py-1.5 text-xs font-medium text-slate-600 sm:text-sm">
+                {announcement?.date_display}
+              </p>
             </div>
-            <p className="text-xs font-medium text-slate-500 sm:text-sm">
-              {announcement?.date_display}
-            </p>
-          </div>
 
-          <h2 className="mb-4 text-xl font-bold leading-tight text-slate-900 md:mb-6 md:text-2xl">
-            {announcement?.title || "E'lon"}
-          </h2>
+            <h2 className="mb-4 text-lg font-bold leading-tight tracking-[-0.02em] text-slate-900 sm:text-xl md:mb-5 md:text-2xl lg:text-[30px] lg:leading-[1.15]">
+              {announcement?.title || "E'lon"}
+            </h2>
 
-          <div className="max-h-[65vh] overflow-y-auto pr-1">
-            <p
-              className="mb-3 text-sm leading-7 text-slate-600 sm:text-base md:mb-4"
-              dangerouslySetInnerHTML={{ __html: announcement?.description || "" }}
-            />
-
-            {announcement?.content && (
-              <div
-                className="rich-text-container mb-5"
-                dangerouslySetInnerHTML={{ __html: announcement.content }}
-              />
-            )}
-
-            {announcement?.footer_text && (
+            <div className="max-h-[min(68svh,620px)] overflow-y-auto rounded-2xl border border-slate-100 bg-white/80 p-4 pr-3 sm:p-5 sm:pr-4 md:p-6">
               <p
-                className="text-sm font-semibold leading-7 text-slate-900 sm:text-base"
-                dangerouslySetInnerHTML={{ __html: announcement.footer_text }}
+                className="mb-4 text-sm leading-7 text-slate-700 sm:text-base sm:leading-8"
+                dangerouslySetInnerHTML={{ __html: announcement?.description || "" }}
               />
-            )}
+
+              {announcement?.content && (
+                <div
+                  className="rich-text-container mb-5 border-t border-slate-100 pt-4"
+                  dangerouslySetInnerHTML={{ __html: announcement.content }}
+                />
+              )}
+
+              {announcement?.footer_text && (
+                <div className="mt-5 rounded-xl border border-[#eadccf] bg-[#fffaf4] p-4 sm:p-5">
+                  <p
+                    className="text-sm font-semibold leading-7 text-slate-900 sm:text-base"
+                    dangerouslySetInnerHTML={{ __html: announcement.footer_text }}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </Modal>

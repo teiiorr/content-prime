@@ -30,11 +30,11 @@ const statusTone: Record<string, string> = {
   Yakunlangan: "border-rose-200 bg-rose-50 text-rose-700",
 };
 
-const statusIconMap: Record<string, ComponentType<{ size?: number; className?: string }>> = {
+const statusIconMap: Record<string, ComponentType<{ size?: number; className?: string }> | null> = {
   Hammasi: Grid2x2,
   Faol: CheckCircle2,
   "Tez kunda": Clock3,
-  Yakunlangan: Sparkles,
+  Yakunlangan: null,
 };
 
 const ContestCard = memo(function ContestCard({ contest }: { contest: Contest }) {
@@ -128,7 +128,7 @@ export const CreativeContestsPage = memo(function CreativeContestsPage() {
 
   return (
     <div className="bg-background">
-      <ParallaxSection tone="amber" intensity={1.05} accentSide="right">
+      <ParallaxSection tone="amber" intensity={1.05} accentSide="right" stickyAccent={false} contentParallax={false}>
       <section
         id="contests-hero"
         className="relative overflow-hidden bg-gradient-to-b from-[#eef1f5] to-transparent py-8 md:py-12 lg:py-16"
@@ -143,7 +143,28 @@ export const CreativeContestsPage = memo(function CreativeContestsPage() {
               </div>
 
               <div className="flex flex-col gap-3">
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="sm:hidden">
+                  <label className="sr-only" htmlFor="contests-status-filter">
+                    Holat bo‘yicha filter
+                  </label>
+                  <select
+                    id="contests-status-filter"
+                    value={activeStatus}
+                    onChange={(e) => {
+                      setActiveStatus(e.target.value);
+                      setVisibleCount(INITIAL_VISIBLE);
+                    }}
+                    className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-800 outline-none transition focus:border-slate-300 focus:ring-2 focus:ring-slate-200/70"
+                  >
+                    {STATUS_LIST.map((status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="hidden flex-wrap items-center gap-2 sm:flex">
                   {STATUS_LIST.map((status) => {
                     const Icon = statusIconMap[status];
                     return (

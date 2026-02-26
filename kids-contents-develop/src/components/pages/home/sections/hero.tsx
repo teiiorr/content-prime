@@ -157,17 +157,13 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
           <button
             type="button"
             onClick={handleStartWithSound}
-            className="absolute left-1/2 top-1/2 z-10 inline-flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-black/30 text-white backdrop-blur-md transition hover:scale-[1.04] hover:bg-black/40 active:scale-95 sm:h-16 sm:w-16"
+            className="absolute left-1/2 top-1/2 z-10 inline-flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-black/22 text-white backdrop-blur-sm transition duration-200 hover:scale-[1.02] hover:bg-black/30 active:scale-95"
             aria-label="Videoni ovoz bilan boshlash"
             aria-pressed={false}
           >
-            <span className="pointer-events-none absolute inset-0 rounded-full border border-white/25 animate-ping opacity-30 [animation-duration:1.8s]" />
-            <span className="pointer-events-none absolute -inset-3 rounded-full border border-white/15 opacity-70 animate-ping [animation-duration:2.8s]" />
-            <span className="pointer-events-none absolute inset-[5px] rounded-full bg-white/10" />
-            <span className="pointer-events-none absolute inset-[12px] rounded-full bg-white/5" />
-            <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 sm:h-8 sm:w-8">
-              <Play className="h-6 w-6 translate-x-[1px] sm:h-5 sm:w-5" />
-            </span>
+            <span className="pointer-events-none absolute -inset-2 rounded-full border border-white/18 opacity-70 [animation:ping_2.8s_cubic-bezier(0,0,0.2,1)_infinite]" />
+            <span className="pointer-events-none absolute inset-[2px] rounded-full border border-white/12" />
+            <Play className="relative h-[18px] w-[18px] translate-x-[1px]" />
           </button>
         ) : null}
         {!reduceMotion && isDesktopViewport ? (
