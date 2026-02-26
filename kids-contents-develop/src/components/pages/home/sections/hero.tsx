@@ -10,6 +10,7 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
   const [hasStartedByUser, setHasStartedByUser] = useState(false);
   const [isDesktopViewport, setIsDesktopViewport] = useState(false);
   const [isSoundOn, setIsSoundOn] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = useState(true);
@@ -52,11 +53,13 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
 
     if (reduceMotion) {
       setIsSoundOn(false);
+      setIsVideoPlaying(false);
       video.pause();
       return;
     }
 
     if (!hasStartedByUser && !isDesktopViewport) {
+      setIsVideoPlaying(false);
       video.pause();
       return;
     }
@@ -66,6 +69,7 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
         video.muted = true;
       }
       setIsSoundOn(false);
+      setIsVideoPlaying(false);
       video.pause();
       return;
     }
@@ -87,6 +91,7 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
   }, [reduceMotion, isVisible, hasStartedByUser, isDesktopViewport]);
 
   const handleHeroEnded = () => {
+    setIsVideoPlaying(false);
     try {
       window.sessionStorage.setItem("home-hero-video-finished", "1");
     } catch {}
@@ -140,13 +145,15 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
           preload="metadata"
           aria-hidden="true"
           onEnded={handleHeroEnded}
+          onPlay={() => setIsVideoPlaying(true)}
+          onPause={() => setIsVideoPlaying(false)}
         >
           <source src={HERO_VIDEO_SRC} type="video/mp4" />
         </video>
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/10" />
 
-        {!reduceMotion && !isDesktopViewport && !hasStartedByUser ? (
+        {!reduceMotion && !isDesktopViewport && !isVideoPlaying ? (
           <button
             type="button"
             onClick={handleStartWithSound}
@@ -163,7 +170,7 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
             </span>
           </button>
         ) : null}
-        {!reduceMotion && (isDesktopViewport || hasStartedByUser) ? (
+        {!reduceMotion && isDesktopViewport ? (
           <button
             type="button"
             onClick={handleToggleSound}

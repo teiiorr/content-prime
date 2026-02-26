@@ -12,6 +12,7 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
   const [hasStartedByUser, setHasStartedByUser] = useState(false);
   const [isDesktopViewport, setIsDesktopViewport] = useState(false);
   const [isSoundOn, setIsSoundOn] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const playTimerRef = useRef<number | null>(null);
@@ -57,17 +58,20 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
     if (reduceMotion) {
       video.muted = true;
       setIsSoundOn(false);
+      setIsVideoPlaying(false);
       video.pause();
       return;
     }
 
     if (!hasStartedByUser && !isDesktopViewport) {
+      setIsVideoPlaying(false);
       video.pause();
       return;
     }
 
     if (!isVisible) {
       setIsSoundOn(false);
+      setIsVideoPlaying(false);
       video.pause();
       return;
     }
@@ -182,11 +186,14 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
                     muted
                     playsInline
                     preload="metadata"
+                    onPlay={() => setIsVideoPlaying(true)}
+                    onPause={() => setIsVideoPlaying(false)}
+                    onEnded={() => setIsVideoPlaying(false)}
                   >
                     <source src="/videos/handbrake-mobile.mp4" type="video/mp4" />
                   </video>
 
-                  {!reduceMotion && !isDesktopViewport && !hasStartedByUser ? (
+                  {!reduceMotion && !isDesktopViewport && !isVideoPlaying ? (
                     <button
                       type="button"
                       onClick={handleStartWithSound}
@@ -201,7 +208,7 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
                       </span>
                     </button>
                   ) : null}
-                  {!reduceMotion && (isDesktopViewport || hasStartedByUser) ? (
+                  {!reduceMotion && isDesktopViewport ? (
                     <button
                       type="button"
                       onClick={handleToggleSound}
