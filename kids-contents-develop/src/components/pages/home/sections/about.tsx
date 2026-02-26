@@ -190,6 +190,7 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
                     onPause={() => setIsVideoPlaying(false)}
                     onEnded={() => setIsVideoPlaying(false)}
                   >
+                    <source src="/videos/handbrake-mobile-web.mp4" type="video/mp4" />
                     <source src="/videos/handbrake-mobile.mp4" type="video/mp4" />
                   </video>
 
