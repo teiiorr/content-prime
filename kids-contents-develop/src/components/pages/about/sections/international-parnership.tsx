@@ -13,7 +13,6 @@ import { ROUTES } from "@/constants";
 import { NewsItemType } from "@/types";
 import { fetchInternationalNews } from "@/lib";
 import {
-  BgBubbles,
   HomeCard,
   HomeSectionHeader,
   HomeSectionShell,
@@ -218,9 +217,6 @@ export const AboutSectionsInternationalPartnership = memo(
             </div>
           </HomeSectionShell>
         </div>
-
-        <BgBubbles color="#ebe1d4" className="bottom-full" />
-        <BgBubbles color="#ebe1d4" className="top-full rotate-180" />
 
         <HomeSliderDotsStyles bulletClass="about-intl-bullet" />
         <style jsx global>{`

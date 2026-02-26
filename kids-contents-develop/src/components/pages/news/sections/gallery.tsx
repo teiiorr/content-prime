@@ -2,7 +2,7 @@
 import { memo } from "react";
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
-import { BgBubbles, HomeSectionShell } from "@/components";
+import { HomeSectionShell } from "@/components";
 import { ScrollCard } from "@/components/motion/ScrollCard";
 
 export const NewsSectionsGallery = memo(function NewsSectionsGallery() {
@@ -100,9 +100,6 @@ export const NewsSectionsGallery = memo(function NewsSectionsGallery() {
           </div>
         </HomeSectionShell>
       </div>
-
-      <BgBubbles color="#ebe1d4" className="bottom-full" />
-      <BgBubbles color="#ebe1d4" className="top-full rotate-180" />
 
       <style jsx>{`
         .gallery-grid {

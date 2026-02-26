@@ -1,7 +1,7 @@
 import { memo } from "react";
 import Image from "next/image";
 import { Mail, Phone } from "lucide-react";
-import { BgBubbles, HomeSectionShell } from "@/components";
+import { HomeSectionShell } from "@/components";
 import { ScrollCard } from "@/components/motion/ScrollCard";
 
 interface MemberItem {
@@ -121,7 +121,6 @@ export const AboutSectionsTeam = memo(function AboutSectionsTeam() {
         </HomeSectionShell>
       </div>
 
-      <BgBubbles color="#eef2ed" className="bottom-full" />
     </section>
   );
 });

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { Facebook, Instagram, Send, MapPin, Phone, Mail } from "lucide-react";
-import { BgBubbles } from "@/components/general";
 import { FooterLink } from "@/components/ui";
 import { LINKS } from "@/constants";
 import { useMemo } from "react";
@@ -48,8 +47,6 @@ export function MainFooter() {
   return (
     <ParallaxSection tone="sky" intensity={0.9} accentSide="left" stickyAccent={false} contentParallax={false}>
       <footer className="relative mt-12 border-t border-slate-200 bg-blue-200 md:mt-16 lg:mt-24">
-        <BgBubbles color="#baedfd" className="bottom-full" />
-
         <div className="container pb-[calc(96px+env(safe-area-inset-bottom))] pt-10 md:py-10">
           <div className="rounded-3xl border border-white/60 bg-white/60 p-5 shadow-[0_24px_60px_-40px_rgba(30,41,59,0.22)] backdrop-blur-sm sm:p-6 lg:p-8 xl:p-10">
           <div className="mb-10 grid gap-8 lg:grid-cols-[1.15fr_.85fr] lg:items-start lg:gap-10 xl:gap-12">

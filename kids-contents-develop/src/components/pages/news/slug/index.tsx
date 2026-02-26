@@ -82,7 +82,7 @@ export const NewsSlugPage = memo(function NewsSlugPage({
 
   return (
     <div className="relative bg-gradient-to-b from-[#eef1f5] via-[#f5f7fa] to-white">
-      <ParallaxSection tone="slate" intensity={1.05} accentSide="right">
+      <ParallaxSection tone="slate" intensity={1.05} accentSide="right" stickyAccent={false}>
       <section id="news-hero" className="relative z-10 overflow-hidden py-8 md:py-12 lg:py-16">
         <div className="container max-w-[1508px] 2xl:max-w-[88%]">
           <HomeSectionShell className="border-transparent bg-white/90 p-4 sm:p-5 lg:p-6 xl:p-8 shadow-[0_30px_70px_-50px_rgba(15,23,42,0.18)]">
@@ -309,16 +309,6 @@ export const NewsSlugPage = memo(function NewsSlugPage({
         </div>
       </section>
       </ParallaxSection>
-
-      <Image
-        src="/images/bg.avif"
-        alt="Hero background image"
-        width={1920}
-        height={663}
-        priority={false}
-        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-auto w-full object-cover object-center opacity-40"
-      />
-
       <style jsx global>{`
         .news-article-body {
           font-size: 16px;

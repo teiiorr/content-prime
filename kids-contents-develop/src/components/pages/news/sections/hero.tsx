@@ -50,7 +50,7 @@ export const NewsSectionsHero = memo(function NewsSectionsHero() {
   const canLoadMore = visibleCount < filteredNews.length;
 
   return (
-    <ParallaxSection tone="slate" intensity={1.05} accentSide="right">
+    <ParallaxSection tone="slate" intensity={1.05} accentSide="right" stickyAccent={false} contentParallax={false}>
     <section
       id="hero"
       className="hero-section relative bg-gradient-to-b from-[#eef1f5] to-transparent py-8 md:py-12 lg:py-16"

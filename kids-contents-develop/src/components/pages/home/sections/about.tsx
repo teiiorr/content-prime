@@ -3,7 +3,7 @@
 import { memo, useEffect, useRef, useState } from "react";
 import { Play, Volume2, VolumeX } from "lucide-react";
 import { ROUTES } from "@/constants";
-import { BgBubbles, Button, Container } from "@/components";
+import { Button, Container } from "@/components";
 import { FadeIn } from "@/components/effects/FadeIn";
 import { ScrollCard } from "@/components/motion/ScrollCard";
 
@@ -197,15 +197,13 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
                     <button
                       type="button"
                       onClick={handleStartWithSound}
-                      className="absolute left-1/2 top-1/2 z-10 inline-flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white backdrop-blur-md transition hover:scale-[1.03] hover:bg-black/45 active:scale-95 sm:h-[72px] sm:w-[72px] lg:h-16 lg:w-16"
+                      className="absolute left-1/2 top-1/2 z-10 inline-flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-black/24 text-white backdrop-blur-sm transition duration-200 hover:scale-[1.02] hover:bg-black/32 active:scale-95"
                       aria-label="Videoni ovoz bilan boshlash"
                       aria-pressed={false}
                     >
-                      <span className="pointer-events-none absolute inset-0 rounded-full border border-white/25 animate-ping opacity-25 [animation-duration:2s]" />
-                      <span className="pointer-events-none absolute inset-[4px] rounded-full bg-white/10" />
-                      <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
-                        <Play className="h-5 w-5 translate-x-[1px]" />
-                      </span>
+                      <span className="pointer-events-none absolute -inset-2 rounded-full border border-white/18 opacity-70 [animation:ping_2.8s_cubic-bezier(0,0,0.2,1)_infinite]" />
+                      <span className="pointer-events-none absolute inset-[2px] rounded-full border border-white/12" />
+                      <Play className="relative h-[18px] w-[18px] translate-x-[1px]" />
                     </button>
                   ) : null}
                   {!reduceMotion && isDesktopViewport ? (
@@ -243,8 +241,6 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
         </FadeIn>
       </Container>
 
-      <BgBubbles color="#d8e6ee" className="bottom-full" />
-      <BgBubbles color="#d8e6ee" className="top-full rotate-180" />
     </section>
   );
 });
