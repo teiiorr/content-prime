@@ -15,6 +15,10 @@ html {
   scroll-behavior: smooth;
 }
 
+html.lenis-active {
+  scroll-behavior: auto;
+}
+
 body {
   color: rgb(var(--foreground)) !important;
   background: linear-gradient(180deg, #f8fafc 0%, #eef6ff 100%) !important;
@@ -80,6 +84,12 @@ main section {
   animation-range: entry 10% cover 32%;
 }
 
+.motion-home section {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 /* Hero / first-screen sections must be visible immediately (no scroll-trigger reveal). */
 main section.hero-section,
 main section#contests-hero,
@@ -93,6 +103,12 @@ main > div > section:first-child {
 @supports not (animation-timeline: view()) {
   main section {
     animation: sectionRevealFallback 0.8s ease-out both;
+  }
+
+  .motion-home section {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   main section.hero-section,

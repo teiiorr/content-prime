@@ -6,6 +6,7 @@ import { BgBubbles } from "@/components/general";
 import { FooterLink } from "@/components/ui";
 import { LINKS } from "@/constants";
 import { useMemo } from "react";
+import { ParallaxSection } from "@/components/motion/ParallaxSection";
 
 function XBrandIcon() {
   return (
@@ -45,11 +46,12 @@ export function MainFooter() {
   const currentYear = useMemo(() => new Date().getFullYear(), []);
 
   return (
-    <footer className="relative mt-12 border-t border-slate-200 bg-blue-200 md:mt-16 lg:mt-24">
-      <BgBubbles color="#baedfd" className="bottom-full" />
+    <ParallaxSection tone="sky" intensity={0.9} accentSide="left" stickyAccent={false} contentParallax={false}>
+      <footer className="relative mt-12 border-t border-slate-200 bg-blue-200 md:mt-16 lg:mt-24">
+        <BgBubbles color="#baedfd" className="bottom-full" />
 
-      <div className="container pb-[calc(96px+env(safe-area-inset-bottom))] pt-10 md:py-10">
-        <div className="rounded-3xl border border-white/60 bg-white/60 p-5 shadow-[0_24px_60px_-40px_rgba(30,41,59,0.22)] backdrop-blur-sm sm:p-6 lg:p-8 xl:p-10">
+        <div className="container pb-[calc(96px+env(safe-area-inset-bottom))] pt-10 md:py-10">
+          <div className="rounded-3xl border border-white/60 bg-white/60 p-5 shadow-[0_24px_60px_-40px_rgba(30,41,59,0.22)] backdrop-blur-sm sm:p-6 lg:p-8 xl:p-10">
           <div className="mb-10 grid gap-8 lg:grid-cols-[1.15fr_.85fr] lg:items-start lg:gap-10 xl:gap-12">
             <div className="max-lg:text-center">
               <div className="mb-6">
@@ -112,16 +114,22 @@ export function MainFooter() {
                 © {currentYear} Bolalar kontentini rivojlantirish markazi
               </div>
 
-              <div className="flex items-center gap-2 text-sm text-slate-600">
-                <span>Designed & Developed by</span>
-                <span className="rounded-full border border-white/80 bg-white/75 px-3 py-1 font-semibold tracking-[-0.01em] text-slate-800">
-                  teiior
+              <div className="flex items-center gap-2 text-sm leading-none text-slate-600">
+                <span className="leading-none">Designed & Developed by</span>
+                <span className="inline-flex items-baseline gap-1 leading-none tracking-[-0.02em]">
+                  <span className="text-[18px] font-extrabold leading-none text-slate-900 sm:text-[19px]">
+                    teiior
+                  </span>
+                  <span className="text-[14px] font-medium leading-none text-slate-500 sm:text-[15px]">
+                    dev
+                  </span>
                 </span>
               </div>
             </div>
           </div>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </ParallaxSection>
   );
 }

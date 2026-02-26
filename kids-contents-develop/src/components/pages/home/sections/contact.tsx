@@ -8,6 +8,7 @@ import {
   HomeCard,
   HomeSectionShell,
 } from "@/components";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 
 export const HomeSectionsContact = memo(function HomeSectionsContact() {
   const contacts = [
@@ -68,69 +69,73 @@ export const HomeSectionsContact = memo(function HomeSectionsContact() {
           <div className="grid gap-6 lg:grid-cols-[1.05fr_.95fr]">
             <div className="space-y-6">
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {contacts.map(({ id, title, value, href, color, icon: Icon }) => (
-                  <HomeCard
-                    key={id}
-                    className="h-full min-h-[164px] p-4 sm:p-5"
-                  >
-                    <div className="flex h-full flex-col gap-3">
-                      <div
-                        className={[
-                          "inline-flex h-11 w-11 items-center justify-center rounded-xl border",
-                          colorClasses[color],
-                        ].join(" ")}
-                      >
-                        <Icon size={20} />
-                      </div>
+                {contacts.map(({ id, title, value, href, color, icon: Icon }, index) => (
+                  <ScrollCard key={id} index={index} yFrom={60} scaleFrom={1.06} blurFrom={6} delayStep={0.05}>
+                    <HomeCard
+                      className="h-full min-h-[164px] p-4 sm:p-5"
+                    >
+                      <div className="flex h-full flex-col gap-3">
+                        <div
+                          className={[
+                            "inline-flex h-11 w-11 items-center justify-center rounded-xl border",
+                            colorClasses[color],
+                          ].join(" ")}
+                        >
+                          <Icon size={20} />
+                        </div>
 
-                      <div className="text-base font-semibold tracking-[-0.01em] text-slate-900 sm:text-lg">
-                        {title}
-                      </div>
+                        <div className="text-base font-semibold tracking-[-0.01em] text-slate-900 sm:text-lg">
+                          {title}
+                        </div>
 
-                      <Link
-                        href={href}
-                        className="mt-auto break-all text-sm font-semibold text-slate-700 no-underline transition hover:text-slate-900"
-                      >
-                        {value}
-                      </Link>
-                    </div>
-                  </HomeCard>
+                        <Link
+                          href={href}
+                          className="mt-auto break-all text-sm font-semibold text-slate-700 no-underline transition hover:text-slate-900"
+                        >
+                          {value}
+                        </Link>
+                      </div>
+                    </HomeCard>
+                  </ScrollCard>
                 ))}
               </div>
 
-              <HomeCard className="bg-slate-50/70 p-4 sm:p-5">
-                <div className="flex items-start gap-3">
-                  <div className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-stone-300 bg-stone-100 text-stone-700">
-                    <MapPin size={20} />
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-lg font-semibold text-slate-900">Bizning manzil</h3>
-                      <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-600">
-                        <Building2 size={14} />
-                        Toshkent shahar
-                      </span>
+              <ScrollCard index={5} yFrom={72} scaleFrom={1.05} blurFrom={6}>
+                <HomeCard className="bg-slate-50/70 p-4 sm:p-5">
+                  <div className="flex items-start gap-3">
+                    <div className="inline-flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-stone-300 bg-stone-100 text-stone-700">
+                      <MapPin size={20} />
                     </div>
 
-                    <p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">
-                      Olmazor tumani, Ziyo ko‘chasi, 2-A uy
-                    </p>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-lg font-semibold text-slate-900">Bizning manzil</h3>
+                        <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-600">
+                          <Building2 size={14} />
+                          Toshkent shahar
+                        </span>
+                      </div>
 
-                    <Link
-                      href="https://yandex.uz/maps/?ll=69.214267%2C41.354485&z=17&pt=69.214267,41.354485,pm2rdl"
-                      target="_blank"
-                      className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 no-underline transition hover:border-stone-300 hover:text-stone-800"
-                    >
-                      Xaritada ochish
-                      <ArrowUpRight size={16} />
-                    </Link>
+                      <p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">
+                        Olmazor tumani, Ziyo ko‘chasi, 2-A uy
+                      </p>
+
+                      <Link
+                        href="https://yandex.uz/maps/?ll=69.214267%2C41.354485&z=17&pt=69.214267,41.354485,pm2rdl"
+                        target="_blank"
+                        className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-semibold text-slate-700 no-underline transition hover:border-stone-300 hover:text-stone-800"
+                      >
+                        Xaritada ochish
+                        <ArrowUpRight size={16} />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </HomeCard>
+                </HomeCard>
+              </ScrollCard>
             </div>
 
-            <div className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 max-md:aspect-square md:min-h-[420px] xl:min-h-[500px]">
+            <ScrollCard className="w-full" index={2} yFrom={88} scaleFrom={1.04} blurFrom={5}>
+              <div className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 max-md:aspect-square md:min-h-[420px] xl:min-h-[500px]">
               <iframe
                 src="https://yandex.uz/map-widget/v1/?ll=69.214267%2C41.354485&z=17&l=map&pt=69.214267%2C41.354485%2Cpm2rdl"
                 title="Bizning manzilimiz Yandex xaritasida"
@@ -141,7 +146,8 @@ export const HomeSectionsContact = memo(function HomeSectionsContact() {
                 loading="lazy"
                 aria-label="Interaktiv xarita: bizning ofis joylashuvi"
               />
-            </div>
+              </div>
+            </ScrollCard>
           </div>
         </HomeSectionShell>
       </Container>

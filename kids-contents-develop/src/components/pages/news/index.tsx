@@ -1,5 +1,6 @@
 import { lazy, memo, Suspense } from "react";
 import { NewsSectionsHero } from "./sections/hero";
+import { ParallaxSection } from "@/components/motion/ParallaxSection";
 
 // const NewsSectionsInternational = lazy(() =>
 //   import("./sections/international").then((module) => ({
@@ -34,13 +35,17 @@ export const NewsPage = memo(function NewsPage() {
         <NewsSectionsInternational />
       </Suspense> */}
 
-      <Suspense fallback={<SectionLoader />}>
-        <NewsSectionsGallery />
-      </Suspense>
+      <ParallaxSection tone="amber" intensity={1.05} accentSide="left">
+        <Suspense fallback={<SectionLoader />}>
+          <NewsSectionsGallery />
+        </Suspense>
+      </ParallaxSection>
 
-      <Suspense fallback={<SectionLoader />}>
-        <NewsSectionsVideoteka />
-      </Suspense>
+      <ParallaxSection tone="slate" intensity={1.05} accentSide="right">
+        <Suspense fallback={<SectionLoader />}>
+          <NewsSectionsVideoteka />
+        </Suspense>
+      </ParallaxSection>
     </div>
   );
 });

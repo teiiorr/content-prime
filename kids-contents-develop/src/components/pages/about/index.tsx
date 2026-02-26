@@ -1,5 +1,6 @@
 import { lazy, memo, Suspense } from "react";
 import { AboutSectionsHero } from "./sections/hero";
+import { ParallaxSection } from "@/components/motion/ParallaxSection";
 
 const AboutSectionsTeam = lazy(() =>
   import("./sections/team").then((module) => ({
@@ -30,17 +31,23 @@ export const AboutPage = memo(function AboutPage() {
     <div className="relative isolate min-h-screen bg-background">
       <AboutSectionsHero />
 
-      <Suspense fallback={<SectionLoader />}>
-        <AboutSectionsTeam />
-      </Suspense>
+      <ParallaxSection tone="slate" intensity={0.95} accentSide="left">
+        <Suspense fallback={<SectionLoader />}>
+          <AboutSectionsTeam />
+        </Suspense>
+      </ParallaxSection>
 
-      <Suspense fallback={<SectionLoader />}>
-        <AboutSectionsInternationalPartnership />
-      </Suspense>
+      <ParallaxSection tone="sky" intensity={1.05} accentSide="right">
+        <Suspense fallback={<SectionLoader />}>
+          <AboutSectionsInternationalPartnership />
+        </Suspense>
+      </ParallaxSection>
 
-      <Suspense fallback={<SectionLoader />}>
-        <AboutSectionsFunctions />
-      </Suspense>
+      <ParallaxSection tone="emerald" intensity={1} accentSide="left">
+        <Suspense fallback={<SectionLoader />}>
+          <AboutSectionsFunctions />
+        </Suspense>
+      </ParallaxSection>
     </div>
   );
 });

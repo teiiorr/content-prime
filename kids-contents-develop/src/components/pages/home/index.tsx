@@ -1,5 +1,6 @@
 import { lazy, memo, Suspense } from "react";
 import { HomeSectionsHero } from "./sections/hero";
+import { ParallaxSection } from "@/components/motion/ParallaxSection";
 
 const HomeSectionsAbout = lazy(() =>
   import("./sections/about").then((module) => ({
@@ -51,36 +52,48 @@ const SectionLoader = () => (
 
 export const HomePage = memo(function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="motion-home min-h-screen bg-background">
       <HomeSectionsHero />
 
-      <Suspense fallback={<SectionLoader />}>
-        <HomeSectionsAbout />
-      </Suspense>
+      <ParallaxSection tone="slate" intensity={1.05} accentSide="left" contentParallax={false}>
+        <Suspense fallback={<SectionLoader />}>
+          <HomeSectionsAbout />
+        </Suspense>
+      </ParallaxSection>
 
-      <Suspense fallback={<SectionLoader />}>
-        <HomeSectionsNews />
-      </Suspense>
+      <ParallaxSection tone="sky" intensity={1.1} accentSide="right">
+        <Suspense fallback={<SectionLoader />}>
+          <HomeSectionsNews />
+        </Suspense>
+      </ParallaxSection>
 
-      <Suspense fallback={<SectionLoader />}>
-        <HomeSectionsAnnouncements />
-      </Suspense>
+      <ParallaxSection tone="amber" intensity={1.05} accentSide="left">
+        <Suspense fallback={<SectionLoader />}>
+          <HomeSectionsAnnouncements />
+        </Suspense>
+      </ParallaxSection>
 
       {/* <Suspense fallback={<SectionLoader />}>
         <HomeSectionsHaveAnIdea />
       </Suspense> */}
 
-      <Suspense fallback={<SectionLoader />}>
-        <HomeSectionsContests />
-      </Suspense>
+      <ParallaxSection tone="emerald" intensity={1.2} accentSide="right">
+        <Suspense fallback={<SectionLoader />}>
+          <HomeSectionsContests />
+        </Suspense>
+      </ParallaxSection>
 
-      <Suspense fallback={<SectionLoader />}>
-        <HomeSectionsPartners />
-      </Suspense>
+      <ParallaxSection tone="sky" intensity={1.05} accentSide="left">
+        <Suspense fallback={<SectionLoader />}>
+          <HomeSectionsPartners />
+        </Suspense>
+      </ParallaxSection>
 
-      <Suspense fallback={<SectionLoader />}>
-        <HomeSectionsContact />
-      </Suspense>
+      <ParallaxSection tone="slate" intensity={0.95} accentSide="right">
+        <Suspense fallback={<SectionLoader />}>
+          <HomeSectionsContact />
+        </Suspense>
+      </ParallaxSection>
     </div>
   );
 });

@@ -5,7 +5,7 @@ import { Montserrat } from "next/font/google";
 import "@/styles/globals.scss";
 import { MainLayout } from "@/components/layouts";
 import { SplashScreenGate } from "@/components/general";
-import { ThemeProvider } from "@/providers";
+import { ScrollProvider, ThemeProvider } from "@/providers";
 
 const montserrat = Montserrat({
   subsets: ["latin", "cyrillic"],
@@ -25,9 +25,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="uz">
       <body className={`${montserrat.variable} font-sans`}>
         <ThemeProvider>
-          <SplashScreenGate>
-            <MainLayout>{children}</MainLayout>
-          </SplashScreenGate>
+          <ScrollProvider>
+            <SplashScreenGate>
+              <MainLayout>{children}</MainLayout>
+            </SplashScreenGate>
+          </ScrollProvider>
         </ThemeProvider>
       </body>
     </html>

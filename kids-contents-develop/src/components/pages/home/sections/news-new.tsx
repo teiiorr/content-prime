@@ -17,6 +17,7 @@ import {
   HomeStatePanel,
   Skeleton,
 } from "@/components";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 import { ROUTES } from "@/constants";
 import { fetchNewsLimited } from "@/lib";
 import type { NewsItemType } from "@/types";
@@ -130,35 +131,37 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
                   }}
                   className="pb-4"
                 >
-                  {news.map((item) => (
+                  {news.map((item, index) => (
                     <SwiperSlide key={item.id}>
-                      <Link
-                        href={`${ROUTES.NEWS}/${item.slug}`}
-                        className="group block focus:outline-none"
-                        aria-label={`${item.title} - ${item.date_display}`}
-                      >
-                        <Card className="h-full overflow-hidden rounded-2xl border-slate-200/90 bg-white p-0 transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_-24px_rgba(15,23,42,0.28)] group-focus-visible:ring-2 group-focus-visible:ring-slate-400/60 group-focus-visible:ring-offset-2 xl:rounded-3xl">
-                          <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
-                            <Image
-                              src={item.image_src}
-                              alt={item.title}
-                              width={420}
-                              height={272}
-                              className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.03]"
-                              sizes="(min-width: 1800px) 21vw, (min-width: 1400px) 22vw, (min-width: 1100px) 28vw, (min-width: 768px) 45vw, 90vw"
-                            />
-                          </div>
+                      <ScrollCard index={index} yFrom={72} scaleFrom={1.08} blurFrom={8}>
+                        <Link
+                          href={`${ROUTES.NEWS}/${item.slug}`}
+                          className="group block focus:outline-none"
+                          aria-label={`${item.title} - ${item.date_display}`}
+                        >
+                          <Card className="h-full overflow-hidden rounded-2xl border-slate-200/90 bg-white p-0 transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_-24px_rgba(15,23,42,0.28)] group-focus-visible:ring-2 group-focus-visible:ring-slate-400/60 group-focus-visible:ring-offset-2 xl:rounded-3xl">
+                            <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                              <Image
+                                src={item.image_src}
+                                alt={item.title}
+                                width={420}
+                                height={272}
+                                className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.03]"
+                                sizes="(min-width: 1800px) 21vw, (min-width: 1400px) 22vw, (min-width: 1100px) 28vw, (min-width: 768px) 45vw, 90vw"
+                              />
+                            </div>
 
-                          <div className="flex h-[84px] flex-col p-3 sm:h-[94px] sm:p-3.5 xl:h-[106px] xl:p-4">
-                            <h3 className="line-clamp-2 text-[14px] font-semibold tracking-[-0.01em] leading-5 text-slate-900 transition-colors group-hover:text-slate-700 sm:text-[15px] sm:leading-5 xl:text-base xl:leading-6">
-                              {item.title}
-                            </h3>
-                            <time className="mt-auto truncate whitespace-nowrap pt-1.5 text-xs leading-none font-medium text-slate-500 sm:pt-2 sm:text-sm">
-                              {item.date_display}
-                            </time>
-                          </div>
-                        </Card>
-                      </Link>
+                            <div className="flex h-[84px] flex-col p-3 sm:h-[94px] sm:p-3.5 xl:h-[106px] xl:p-4">
+                              <h3 className="line-clamp-2 text-[14px] font-semibold tracking-[-0.01em] leading-5 text-slate-900 transition-colors group-hover:text-slate-700 sm:text-[15px] sm:leading-5 xl:text-base xl:leading-6">
+                                {item.title}
+                              </h3>
+                              <time className="mt-auto truncate whitespace-nowrap pt-1.5 text-xs leading-none font-medium text-slate-500 sm:pt-2 sm:text-sm">
+                                {item.date_display}
+                              </time>
+                            </div>
+                          </Card>
+                        </Link>
+                      </ScrollCard>
                     </SwiperSlide>
                   ))}
                 </Swiper>

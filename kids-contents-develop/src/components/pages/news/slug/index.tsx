@@ -7,6 +7,8 @@ import { Breadcrumb } from "antd";
 import { ArrowLeft, ChevronLeft, ChevronRight, Copy, Share2 } from "lucide-react";
 
 import { HomeSectionShell } from "@/components";
+import { ParallaxSection } from "@/components/motion/ParallaxSection";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 import { ROUTES } from "@/constants";
 import { NewsWithContentItemType } from "@/types";
 
@@ -80,9 +82,11 @@ export const NewsSlugPage = memo(function NewsSlugPage({
 
   return (
     <div className="relative bg-gradient-to-b from-[#eef1f5] via-[#f5f7fa] to-white">
+      <ParallaxSection tone="slate" intensity={1.05} accentSide="right">
       <section id="news-hero" className="relative z-10 overflow-hidden py-8 md:py-12 lg:py-16">
         <div className="container max-w-[1508px] 2xl:max-w-[88%]">
           <HomeSectionShell className="border-transparent bg-white/90 p-4 sm:p-5 lg:p-6 xl:p-8 shadow-[0_30px_70px_-50px_rgba(15,23,42,0.18)]">
+            <ScrollCard index={0} yFrom={48} scaleFrom={1.02} blurFrom={4}>
             <div className="mb-5 flex flex-col gap-3 md:mb-6">
               <div className="flex flex-wrap items-center gap-3">
                 <Breadcrumb
@@ -154,9 +158,11 @@ export const NewsSlugPage = memo(function NewsSlugPage({
                 </div>
               </div>
             </div>
+            </ScrollCard>
 
             <div className="min-w-0">
                 {gallery ? (
+                  <ScrollCard index={1} yFrom={70} scaleFrom={1.04} blurFrom={5}>
                   <div className="mb-8 lg:mb-10">
                     <div className="relative overflow-hidden rounded-3xl bg-white p-2 shadow-[0_20px_50px_-38px_rgba(15,23,42,0.22)] sm:rounded-[30px] lg:rounded-[34px]">
                       <div className="relative aspect-video overflow-hidden rounded-2xl bg-slate-100 sm:rounded-[22px]">
@@ -225,7 +231,9 @@ export const NewsSlugPage = memo(function NewsSlugPage({
                       </div>
                     ) : null}
                   </div>
+                  </ScrollCard>
                 ) : (
+                  <ScrollCard index={1} yFrom={70} scaleFrom={1.04} blurFrom={5}>
                   <div className="mb-8 overflow-hidden rounded-3xl bg-white p-2 shadow-[0_20px_50px_-38px_rgba(15,23,42,0.22)] lg:mb-10">
                     <div className="relative aspect-video overflow-hidden rounded-2xl bg-slate-100">
                       {newsItem.video_src ? (
@@ -247,6 +255,7 @@ export const NewsSlugPage = memo(function NewsSlugPage({
                       )}
                     </div>
                   </div>
+                  </ScrollCard>
                 )}
 
                 <article id="news-article-content" className="max-w-none">
@@ -275,6 +284,7 @@ export const NewsSlugPage = memo(function NewsSlugPage({
                   </div>
                 </article>
 
+                <ScrollCard index={2} yFrom={42} scaleFrom={1.02} blurFrom={3}>
                 <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-slate-200/80 pt-4">
                   <button
                     type="button"
@@ -293,10 +303,12 @@ export const NewsSlugPage = memo(function NewsSlugPage({
                     {copied ? "Nusxalandi" : "Havolani nusxalash"}
                   </button>
                 </div>
+                </ScrollCard>
             </div>
           </HomeSectionShell>
         </div>
       </section>
+      </ParallaxSection>
 
       <Image
         src="/images/bg.avif"

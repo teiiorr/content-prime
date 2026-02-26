@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 
 import { HomeSectionShell, NewsItem } from "@/components";
+import { ParallaxSection } from "@/components/motion/ParallaxSection";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 import { ROUTES } from "@/constants";
 import { fetchNewsLimited } from "@/lib";
 import { NewsItemType, ProjectItemType, Status } from "@/types";
@@ -137,9 +139,11 @@ export const ProjectsSlugPage = memo(function ProjectsSlugPage({
 
   return (
     <div className="relative bg-gradient-to-b from-[#eef1f5] via-[#f5f7fa] to-white">
+      <ParallaxSection tone="slate" intensity={1.05} accentSide="right">
       <section id="projects-hero" className="relative z-10 overflow-hidden py-8 md:py-12 lg:py-16">
         <div className="container max-w-[1508px] 2xl:max-w-[88%]">
           <HomeSectionShell className="border-transparent bg-white/90 p-4 sm:p-5 lg:p-6 xl:p-8 shadow-[0_30px_70px_-50px_rgba(15,23,42,0.18)]">
+            <ScrollCard index={0} yFrom={48} scaleFrom={1.02} blurFrom={4}>
             <div className="mb-5 flex flex-col gap-3 md:mb-6">
               <div className="flex flex-wrap items-center gap-3">
                 <Breadcrumb
@@ -198,8 +202,10 @@ export const ProjectsSlugPage = memo(function ProjectsSlugPage({
                 </div>
               </div>
             </div>
+            </ScrollCard>
 
             <div className="min-w-0">
+              <ScrollCard index={1} yFrom={72} scaleFrom={1.04} blurFrom={5}>
               <div className="mb-8 overflow-hidden rounded-3xl bg-white p-2 shadow-[0_20px_50px_-38px_rgba(15,23,42,0.22)] lg:mb-10">
                 <div className="relative aspect-video overflow-hidden rounded-2xl bg-slate-100">
                   {projectItem.video_src ? (
@@ -221,7 +227,9 @@ export const ProjectsSlugPage = memo(function ProjectsSlugPage({
                   )}
                 </div>
               </div>
+              </ScrollCard>
 
+              <ScrollCard index={2} yFrom={70} scaleFrom={1.04} blurFrom={5}>
               <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 lg:mb-10">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <h2 className="text-xl font-bold tracking-[-0.01em] text-slate-900 sm:text-2xl">
@@ -275,6 +283,7 @@ export const ProjectsSlugPage = memo(function ProjectsSlugPage({
                   })}
                 </div>
               </div>
+              </ScrollCard>
 
               <article id="projects-article-content" className="max-w-none">
                 <div className="project-article-body text-slate-700">
@@ -289,6 +298,7 @@ export const ProjectsSlugPage = memo(function ProjectsSlugPage({
               </article>
 
               {socialLinks.length > 0 ? (
+                <ScrollCard index={3} yFrom={56} scaleFrom={1.03} blurFrom={4}>
                 <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4">
                   <h3 className="mb-3 text-base font-semibold text-slate-900 sm:text-lg">
                     Loyihaning tarmoq sahifalari
@@ -308,8 +318,10 @@ export const ProjectsSlugPage = memo(function ProjectsSlugPage({
                     ))}
                   </div>
                 </div>
+                </ScrollCard>
               ) : null}
 
+              <ScrollCard index={4} yFrom={42} scaleFrom={1.02} blurFrom={3}>
               <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-slate-200/80 pt-4">
                 <button
                   type="button"
@@ -328,6 +340,7 @@ export const ProjectsSlugPage = memo(function ProjectsSlugPage({
                   {copied ? "Nusxalandi" : "Havolani nusxalash"}
                 </button>
               </div>
+              </ScrollCard>
 
               <div className="mt-10">
                 <h2 className="mb-5 text-xl font-bold tracking-[-0.01em] text-slate-900 sm:text-2xl">
@@ -335,8 +348,10 @@ export const ProjectsSlugPage = memo(function ProjectsSlugPage({
                 </h2>
                 {news.length > 0 ? (
                   <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:gap-8">
-                    {news.map((item) => (
-                      <NewsItem key={item.id} item={item} showDescription={false} />
+                    {news.map((item, index) => (
+                      <ScrollCard key={item.id} index={index} yFrom={72} scaleFrom={1.06} blurFrom={6} delayStep={0.04}>
+                        <NewsItem item={item} showDescription={false} />
+                      </ScrollCard>
                     ))}
                   </div>
                 ) : (
@@ -349,6 +364,7 @@ export const ProjectsSlugPage = memo(function ProjectsSlugPage({
           </HomeSectionShell>
         </div>
       </section>
+      </ParallaxSection>
 
       <Image
         src="/images/bg.avif"

@@ -17,6 +17,7 @@ import {
   HomeStatePanel,
   Skeleton,
 } from "@/components";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 import { Announcement } from "@/types";
 import { fetchAnnouncementsLimited } from "@/lib";
 
@@ -138,49 +139,51 @@ export const HomeSectionsAnnouncements = memo(function HomeSectionsAnnouncements
                   }}
                   className="pb-2"
                 >
-                  {announcements.map((item) => (
+                  {announcements.map((item, index) => (
                     <SwiperSlide key={item.id}>
-                      <Card
-                        aria-label={`${item.title}-${item.date_display}`}
-                        className="relative flex h-full min-h-[252px] flex-col overflow-hidden border-slate-200 bg-white p-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_-24px_rgba(15,23,42,0.2)] sm:p-5 xl:min-h-[270px] xl:p-6"
-                      >
-                        <div className="absolute inset-x-0 top-0 h-1 bg-[#9a6a43]" />
+                      <ScrollCard index={index} yFrom={78} scaleFrom={1.09} blurFrom={8}>
+                        <Card
+                          aria-label={`${item.title}-${item.date_display}`}
+                          className="relative flex h-full min-h-[252px] flex-col overflow-hidden border-slate-200 bg-white p-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_-24px_rgba(15,23,42,0.2)] sm:p-5 xl:min-h-[270px] xl:p-6"
+                        >
+                          <div className="absolute inset-x-0 top-0 h-1 bg-[#9a6a43]" />
 
-                        <div className="mb-4 inline-flex w-fit items-center rounded-full border border-[#e2cfbd] bg-[#f7efe6] px-2.5 py-1 text-xs font-semibold text-[#7a5232]">
-                          E'lon
-                        </div>
+                          <div className="mb-4 inline-flex w-fit items-center rounded-full border border-[#e2cfbd] bg-[#f7efe6] px-2.5 py-1 text-xs font-semibold text-[#7a5232]">
+                            E'lon
+                          </div>
 
-                        <div className="flex-1">
-                          <h3 className="mb-2 line-clamp-2 text-lg font-semibold tracking-[-0.01em] leading-6 text-slate-900 xl:text-xl xl:leading-7">
-                            {item.title}
-                          </h3>
-                          <p
-                            className="line-clamp-2 text-sm leading-6 text-slate-600 xl:text-[15px] xl:leading-7"
-                            dangerouslySetInnerHTML={{ __html: item.description }}
-                          />
-                        </div>
-
-                        <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
-                          <p className="text-xs leading-none font-medium text-[#8a5d3a] sm:text-sm">
-                            {item.date_display}
-                          </p>
-
-                          <button
-                            type="button"
-                            className="group inline-flex items-center gap-1.5 rounded-full border border-[#e2cfbd] bg-white px-3 py-1.5 text-sm font-semibold text-[#7a5232] transition hover:bg-[#f7efe6] hover:border-[#d4b89d] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c08b60] focus-visible:ring-offset-2"
-                            onClick={() => {
-                              setAnnouncement(item);
-                              setIsModalOpen(true);
-                            }}
-                          >
-                            <span>Batafsil</span>
-                            <ArrowRight
-                              className="transition-transform group-hover:translate-x-0.5"
-                              size={16}
+                          <div className="flex-1">
+                            <h3 className="mb-2 line-clamp-2 text-lg font-semibold tracking-[-0.01em] leading-6 text-slate-900 xl:text-xl xl:leading-7">
+                              {item.title}
+                            </h3>
+                            <p
+                              className="line-clamp-2 text-sm leading-6 text-slate-600 xl:text-[15px] xl:leading-7"
+                              dangerouslySetInnerHTML={{ __html: item.description }}
                             />
-                          </button>
-                        </div>
-                      </Card>
+                          </div>
+
+                          <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
+                            <p className="text-xs leading-none font-medium text-[#8a5d3a] sm:text-sm">
+                              {item.date_display}
+                            </p>
+
+                            <button
+                              type="button"
+                              className="group inline-flex items-center gap-1.5 rounded-full border border-[#e2cfbd] bg-white px-3 py-1.5 text-sm font-semibold text-[#7a5232] transition hover:bg-[#f7efe6] hover:border-[#d4b89d] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c08b60] focus-visible:ring-offset-2"
+                              onClick={() => {
+                                setAnnouncement(item);
+                                setIsModalOpen(true);
+                              }}
+                            >
+                              <span>Batafsil</span>
+                              <ArrowRight
+                                className="transition-transform group-hover:translate-x-0.5"
+                                size={16}
+                              />
+                            </button>
+                          </div>
+                        </Card>
+                      </ScrollCard>
                     </SwiperSlide>
                   ))}
                 </Swiper>

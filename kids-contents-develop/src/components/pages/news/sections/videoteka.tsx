@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Clapperboard } from "lucide-react";
 
 import { ROUTES } from "@/constants";
 import { HomeSectionShell, VideotekaItem } from "@/components";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 
 const VIDEOS_PER_VIEW = 3;
 
@@ -71,11 +72,14 @@ export const NewsSectionsVideoteka = memo(function NewsSectionsVideoteka() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:gap-8">
-            {currentVideos.map((video) => (
-              <VideotekaItem key={video.id} video={video} />
+            {currentVideos.map((video, index) => (
+              <ScrollCard key={video.id} index={index} yFrom={76} scaleFrom={1.07} blurFrom={7}>
+                <VideotekaItem video={video} />
+              </ScrollCard>
             ))}
           </div>
 
+          <ScrollCard index={3} yFrom={48} scaleFrom={1.03} blurFrom={4}>
           <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <button
@@ -131,6 +135,7 @@ export const NewsSectionsVideoteka = memo(function NewsSectionsVideoteka() {
               )}
             </div>
           </div>
+          </ScrollCard>
         </HomeSectionShell>
       </div>
     </section>

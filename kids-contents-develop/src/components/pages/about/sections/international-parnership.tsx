@@ -21,6 +21,7 @@ import {
   HomeStatePanel,
   SiteLoader,
 } from "@/components";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 
 const PARTNERS = [
   {
@@ -115,20 +116,19 @@ export const AboutSectionsInternationalPartnership = memo(
             </HomeSectionHeader>
 
             <div className="grid grid-cols-2 place-content-center place-items-center gap-12 rounded-[32px] border border-slate-200 bg-white px-12 py-16 min-h-[220px] lg:gap-14">
-              {PARTNERS.map((partner) => (
-                <div
-                  key={partner.key}
-                  className="flex w-full items-center justify-center"
-                >
-                  <Image
-                    src={partner.src}
-                    alt={partner.alt}
-                    width={partner.width}
-                    height={partner.height}
-                    className="max-sm:h-auto max-sm:w-full"
-                    sizes="(min-width: 1024px) 327px, 45vw"
-                  />
-                </div>
+              {PARTNERS.map((partner, index) => (
+                <ScrollCard key={partner.key} index={index} yFrom={56} scaleFrom={1.05} blurFrom={5} delayStep={0.04}>
+                  <div className="flex w-full items-center justify-center">
+                    <Image
+                      src={partner.src}
+                      alt={partner.alt}
+                      width={partner.width}
+                      height={partner.height}
+                      className="max-sm:h-auto max-sm:w-full"
+                      sizes="(min-width: 1024px) 327px, 45vw"
+                    />
+                  </div>
+                </ScrollCard>
               ))}
             </div>
 
@@ -176,34 +176,36 @@ export const AboutSectionsInternationalPartnership = memo(
                     }}
                     className="pb-2"
                   >
-                    {internationalNews.map((item) => (
+                    {internationalNews.map((item, index) => (
                       <SwiperSlide key={item.id}>
-                        <Link
-                          href={`${ROUTES.internatiolPartnership}/${item.slug}`}
-                          aria-label={`${item.title} - ${item.date_display}`}
-                          className="group block focus:outline-none"
-                        >
-                          <HomeCard className="overflow-hidden p-0 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-26px_rgba(15,23,42,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-slate-400/60 group-focus-visible:ring-offset-2">
-                            <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
-                              <Image
-                                src={item.image_src}
-                                alt={item.title}
-                                width={420}
-                                height={260}
-                                className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.03]"
-                                sizes="(min-width: 1700px) 24vw, (min-width: 1200px) 30vw, (min-width: 768px) 44vw, 92vw"
-                              />
-                            </div>
-                            <div className="flex h-[96px] flex-col p-3.5 sm:h-[106px] sm:p-4">
-                              <h3 className="line-clamp-2 text-[14px] font-semibold tracking-[-0.01em] leading-5 text-slate-900 transition-colors group-hover:text-slate-700 sm:text-[15px] sm:leading-5 xl:text-base xl:leading-6">
-                                {item.title}
-                              </h3>
-                              <time className="mt-auto truncate whitespace-nowrap pt-2 text-xs leading-none font-medium text-slate-500 sm:text-sm">
-                                {item.date_display}
-                              </time>
-                            </div>
-                          </HomeCard>
-                        </Link>
+                        <ScrollCard index={index} yFrom={72} scaleFrom={1.07} blurFrom={7}>
+                          <Link
+                            href={`${ROUTES.internatiolPartnership}/${item.slug}`}
+                            aria-label={`${item.title} - ${item.date_display}`}
+                            className="group block focus:outline-none"
+                          >
+                            <HomeCard className="overflow-hidden p-0 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-26px_rgba(15,23,42,0.24)] group-focus-visible:ring-2 group-focus-visible:ring-slate-400/60 group-focus-visible:ring-offset-2">
+                              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                                <Image
+                                  src={item.image_src}
+                                  alt={item.title}
+                                  width={420}
+                                  height={260}
+                                  className="h-full w-full object-cover object-center transition duration-300 group-hover:scale-[1.03]"
+                                  sizes="(min-width: 1700px) 24vw, (min-width: 1200px) 30vw, (min-width: 768px) 44vw, 92vw"
+                                />
+                              </div>
+                              <div className="flex h-[96px] flex-col p-3.5 sm:h-[106px] sm:p-4">
+                                <h3 className="line-clamp-2 text-[14px] font-semibold tracking-[-0.01em] leading-5 text-slate-900 transition-colors group-hover:text-slate-700 sm:text-[15px] sm:leading-5 xl:text-base xl:leading-6">
+                                  {item.title}
+                                </h3>
+                                <time className="mt-auto truncate whitespace-nowrap pt-2 text-xs leading-none font-medium text-slate-500 sm:text-sm">
+                                  {item.date_display}
+                                </time>
+                              </div>
+                            </HomeCard>
+                          </Link>
+                        </ScrollCard>
                       </SwiperSlide>
                     ))}
                   </Swiper>

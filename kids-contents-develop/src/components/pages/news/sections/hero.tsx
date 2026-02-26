@@ -6,6 +6,8 @@ import { Newspaper, Search, X } from "lucide-react";
 import { fetchNews } from "@/lib";
 import { NewsItemType } from "@/types";
 import { HomeSectionShell, HomeStatePanel, NewsItem, SiteLoader } from "@/components";
+import { ScrollCard } from "@/components/motion/ScrollCard";
+import { ParallaxSection } from "@/components/motion/ParallaxSection";
 
 const INITIAL_VISIBLE = 9;
 const LOAD_MORE_STEP = 9;
@@ -48,12 +50,14 @@ export const NewsSectionsHero = memo(function NewsSectionsHero() {
   const canLoadMore = visibleCount < filteredNews.length;
 
   return (
+    <ParallaxSection tone="slate" intensity={1.05} accentSide="right">
     <section
       id="hero"
       className="hero-section relative bg-gradient-to-b from-[#eef1f5] to-transparent py-8 md:py-12 lg:py-16"
     >
       <div className="container relative z-10 max-w-[1508px] 2xl:max-w-[88%]">
         <HomeSectionShell className="border-[#d4dce5] bg-white/90 p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(15,23,42,0.16)]">
+          <ScrollCard index={0} yFrom={46} scaleFrom={1.02} blurFrom={4}>
           <div className="mb-6 flex flex-col gap-4 md:mb-8 md:gap-5">
             <div className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-300/80 bg-white px-4 py-2 text-sm font-semibold tracking-[-0.01em] text-slate-800 shadow-sm">
               <Newspaper size={16} className="text-slate-600" />
@@ -98,6 +102,7 @@ export const NewsSectionsHero = memo(function NewsSectionsHero() {
               ) : null}
             </div>
           </div>
+          </ScrollCard>
 
           {loading ? (
             <div className="flex min-h-[320px] items-center justify-center rounded-2xl border border-slate-200 bg-white">
@@ -107,13 +112,16 @@ export const NewsSectionsHero = memo(function NewsSectionsHero() {
             <HomeStatePanel tone="error">Yangiliklarni yuklab bo‘lmadi.</HomeStatePanel>
           ) : filteredNews.length > 0 ? (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:gap-9">
-                {visibleNews.map((item) => (
-                  <NewsItem key={item.id} item={item} showDescription={false} />
+              <div className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:gap-9">
+                {visibleNews.map((item, index) => (
+                  <ScrollCard key={item.id} index={index} yFrom={72} scaleFrom={1.06} blurFrom={6} delayStep={0.04}>
+                    <NewsItem item={item} showDescription={false} />
+                  </ScrollCard>
                 ))}
               </div>
 
               {canLoadMore ? (
+                <ScrollCard index={2} yFrom={44} scaleFrom={1.02} blurFrom={3}>
                 <div className="flex justify-center pt-1">
                   <button
                     type="button"
@@ -123,6 +131,7 @@ export const NewsSectionsHero = memo(function NewsSectionsHero() {
                     Yana yuklash
                   </button>
                 </div>
+                </ScrollCard>
               ) : null}
             </div>
           ) : (
@@ -148,6 +157,7 @@ export const NewsSectionsHero = memo(function NewsSectionsHero() {
         </HomeSectionShell>
       </div>
     </section>
+    </ParallaxSection>
   );
 });
 

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { ROUTES } from "@/constants";
 import { Button, Card, Container, HomeSectionShell } from "@/components";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 
 export const HomeSectionsContests = memo(function HomeSectionsContests() {
   const contestDirections = [
@@ -55,39 +56,42 @@ export const HomeSectionsContests = memo(function HomeSectionsContests() {
               </p>
 
               <div className="mt-5 grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-2">
-                {contestDirections.map(({ title, icon: Icon, classes }) => (
-                  <div
-                    key={title}
-                    className={[
-                      "rounded-2xl border p-3 sm:p-3.5 xl:p-4",
-                      "min-h-[72px] sm:min-h-[78px]",
-                      "transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-22px_rgba(15,23,42,0.22)]",
-                      classes,
-                    ].join(" ")}
-                  >
-                    <div className="flex h-full items-center gap-2.5">
-                      <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/70">
-                        <Icon size={16} />
-                      </div>
-                      <div className="min-w-0 text-sm font-semibold leading-5 sm:text-[15px]">
-                        {title}
+                {contestDirections.map(({ title, icon: Icon, classes }, index) => (
+                  <ScrollCard key={title} index={index} yFrom={66} scaleFrom={1.07} blurFrom={6} delayStep={0.05}>
+                    <div
+                      className={[
+                        "rounded-2xl border p-3 sm:p-3.5 xl:p-4",
+                        "min-h-[72px] sm:min-h-[78px]",
+                        "transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-22px_rgba(15,23,42,0.22)]",
+                        classes,
+                      ].join(" ")}
+                    >
+                      <div className="flex h-full items-center gap-2.5">
+                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/70">
+                          <Icon size={16} />
+                        </div>
+                        <div className="min-w-0 text-sm font-semibold leading-5 sm:text-[15px]">
+                          {title}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </ScrollCard>
                 ))}
               </div>
 
-              <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-4 xl:p-5">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#e6ebdd] text-[#55614a]">
-                    <BadgeCheck size={18} />
+              <ScrollCard index={4} yFrom={72} scaleFrom={1.05} blurFrom={5} delayStep={0.04}>
+                <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-4 xl:p-5">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#e6ebdd] text-[#55614a]">
+                      <BadgeCheck size={18} />
+                    </div>
+                    <p className="text-sm leading-6 text-slate-700 lg:text-[15px] lg:leading-7">
+                      Tanlovlar muntazam ravishda e’lon qilinadi. Talablar, muddatlar va ariza
+                      topshirish tartibi har bir tanlov sahifasida alohida ko‘rsatiladi.
+                    </p>
                   </div>
-                  <p className="text-sm leading-6 text-slate-700 lg:text-[15px] lg:leading-7">
-                    Tanlovlar muntazam ravishda e’lon qilinadi. Talablar, muddatlar va ariza
-                    topshirish tartibi har bir tanlov sahifasida alohida ko‘rsatiladi.
-                  </p>
                 </div>
-              </div>
+              </ScrollCard>
 
               <div className="mt-6 pt-1 lg:mt-8 xl:mt-10">
                 <Button
@@ -100,7 +104,7 @@ export const HomeSectionsContests = memo(function HomeSectionsContests() {
               </div>
             </div>
 
-            <div className="order-1 lg:order-2">
+            <ScrollCard className="order-1 lg:order-2" index={2} yFrom={84} scaleFrom={1.08} blurFrom={8}>
               <Card className="relative h-full overflow-hidden rounded-[24px] border-[#d4dacb] bg-gradient-to-br from-[#f3f5ef] to-white p-0 shadow-[0_24px_60px_-40px_rgba(84,98,64,0.24)]">
                 <div className="relative aspect-[4/3] min-h-[260px] sm:min-h-[320px] lg:h-full lg:min-h-0 lg:aspect-auto">
                   <Image
@@ -113,7 +117,7 @@ export const HomeSectionsContests = memo(function HomeSectionsContests() {
                   />
                 </div>
               </Card>
-            </div>
+            </ScrollCard>
           </div>
         </HomeSectionShell>
       </Container>
