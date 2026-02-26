@@ -3,6 +3,7 @@ import { memo } from "react";
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
 import { BgBubbles, HomeSectionShell } from "@/components";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 
 export const NewsSectionsGallery = memo(function NewsSectionsGallery() {
   const galleryItems = [
@@ -71,18 +72,29 @@ export const NewsSectionsGallery = memo(function NewsSectionsGallery() {
           </div>
 
           <div className="gallery-grid">
-            {galleryItems.map((item) => (
+            {galleryItems.map((item, index) => (
               <div
                 key={item.id}
-                className={`gallery-item gallery-item-${item.id} group relative cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 lg:rounded-[28px]`}
+                className={`gallery-item gallery-item-${item.id}`}
               >
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  sizes="(min-width: 1024px) 30vw, 50vw"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                />
+                <ScrollCard
+                  index={index}
+                  yFrom={84}
+                  scaleFrom={1.08}
+                  blurFrom={8}
+                  delayStep={0.04}
+                  className="h-full"
+                >
+                  <div className="group relative h-full cursor-pointer overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 lg:rounded-[28px]">
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      fill
+                      sizes="(min-width: 1024px) 30vw, 50vw"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
+                  </div>
+                </ScrollCard>
               </div>
             ))}
           </div>

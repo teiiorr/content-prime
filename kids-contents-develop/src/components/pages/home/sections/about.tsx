@@ -1,34 +1,20 @@
 "use client";
 
 import { memo, useEffect, useRef, useState } from "react";
-import { GraduationCap, ShieldCheck, Sparkles, Volume2 } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import { ROUTES } from "@/constants";
-import { BgBubbles, Button, Card, Container } from "@/components";
+import { BgBubbles, Button, Container } from "@/components";
 import { FadeIn } from "@/components/effects/FadeIn";
-
-const ABOUT_HIGHLIGHTS = [
-  {
-    icon: ShieldCheck,
-    title: "Himoya va xavfsizlik",
-    text: "Bolalarni zararli axborot va salbiy media ta’siridan asrashga qaratilgan milliy yondashuv.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Ta’lim va kasbga yo‘naltirish",
-    text: "Ta’limga jalb etish va foydali ko‘nikmalarni rivojlantiradigan kontent yaratishni qo‘llab-quvvatlash.",
-  },
-  {
-    icon: Sparkles,
-    title: "Milliy va zamonaviy kontent",
-    text: "Vatanparvarlik ruhidagi, bolalar uchun qiziqarli va sifatli kontentlarni ommalashtirish.",
-  },
-];
+import { ScrollCard } from "@/components/motion/ScrollCard";
 
 export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [hasStartedByUser, setHasStartedByUser] = useState(false);
+  const [isDesktopViewport, setIsDesktopViewport] = useState(false);
+  const [isSoundOn, setIsSoundOn] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
-  const [heroFinished, setHeroFinished] = useState(false);
+  const playTimerRef = useRef<number | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -40,20 +26,19 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
   }, []);
 
   useEffect(() => {
-    try {
-      setHeroFinished(window.sessionStorage.getItem("home-hero-video-finished") === "1");
-    } catch {}
-
-    const onHeroFinished = () => setHeroFinished(true);
-    window.addEventListener("home-hero-video-finished", onHeroFinished as EventListener);
-    return () =>
-      window.removeEventListener("home-hero-video-finished", onHeroFinished as EventListener);
+    const media = window.matchMedia("(min-width: 640px)");
+    const update = () => setIsDesktopViewport(media.matches);
+    update();
+    media.addEventListener?.("change", update);
+    return () => media.removeEventListener?.("change", update);
   }, []);
 
   useEffect(() => {
     if (!sectionRef.current) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
       { threshold: 0.35 }
     );
     observer.observe(sectionRef.current);
@@ -64,27 +49,72 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
     const video = videoRef.current;
     if (!video) return;
 
+    if (playTimerRef.current) {
+      window.clearTimeout(playTimerRef.current);
+      playTimerRef.current = null;
+    }
+
     if (reduceMotion) {
+      video.muted = true;
+      setIsSoundOn(false);
       video.pause();
       return;
     }
 
-    if (heroFinished && isVisible) {
-      video.muted = true;
-      void video.play().catch(() => {});
+    if (!hasStartedByUser && !isDesktopViewport) {
+      video.pause();
+      return;
     }
-  }, [heroFinished, isVisible, reduceMotion]);
 
-  const handleEnableSound = async () => {
+    if (!isVisible) {
+      setIsSoundOn(false);
+      video.pause();
+      return;
+    }
+
+    playTimerRef.current = window.setTimeout(() => {
+      if (isDesktopViewport) {
+        video.muted = true;
+        setIsSoundOn(false);
+      }
+      void video.play().catch(() => {});
+    }, 180);
+
+    return () => {
+      if (playTimerRef.current) {
+        window.clearTimeout(playTimerRef.current);
+        playTimerRef.current = null;
+      }
+    };
+  }, [isVisible, reduceMotion, hasStartedByUser, isDesktopViewport]);
+
+  const handleStartWithSound = async () => {
     const video = videoRef.current;
     if (!video) return;
 
     try {
-      video.currentTime = 0;
       video.muted = false;
       await video.play();
+      setHasStartedByUser(true);
+      setIsSoundOn(true);
     } catch {
       video.muted = true;
+      setHasStartedByUser(false);
+      setIsSoundOn(false);
+    }
+  };
+
+  const handleToggleSound = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+    try {
+      const next = video.muted;
+      video.muted = !next;
+      await video.play();
+      setIsSoundOn(next);
+    } catch {
+      video.muted = true;
+      setIsSoundOn(false);
     }
   };
 
@@ -92,87 +122,118 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative mb-0 mt-10 overflow-hidden bg-[#dfe9ef] py-12 md:mt-16 md:py-20"
+      className="relative mb-0 mt-0 overflow-hidden bg-[#dfe9ef] py-12 md:py-20"
     >
       <Container className="relative z-10 max-w-[1508px] 2xl:max-w-[88%]">
-        <div className="grid gap-8 lg:gap-10 xl:gap-12">
-          <div className="grid items-start gap-8 lg:grid-cols-[1.05fr_.95fr] lg:items-stretch lg:gap-14 xl:gap-16">
-            <FadeIn>
-              <div className="flex h-full flex-col gap-6">
-                <Card className="rounded-3xl border-white/70 bg-white/90 p-5 shadow-[0_24px_60px_-34px_rgba(2,6,23,0.35)] md:p-6 xl:p-7">
-                  <p className="text-[17px] leading-8 text-slate-700 md:text-[18px] md:leading-8 xl:text-[19px] xl:leading-9">
-                    Bolalar kontentini rivojlantirish markazi O‘zbekiston Respublikasi
-                    Prezidentining 2025-yil 15-maydagi PQ-183-son qaroriga muvofiq
-                    tashkil etilgan bo‘lib, markazning asosiy maqsadi bolalarni
-                    zararli axborotdan himoya qilish, ta’limga keng jalb etish,
-                    kasbga yo‘naltirish va yuksak vatanparvarlik ruhida tarbiyalashga
-                    xizmat qiladigan milliy kontentlar yaratishni qo‘llab-quvvatlashdir.
-                  </p>
+        <FadeIn>
+          <div className="mb-6 text-center md:mb-8">
+            <div className="mx-auto max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">
+                Biz haqimizda
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                Markaz haqida
+              </h2>
+            </div>
+          </div>
+        </FadeIn>
 
-                  <div className="mt-5 flex flex-wrap items-center gap-3">
-                    <div className="rounded-full border border-white/70 bg-white/75 px-4 py-2 text-sm font-medium text-slate-700">
-                      PQ-183 • 15-may, 2025
-                    </div>
+        <FadeIn>
+          <div className="rounded-[28px] border border-white/70 bg-white/50 p-3 sm:p-4 lg:p-5">
+            <div className="grid items-stretch gap-4 lg:grid-cols-[1.15fr_.85fr] lg:gap-5">
+              <ScrollCard className="h-full [&>div]:h-full" index={0} yFrom={72} scaleFrom={1.04} blurFrom={5}>
+              <div className="overflow-hidden rounded-[22px] border border-white/70 bg-white/72">
+                <div className="relative overflow-hidden border-b border-white/70">
+                  <img
+                    src="/images/president.jpg"
+                    alt="O‘zbekiston Respublikasi Prezidenti"
+                    className="block h-auto w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-4 sm:p-5 lg:p-6 xl:p-7">
+                  <div className="mb-3 inline-flex items-center rounded-full border border-white/80 bg-white/90 px-3 py-1.5 text-xs font-semibold tracking-[0.08em] text-slate-700 lg:text-[13px]">
+                    PQ-183 • 15-MAY, 2025
+                  </div>
+                  <p className="text-[14px] leading-7 text-slate-800 sm:text-[15px] sm:leading-7 lg:text-[17px] lg:leading-8 xl:text-[18px] xl:leading-9">
+                    Bolalar kontentini rivojlantirish markazi O‘zbekiston Respublikasi
+                    Prezidentining 2025-yil 15-maydagi PQ-183-son qaroriga muvofiq tashkil
+                    etilgan bo‘lib, markazning asosiy maqsadi bolalarni zararli axborotdan
+                    himoya qilish, ta’limga keng jalb etish, kasbga yo‘naltirish va yuksak
+                    vatanparvarlik ruhida tarbiyalashga xizmat qiladigan milliy kontentlar
+                    yaratishni qo‘llab-quvvatlashdir.
+                  </p>
+                  <div className="mt-4 lg:mt-5">
                     <Button href={ROUTES.ABOUT} theme="primary">
                       Batafsil
                     </Button>
                   </div>
-                </Card>
-
-                <div className="grid gap-3 sm:grid-cols-3">
-                  {ABOUT_HIGHLIGHTS.map(({ icon: Icon, title, text }) => (
-                    <div
-                      key={title}
-                      className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white/70 p-4 shadow-[0_16px_40px_-30px_rgba(15,23,42,0.35)] backdrop-blur-sm xl:p-5"
-                    >
-                      <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#e7eef3] text-slate-700">
-                        <Icon size={18} />
-                      </div>
-                      <h3 className="text-sm font-semibold leading-5 text-slate-900">{title}</h3>
-                      <p className="mt-2 text-xs leading-5 text-slate-600">{text}</p>
-                    </div>
-                  ))}
                 </div>
               </div>
-            </FadeIn>
+              </ScrollCard>
 
-            <FadeIn>
-              <div className="relative flex h-full flex-col">
-                <div className="pointer-events-none absolute -left-3 -top-3 h-28 w-28 rounded-3xl bg-[#a7bfcc]/35 blur-2xl" />
-                <div className="pointer-events-none absolute -bottom-6 -right-4 h-32 w-32 rounded-full bg-[#c8b39a]/25 blur-2xl" />
+              <ScrollCard className="h-full [&>div]:h-full" index={1} yFrom={88} scaleFrom={1.06} blurFrom={6}>
+              <div className="relative h-full overflow-hidden rounded-[22px] border border-white/70 bg-white/72">
+                <div className="relative h-full min-h-[500px] w-full overflow-hidden rounded-[22px] sm:min-h-[560px] lg:min-h-[640px]">
+                  <video
+                    ref={videoRef}
+                    className="absolute inset-0 h-full w-full object-cover object-center"
+                    autoPlay={false}
+                    muted
+                    playsInline
+                    preload="metadata"
+                  >
+                    <source src="/videos/handbrake-mobile.mp4" type="video/mp4" />
+                  </video>
 
-                <Card className="relative h-full overflow-hidden rounded-[28px] border-white/70 bg-white/90 p-0 shadow-[0_34px_70px_-36px_rgba(2,6,23,0.45)]">
-                  <div className="relative aspect-[4/5] min-h-[320px] overflow-hidden bg-slate-950 sm:aspect-[16/10] sm:min-h-[380px] lg:h-full lg:min-h-0 lg:aspect-auto">
-                    <video
-                      ref={videoRef}
-                      className="absolute inset-0 h-full w-full object-contain object-center bg-slate-950"
-                      autoPlay={false}
-                      muted
-                      playsInline
-                      preload="auto"
-                      poster="/images/about-video-poster.avif"
+                  {!reduceMotion && !isDesktopViewport && !hasStartedByUser ? (
+                    <button
+                      type="button"
+                      onClick={handleStartWithSound}
+                      className="absolute left-1/2 top-1/2 z-10 inline-flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/35 text-white backdrop-blur-md transition hover:scale-[1.03] hover:bg-black/45 active:scale-95 sm:h-[72px] sm:w-[72px] lg:h-16 lg:w-16"
+                      aria-label="Videoni ovoz bilan boshlash"
+                      aria-pressed={false}
                     >
-                      <source src="/videos/intro.mp4" type="video/mp4" />
-                    </video>
-
-                    {!reduceMotion ? (
-                      <button
-                        type="button"
-                        onClick={handleEnableSound}
-                        className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/45 px-3 py-2 text-xs font-semibold text-white backdrop-blur-md transition hover:bg-black/60 sm:bottom-5 sm:right-5"
-                        aria-label="Ovoz bilan ijro etish"
-                      >
-                        <Volume2 className="h-4 w-4" />
-                        <span>Ovoz bilan</span>
-                      </button>
-                    ) : null}
-                  </div>
-                </Card>
+                      <span className="pointer-events-none absolute inset-0 rounded-full border border-white/25 animate-ping opacity-25 [animation-duration:2s]" />
+                      <span className="pointer-events-none absolute inset-[4px] rounded-full bg-white/10" />
+                      <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
+                        <Play className="h-5 w-5 translate-x-[1px]" />
+                      </span>
+                    </button>
+                  ) : null}
+                  {!reduceMotion && (isDesktopViewport || hasStartedByUser) ? (
+                    <button
+                      type="button"
+                      onClick={handleToggleSound}
+                      className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-2 text-white backdrop-blur-sm transition hover:bg-black/55 sm:bottom-4 sm:right-4"
+                      aria-label={isSoundOn ? "Ovozni o‘chirish" : "Ovozni yoqish"}
+                      aria-pressed={isSoundOn}
+                    >
+                      <span className="relative inline-flex h-4 w-4 shrink-0 items-center justify-center">
+                        <Volume2
+                          className={`absolute h-4 w-4 transition-all duration-200 ${
+                            isSoundOn ? "opacity-100 scale-100" : "opacity-0 scale-75"
+                          }`}
+                          strokeWidth={2}
+                        />
+                        <VolumeX
+                          className={`absolute h-4 w-4 transition-all duration-200 ${
+                            isSoundOn ? "opacity-0 scale-75" : "opacity-100 scale-100"
+                          }`}
+                          strokeWidth={2}
+                        />
+                      </span>
+                      <span className="text-xs font-medium leading-none">
+                        {isSoundOn ? "Ovozli" : "Ovoz bilan"}
+                      </span>
+                    </button>
+                  ) : null}
+                </div>
               </div>
-            </FadeIn>
+              </ScrollCard>
+            </div>
           </div>
-
-        </div>
+        </FadeIn>
       </Container>
 
       <BgBubbles color="#d8e6ee" className="bottom-full" />

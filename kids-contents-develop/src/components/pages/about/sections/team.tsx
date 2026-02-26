@@ -2,6 +2,7 @@ import { memo } from "react";
 import Image from "next/image";
 import { Mail, Phone } from "lucide-react";
 import { BgBubbles, HomeSectionShell } from "@/components";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 
 interface MemberItem {
   id: number;
@@ -58,13 +59,13 @@ export const AboutSectionsTeam = memo(function AboutSectionsTeam() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:gap-5">
-            {team.map((member) => {
+            {team.map((member, index) => {
               const isShortPosition = member.position.length <= 20;
               const isMediumPosition = member.position.length > 20 && member.position.length <= 36;
 
               return (
+                <ScrollCard key={member.id} index={index} yFrom={68} scaleFrom={1.06} blurFrom={6}>
                 <article
-                  key={member.id}
                   className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.2)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_rgba(15,23,42,0.22)] sm:p-5"
                 >
                   <div className="mb-4 flex items-start gap-4">
@@ -113,6 +114,7 @@ export const AboutSectionsTeam = memo(function AboutSectionsTeam() {
                   </div>
                 </div>
                 </article>
+                </ScrollCard>
               );
             })}
           </div>

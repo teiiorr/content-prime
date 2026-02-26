@@ -1,13 +1,19 @@
 "use client";
 
 import { memo, useEffect, useRef, useState } from "react";
-import { Volume2 } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 
-const HERO_VIDEO_SRC = "/videos/intro_video.mp4";
+const HERO_VIDEO_SRC = "/videos/bola-logo.mp4";
 
 export const HomeSectionsHero = memo(function HomeSectionsHero() {
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [hasStartedByUser, setHasStartedByUser] = useState(false);
+  const [isDesktopViewport, setIsDesktopViewport] = useState(false);
+  const [isSoundOn, setIsSoundOn] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const playTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -18,12 +24,67 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
   }, []);
 
   useEffect(() => {
-    if (reduceMotion) return;
+    const media = window.matchMedia("(min-width: 640px)");
+    const update = () => setIsDesktopViewport(media.matches);
+    update();
+    media.addEventListener?.("change", update);
+    return () => media.removeEventListener?.("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.intersectionRatio >= 0.45),
+      { threshold: [0.25, 0.45, 0.75] }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.muted = true;
-    void video.play().catch(() => {});
-  }, [reduceMotion]);
+
+    if (playTimerRef.current) {
+      window.clearTimeout(playTimerRef.current);
+      playTimerRef.current = null;
+    }
+
+    if (reduceMotion) {
+      setIsSoundOn(false);
+      video.pause();
+      return;
+    }
+
+    if (!hasStartedByUser && !isDesktopViewport) {
+      video.pause();
+      return;
+    }
+
+    if (!isVisible) {
+      if (!hasStartedByUser || isDesktopViewport) {
+        video.muted = true;
+      }
+      setIsSoundOn(false);
+      video.pause();
+      return;
+    }
+
+    playTimerRef.current = window.setTimeout(() => {
+      if (!hasStartedByUser || isDesktopViewport) {
+        video.muted = true;
+      }
+      setIsSoundOn(false);
+      void video.play().catch(() => {});
+    }, 150);
+
+    return () => {
+      if (playTimerRef.current) {
+        window.clearTimeout(playTimerRef.current);
+        playTimerRef.current = null;
+      }
+    };
+  }, [reduceMotion, isVisible, hasStartedByUser, isDesktopViewport]);
 
   const handleHeroEnded = () => {
     try {
@@ -32,34 +93,51 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
     window.dispatchEvent(new CustomEvent("home-hero-video-finished"));
   };
 
-  const handleEnableSound = async () => {
+  const handleStartWithSound = async () => {
     const video = videoRef.current;
     if (!video) return;
 
     try {
-      video.currentTime = 0;
       video.muted = false;
       await video.play();
+      setHasStartedByUser(true);
+      setIsSoundOn(true);
     } catch {
-      // If browser still blocks, keep button visible.
       video.muted = true;
+      setHasStartedByUser(false);
+      setIsSoundOn(false);
+    }
+  };
+
+  const handleToggleSound = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+    try {
+      const next = video.muted;
+      video.muted = !next;
+      await video.play();
+      setIsSoundOn(next);
+    } catch {
+      video.muted = true;
+      setIsSoundOn(false);
     }
   };
 
   return (
     <section
+      ref={sectionRef}
       id="hero"
       className="relative w-full overflow-hidden bg-background"
       aria-label="Homepage hero"
     >
-      <div className="relative w-full min-h-[78svh] sm:min-h-[82svh] lg:min-h-[88svh] xl:min-h-[92svh] max-h-[980px]">
+      <div className="relative h-[calc(100svh-82px)] w-full min-h-[calc(100svh-82px)] sm:h-auto sm:min-h-[82svh] lg:min-h-[88svh] xl:min-h-[92svh] sm:max-h-[980px]">
         <video
           ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover object-center lg:object-[center_38%] 2xl:object-[center_34%]"
-          autoPlay={!reduceMotion}
+          className="absolute inset-0 h-full w-full object-cover object-[center_45%] sm:object-center lg:object-[center_38%] 2xl:object-[center_34%]"
+          autoPlay={false}
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           aria-hidden="true"
           onEnded={handleHeroEnded}
         >
@@ -68,17 +146,51 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/10" />
 
-        {!reduceMotion ? (
+        {!reduceMotion && !isDesktopViewport && !hasStartedByUser ? (
           <button
             type="button"
-            onClick={handleEnableSound}
-            className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/45 px-3 py-2 text-xs font-semibold text-white backdrop-blur-md transition hover:bg-black/60 sm:bottom-6 sm:right-6"
-            aria-label="Ovoz bilan ijro etish"
+            onClick={handleStartWithSound}
+            className="absolute left-1/2 top-1/2 z-10 inline-flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-black/30 text-white backdrop-blur-md transition hover:scale-[1.04] hover:bg-black/40 active:scale-95 sm:h-16 sm:w-16"
+            aria-label="Videoni ovoz bilan boshlash"
+            aria-pressed={false}
           >
-            <Volume2 className="h-4 w-4" />
-            <span>Ovoz bilan</span>
+            <span className="pointer-events-none absolute inset-0 rounded-full border border-white/25 animate-ping opacity-30 [animation-duration:1.8s]" />
+            <span className="pointer-events-none absolute -inset-3 rounded-full border border-white/15 opacity-70 animate-ping [animation-duration:2.8s]" />
+            <span className="pointer-events-none absolute inset-[5px] rounded-full bg-white/10" />
+            <span className="pointer-events-none absolute inset-[12px] rounded-full bg-white/5" />
+            <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 sm:h-8 sm:w-8">
+              <Play className="h-6 w-6 translate-x-[1px] sm:h-5 sm:w-5" />
+            </span>
           </button>
         ) : null}
+        {!reduceMotion && (isDesktopViewport || hasStartedByUser) ? (
+          <button
+            type="button"
+            onClick={handleToggleSound}
+            className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-3 py-2 text-white backdrop-blur-sm transition hover:bg-black/50 sm:bottom-5 sm:right-5"
+            aria-label={isSoundOn ? "Ovozni o‘chirish" : "Ovozni yoqish"}
+            aria-pressed={isSoundOn}
+          >
+            <span className="relative inline-flex h-4 w-4 shrink-0 items-center justify-center">
+              <Volume2
+                className={`absolute h-4 w-4 transition-all duration-200 ${
+                  isSoundOn ? "opacity-100 scale-100" : "opacity-0 scale-75"
+                }`}
+                strokeWidth={2}
+              />
+              <VolumeX
+                className={`absolute h-4 w-4 transition-all duration-200 ${
+                  isSoundOn ? "opacity-0 scale-75" : "opacity-100 scale-100"
+                }`}
+                strokeWidth={2}
+              />
+            </span>
+            <span className="text-xs font-medium leading-none">
+              {isSoundOn ? "Ovozli" : "Ovoz bilan"}
+            </span>
+          </button>
+        ) : null}
+
       </div>
     </section>
   );

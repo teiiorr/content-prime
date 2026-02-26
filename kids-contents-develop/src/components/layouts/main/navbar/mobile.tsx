@@ -208,7 +208,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
     <div className="lg:hidden">
       {/* Top sticky bar is shown only on homepage */}
       {isHomePage ? (
-        <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl shadow-[0_20px_35px_-30px_rgba(2,6,23,1)]">
+        <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl shadow-none border-0 ring-0">
           <div className="container">
             <div className="flex items-center justify-between py-2.5">
               <Link href={ROUTES.HOME} className="inline-flex items-center">
@@ -218,7 +218,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleOpenSubmissionModal}
-                  className="inline-flex h-9 items-center gap-1.5 rounded-full border border-[#8a6429] bg-[#6d4d1f] px-3 text-[12px] font-semibold text-white shadow-[0_12px_22px_-16px_rgba(88,60,24,0.6)] transition hover:bg-[#7a5826] active:scale-[0.99]"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-full border border-[#8a6429] bg-[#6d4d1f] px-3 text-[12px] font-semibold text-white shadow-none transition hover:bg-[#7a5826] active:scale-[0.99]"
                   type="button"
                   aria-label="Sizda g'oya bormi?"
                 >

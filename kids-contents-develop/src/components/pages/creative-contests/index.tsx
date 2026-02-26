@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 
 import { HomeSectionShell, HomeStatePanel, SiteLoader } from "@/components";
+import { ParallaxSection } from "@/components/motion/ParallaxSection";
+import { ScrollCard } from "@/components/motion/ScrollCard";
 import { ROUTES } from "@/constants";
 import { Contest } from "@/types";
 import { fetchContests } from "@/lib";
@@ -39,7 +41,7 @@ const ContestCard = memo(function ContestCard({ contest }: { contest: Contest })
   return (
     <Link
       href={`${ROUTES.CREATIVE_CONTESTS}/${contest.slug}`}
-      className="group block rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.18)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-28px_rgba(15,23,42,0.2)]"
+      className="group block h-full rounded-2xl border border-slate-200 bg-white p-2 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.18)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-28px_rgba(15,23,42,0.2)]"
     >
       <div className="relative overflow-hidden rounded-xl bg-slate-100">
         <div className="absolute left-3 top-3 z-10">
@@ -66,7 +68,7 @@ const ContestCard = memo(function ContestCard({ contest }: { contest: Contest })
         </div>
       </div>
 
-      <div className="p-3 sm:p-4">
+      <div className="flex min-h-[92px] flex-col p-3 sm:min-h-[104px] sm:p-4">
         <h3 className="line-clamp-2 text-lg font-semibold leading-6 tracking-[-0.01em] text-slate-900 sm:text-xl">
           {contest.title}
         </h3>
@@ -126,12 +128,14 @@ export const CreativeContestsPage = memo(function CreativeContestsPage() {
 
   return (
     <div className="bg-background">
+      <ParallaxSection tone="amber" intensity={1.05} accentSide="right">
       <section
         id="contests-hero"
         className="relative overflow-hidden bg-gradient-to-b from-[#eef1f5] to-transparent py-8 md:py-12 lg:py-16"
       >
         <div className="container relative z-10 max-w-[1508px] 2xl:max-w-[88%]">
           <HomeSectionShell className="border-[#d4dce5] bg-white/90 p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(15,23,42,0.16)]">
+            <ScrollCard index={0} yFrom={50} scaleFrom={1.02} blurFrom={4}>
             <div className="mb-6 flex flex-col gap-4 md:mb-8 md:gap-5">
               <div className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-300/80 bg-white px-4 py-2 text-sm font-semibold tracking-[-0.01em] text-slate-800 shadow-sm">
                 <Trophy size={16} className="text-slate-600" />
@@ -203,6 +207,7 @@ export const CreativeContestsPage = memo(function CreativeContestsPage() {
                 </div>
               </div>
             </div>
+            </ScrollCard>
 
             {loading ? (
               <div className="flex min-h-[320px] items-center justify-center rounded-2xl border border-slate-200 bg-white">
@@ -212,13 +217,16 @@ export const CreativeContestsPage = memo(function CreativeContestsPage() {
               <HomeStatePanel tone="error">Tanlovlarni yuklab bo‘lmadi.</HomeStatePanel>
             ) : filteredContests.length > 0 ? (
               <div className="space-y-6">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:gap-8">
-                  {visibleContests.map((contest) => (
-                    <ContestCard key={contest.id} contest={contest} />
+                <div className="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 xl:gap-8">
+                  {visibleContests.map((contest, index) => (
+                    <ScrollCard key={contest.id} index={index} yFrom={74} scaleFrom={1.06} blurFrom={6} delayStep={0.04}>
+                      <ContestCard contest={contest} />
+                    </ScrollCard>
                   ))}
                 </div>
 
                 {canLoadMore ? (
+                  <ScrollCard index={2} yFrom={44} scaleFrom={1.02} blurFrom={3}>
                   <div className="flex justify-center pt-1">
                     <button
                       type="button"
@@ -228,6 +236,7 @@ export const CreativeContestsPage = memo(function CreativeContestsPage() {
                       Yana yuklash
                     </button>
                   </div>
+                  </ScrollCard>
                 ) : null}
               </div>
             ) : (
@@ -253,6 +262,7 @@ export const CreativeContestsPage = memo(function CreativeContestsPage() {
           </HomeSectionShell>
         </div>
       </section>
+      </ParallaxSection>
     </div>
   );
 });
