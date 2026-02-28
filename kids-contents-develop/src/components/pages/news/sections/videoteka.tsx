@@ -14,14 +14,14 @@ export const NewsSectionsVideoteka = memo(function NewsSectionsVideoteka() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const allVideos = useMemo(() => {
-    return Array.from({ length: 30 }, (_, index) => ({
-      id: index + 1,
-      image: `/images/videoteka/${(index % 2) + 1}.avif`,
-      image2x: `/images/videoteka/${(index % 2) + 1}@2x.avif`,
-      title: `Bolalar kontentini`,
-      description: `Videoning tavsifi ${index + 1}`,
-      length: `${(index % 3) + 1}:0${(index % 2) + 1}`,
-    }));
+    return [
+      { id: 1, videoSrc: "/videos/amir-temur.mp4", title: "Amir Temur", description: "Videoning tavsifi 1" },
+      { id: 2, videoSrc: "/videos/bobur.mp4", title: "Zahiriddin Muhammad Bobur", description: "Videoning tavsifi 2" },
+      { id: 3, videoSrc: "/videos/bolakay.mp4", title: "Bolakay", description: "Videoning tavsifi 3" },
+      { id: 4, videoSrc: "/videos/bolalar-uchun-ijodiy-tanlov.mp4", title: "Bolalar uchun ijodiy tanlov", description: "Videoning tavsifi 4" },
+      { id: 5, videoSrc: "/videos/ibn-sino.mp4", title: "Ibn Sino", description: "Videoning tavsifi 5" },
+      { id: 6, videoSrc: "/videos/polapon.mp4", title: "Polapon", description: "Videoning tavsifi 6" },
+    ];
   }, []);
 
   const totalVideos = allVideos.length;
@@ -65,8 +65,8 @@ export const NewsSectionsVideoteka = memo(function NewsSectionsVideoteka() {
       <div className="container z-10 max-w-[1508px] 2xl:max-w-[88%]">
         <HomeSectionShell className="border-[#d4dce5] bg-white/90 p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(15,23,42,0.16)]">
           <div className="mb-6 flex justify-center md:mb-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white px-5 py-2.5 text-base font-bold tracking-[-0.01em] text-slate-900 shadow-sm sm:px-6 sm:py-3 sm:text-lg md:px-7 md:py-3.5 md:text-xl">
-              <Clapperboard size={18} className="text-slate-600 md:h-5 md:w-5" />
+            <div className="inline-flex items-center gap-2 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+              <Clapperboard size={18} className="text-slate-600 sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
               Videoteka
             </div>
           </div>

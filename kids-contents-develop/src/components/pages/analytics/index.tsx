@@ -99,8 +99,8 @@ export const AnalyticsPage = memo(function AnalyticsPage() {
         <div className="container max-w-[1508px] 2xl:max-w-[88%]">
           <HomeSectionShell className="border-[#d4dce5] bg-white/90 p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(15,23,42,0.16)]">
             <div className="mb-6 flex flex-col gap-4 md:mb-8 md:gap-5">
-              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-300/80 bg-white px-4 py-2 text-sm font-semibold tracking-[-0.01em] text-slate-800 shadow-sm">
-                <BarChart3 size={16} className="text-slate-600" />
+              <div className="inline-flex w-fit items-center gap-2 self-center pt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:self-start sm:pt-0 sm:text-3xl lg:text-4xl">
+                <BarChart3 size={16} className="text-slate-600 sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
                 Tahlillar
               </div>
 

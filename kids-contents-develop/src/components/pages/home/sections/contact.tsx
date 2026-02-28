@@ -58,7 +58,7 @@ export const HomeSectionsContact = memo(function HomeSectionsContact() {
       <Container className="max-w-[1508px] py-10 lg:py-24 2xl:max-w-[88%]">
         <HomeSectionShell className="border-[#cfd6dd] bg-[#fbfcfd] p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(33,54,76,0.18)]">
           <div className="mb-6 flex flex-col items-center text-center md:mb-8 lg:mb-10">
-            <div className="inline-flex items-center justify-center rounded-full border border-[#cfd8e1] bg-white px-5 py-2.5 text-lg font-bold tracking-[-0.02em] text-slate-900 shadow-[0_10px_24px_-18px_rgba(33,54,76,0.22)] sm:px-6 sm:text-xl lg:px-7 lg:py-3 lg:text-2xl">
+            <div className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
               Kontaktlar va joylashuv
             </div>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">

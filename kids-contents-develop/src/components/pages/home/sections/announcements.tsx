@@ -75,7 +75,7 @@ export const HomeSectionsAnnouncements = memo(function HomeSectionsAnnouncements
         <HomeSectionShell className="border-[#d8c8b5] bg-[#fffdf9] p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(120,85,55,0.22)]">
           <HomeSectionHeader>
             <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-              <div className="inline-flex items-center justify-center rounded-full border border-[#dccab8] bg-white px-5 py-2.5 text-lg font-bold tracking-[-0.02em] text-[#6e472c] shadow-[0_10px_24px_-18px_rgba(120,85,55,0.28)] sm:px-6 sm:text-xl lg:px-7 lg:py-3 lg:text-2xl">
+              <div className="text-2xl font-semibold tracking-tight text-[#6e472c] sm:text-3xl lg:text-4xl">
                 E&apos;lonlar
               </div>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">

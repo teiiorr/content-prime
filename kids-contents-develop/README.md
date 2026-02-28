@@ -15,14 +15,9 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://git.therealstart.com/sandbox/jafton-react.git
 git branch -M main
-git push -uf origin main
+git push -uf origin <your-remote>
 ```
-
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://git.therealstart.com/sandbox/jafton-react/-/settings/integrations)
 
 ## Collaborate with your team
 

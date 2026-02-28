@@ -99,7 +99,7 @@ export const InternationalPartnershipSlugPage = memo(function InternationalPartn
                   {
                     title: (
                       <Link
-                        href={ROUTES.internatiolPartnership}
+                        href={`${ROUTES.ABOUT}#international-cooperation`}
                         className="text-slate-600 text-sm font-semibold"
                       >
                         Xalqaro hamkorlik
@@ -112,7 +112,7 @@ export const InternationalPartnershipSlugPage = memo(function InternationalPartn
               />
 
               <Link
-                href={ROUTES.internatiolPartnership}
+                href={`${ROUTES.ABOUT}#international-cooperation`}
                 className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
               >
                 <ArrowLeft size={15} />

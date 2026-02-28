@@ -208,22 +208,27 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
     <div className="lg:hidden">
       {/* Top sticky bar is shown only on homepage */}
       {isHomePage ? (
-        <div className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl shadow-none border-0 ring-0">
+        <div className="sticky top-0 z-50 border-0 bg-[#000014]/94 backdrop-blur-xl shadow-none ring-0">
           <div className="container">
             <div className="flex items-center justify-between py-2.5">
               <Link href={ROUTES.HOME} className="inline-flex items-center">
-                <img src="/logo.svg" alt="Site logo" width={172} height={62} />
+                <img
+                  src="/logo.svg"
+                  alt="Site logo"
+                  width={172}
+                  height={62}
+                  className="[filter:brightness(0)_invert(1)]"
+                />
               </Link>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleOpenSubmissionModal}
-                  className="inline-flex h-9 items-center gap-1.5 rounded-full border border-[#8a6429] bg-[#6d4d1f] px-3 text-[12px] font-semibold text-white shadow-none transition hover:bg-[#7a5826] active:scale-[0.99]"
+                  className="nbm-idea-btn relative inline-flex h-10 w-10 items-center justify-center text-[#f4d35e] shadow-none transition active:scale-[0.99]"
                   type="button"
                   aria-label="Sizda g'oya bormi?"
                 >
-                  <Lightbulb size={14} className="nbm-idea-bulb" />
-                  <span className="max-[360px]:hidden">G'oya</span>
+                  <Lightbulb size={22} className="nbm-idea-bulb" />
                 </button>
               </div>
             </div>
@@ -305,7 +310,13 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         title={
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <img src="/logo.svg" alt="Site logo" width={170} height={58} />
+              <img
+                src="/logo.svg"
+                alt="Site logo"
+                width={170}
+                height={58}
+                className="[filter:brightness(0)_invert(1)]"
+              />
             </div>
             <button
               onClick={closeDrawer}
@@ -514,7 +525,26 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         .nbm-idea-bulb {
           color: #fcd34d;
           filter: drop-shadow(0 0 0 rgba(252, 211, 77, 0));
-          animation: nbm-bulb-glow 2s ease-in-out infinite;
+          animation: nbm-bulb-glow 2s ease-in-out infinite, nbm-bulb-bounce 2.4s ease-in-out infinite;
+          transition: transform 140ms ease;
+        }
+        .nbm-idea-btn:hover .nbm-idea-bulb {
+          transform: scale(1.18);
+        }
+        @keyframes nbm-bulb-bounce {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          40% {
+            transform: translateY(-2px);
+          }
+          55% {
+            transform: translateY(0);
+          }
+          70% {
+            transform: translateY(-1px);
+          }
         }
         @keyframes nbm-bulb-glow {
           0%,
@@ -538,8 +568,9 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           width: 40px;
           height: 40px;
           border-radius: 14px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
-          background: rgba(2, 6, 23, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.08);
+          color: rgba(255, 255, 255, 0.9);
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -553,9 +584,9 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           bottom: 0;
           z-index: 60;
           padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-          background: rgba(255, 255, 255, 0.82);
+          background: rgba(0, 0, 20, 0.94);
           backdrop-filter: blur(18px);
-          border-top: 1px solid rgba(2, 6, 23, 0.08);
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nbm-bottom-inner {
@@ -587,18 +618,23 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           padding: 10px 6px;
           border-radius: 18px;
           border: 1px solid transparent;
-          color: rgba(2, 6, 23, 0.72);
+          color: rgba(255, 255, 255, 0.7);
         }
 
         .nbm-tab.is-active {
-          border-color: rgba(2, 6, 23, 0.1);
-          background: rgba(2, 6, 23, 0.035);
-          color: rgba(2, 6, 23, 0.92);
+          border-color: rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.08);
+          color: rgba(255, 255, 255, 0.96);
         }
 
         .nbm-ico {
           line-height: 0;
           display: inline-flex;
+          color: #ffffff;
+        }
+
+        .nbm-tab.is-active .nbm-ico {
+          color: #f4d35e;
         }
 
         .nbm-lbl {
@@ -608,8 +644,19 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         }
 
         /* Drawer sheet */
+        :global(.nbm-drawer .ant-drawer-content) {
+          background: #000014;
+        }
+        :global(.nbm-drawer .ant-drawer-header) {
+          background: rgba(0, 0, 20, 0.98);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        :global(.nbm-drawer .ant-drawer-title) {
+          color: rgba(255, 255, 255, 0.96);
+        }
         .nbm-drawer .ant-drawer-body {
           padding: 12px 12px 18px;
+          background: #000014;
         }
 
         .nbm-sheet {
@@ -620,15 +667,15 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         .nbm-section {
           margin-bottom: 14px;
           padding: 12px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 18px;
-          background: rgba(255, 255, 255, 0.9);
+          background: rgba(255, 255, 255, 0.06);
         }
 
         .nbm-title {
           font-size: 12px;
           font-weight: 700;
-          color: rgba(2, 6, 23, 0.78);
+          color: rgba(255, 255, 255, 0.72);
           margin-bottom: 10px;
         }
 
@@ -652,9 +699,9 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           gap: 10px;
           padding: 12px 12px;
           border-radius: 16px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
-          background: rgba(2, 6, 23, 0.02);
-          color: rgba(2, 6, 23, 0.92);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.06);
+          color: rgba(255, 255, 255, 0.92);
         }
 
         .nbm-item-main {
@@ -664,21 +711,21 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         .nbm-toggle {
           width: 46px;
           border-radius: 16px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
-          background: rgba(255, 255, 255, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.08);
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          color: rgba(2, 6, 23, 0.65);
+          color: rgba(255, 255, 255, 0.72);
         }
 
         .nbm-pill {
           font-size: 11px;
           padding: 4px 8px;
           border-radius: 999px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
-          color: rgba(2, 6, 23, 0.65);
-          background: rgba(255, 255, 255, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: rgba(255, 255, 255, 0.7);
+          background: rgba(255, 255, 255, 0.08);
           white-space: nowrap;
         }
 
@@ -686,7 +733,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           margin-top: 8px;
           margin-left: 6px;
           padding-left: 10px;
-          border-left: 1px solid rgba(2, 6, 23, 0.08);
+          border-left: 1px solid rgba(255, 255, 255, 0.1);
           display: grid;
           gap: 8px;
         }
@@ -695,9 +742,9 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           display: block;
           padding: 10px 12px;
           border-radius: 14px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
-          background: rgba(255, 255, 255, 0.75);
-          color: rgba(2, 6, 23, 0.9);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.06);
+          color: rgba(255, 255, 255, 0.9);
           text-decoration: none;
         }
 
@@ -711,8 +758,8 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         .nbm-primary {
           height: 44px;
           border-radius: 16px;
-          border: 1px solid rgba(2, 6, 23, 0.1);
-          background: rgba(2, 6, 23, 0.92);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          background: rgba(255, 255, 255, 0.12);
           color: white;
           font-weight: 700;
         }
@@ -720,18 +767,18 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
         .nbm-secondary {
           height: 44px;
           border-radius: 16px;
-          border: 1px solid rgba(2, 6, 23, 0.1);
-          background: rgba(2, 6, 23, 0.03);
-          color: rgba(2, 6, 23, 0.88);
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          background: rgba(255, 255, 255, 0.06);
+          color: rgba(255, 255, 255, 0.88);
           font-weight: 700;
         }
 
         /* Search UI */
         .nbm-search {
           padding: 12px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 18px;
-          background: rgba(255, 255, 255, 0.9);
+          background: rgba(255, 255, 255, 0.06);
         }
 
         .nbm-searchbox {
@@ -740,8 +787,8 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           gap: 10px;
           padding: 10px 12px;
           border-radius: 16px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
-          background: rgba(2, 6, 23, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.06);
           margin-bottom: 12px;
         }
 
@@ -751,7 +798,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           outline: none;
           background: transparent;
           font-size: 14px;
-          color: rgba(2, 6, 23, 0.92);
+          color: rgba(255, 255, 255, 0.92);
         }
 
         .nbm-clear {
@@ -761,9 +808,9 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           align-items: center;
           justify-content: center;
           border-radius: 14px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
-          background: rgba(2, 6, 23, 0.03);
-          color: rgba(2, 6, 23, 0.65);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.08);
+          color: rgba(255, 255, 255, 0.72);
         }
 
         .nbm-results {
@@ -776,9 +823,9 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
           gap: 4px;
           padding: 12px 12px;
           border-radius: 16px;
-          border: 1px solid rgba(2, 6, 23, 0.08);
-          background: rgba(255, 255, 255, 0.75);
-          color: rgba(2, 6, 23, 0.9);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.06);
+          color: rgba(255, 255, 255, 0.9);
           text-decoration: none;
         }
 
@@ -789,7 +836,7 @@ export function MainNavbarMobile({ menuItems }: MainNavbarMobileProps) {
 
         .nbm-result-cat {
           font-size: 11px;
-          color: rgba(2, 6, 23, 0.6);
+          color: rgba(255, 255, 255, 0.62);
         }
       `}</style>
 

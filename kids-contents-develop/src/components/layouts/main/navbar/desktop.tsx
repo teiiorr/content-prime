@@ -97,14 +97,14 @@ function PopoverContent({
       {(title || hint) && (
         <div className="px-4 pb-3 pt-4">
           <div className="flex items-center justify-between gap-3">
-            <div className="text-[11px] uppercase tracking-wider text-gray-500">{title}</div>
+            <div className="text-[11px] uppercase tracking-wider text-white/60">{title}</div>
             {hint ? (
-              <div className="rounded-full border border-black/10 bg-white/60 px-2 py-1 text-[11px] text-gray-500">
+              <div className="rounded-full border border-white/12 bg-white/8 px-2 py-1 text-[11px] text-white/60">
                 {hint}
               </div>
             ) : null}
           </div>
-          <div className="mt-3 h-px w-full bg-black/5" />
+          <div className="mt-3 h-px w-full bg-white/10" />
         </div>
       )}
       <div className={["flex flex-col gap-1 px-2 pb-3", title || hint ? "" : "pt-2"].join(" ")}>
@@ -127,7 +127,7 @@ const DropdownPanel = ({
         key={href}
         href={href}
         onClick={onItemClick}
-        className="nb-dd-item group flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 text-[14px] font-medium text-gray-900"
+        className="nb-dd-item group flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 text-[14px] font-medium text-white/88"
       >
         <span className="nb-dd-text">{label}</span>
         <span className="nb-dd-arrow opacity-0">→</span>
@@ -252,13 +252,13 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
         className={[
           "nb-item group relative inline-flex items-center gap-2 rounded-full px-[14px] py-[9px]",
           "nb-font font-semibold",
-          active ? "text-gray-900" : "text-gray-700",
+          "text-white",
         ].join(" ")}
       >
         <span
           className={[
             "nb-icon transition-colors",
-            active ? "text-gray-700" : "text-gray-500",
+            "text-white/88",
           ].join(" ")}
         >
           {icon}
@@ -310,11 +310,11 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           </PopoverContent>
         }
       >
-        <div className="nb-item group relative inline-flex cursor-pointer select-none items-center gap-2 rounded-full px-[14px] py-[9px] nb-font font-semibold text-gray-700">
+        <div className="nb-item group relative inline-flex cursor-pointer select-none items-center gap-2 rounded-full px-[14px] py-[9px] nb-font font-semibold text-white">
           <span
             className={[
               "nb-icon transition-colors",
-              open ? "text-gray-700" : "text-gray-500",
+              "text-white/88",
             ].join(" ")}
           >
             {NAV_ICONS[k]}
@@ -323,7 +323,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           <span className="nb-text transition-colors">{label}</span>
 
           <span
-            className="text-gray-500 transition-transform"
+            className="text-white/78 transition-transform"
             style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
           >
             <ChevronDown size={18} />
@@ -351,11 +351,11 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
               "rounded-[28px]",
               "backdrop-blur-xl",
               "shadow-none border-0",
-              scrolled ? "bg-white/86" : "bg-white/72",
+              scrolled ? "bg-[#000014]/96" : "bg-[#000014]/90",
             ].join(" ")}
             onMouseLeave={closeAllPopovers}
           >
-            <div className="nb-inner px-4 xl:px-6">
+            <div className="nb-inner pl-4 pr-1 xl:pl-6 xl:pr-2">
               <div
                 className="flex items-center justify-between"
                 style={{ minHeight: "var(--nav-height)" }}
@@ -370,7 +370,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
                       alt="Site logo"
                       width={210}
                       height={76}
-                      className="max-xl:h-auto max-xl:w-40"
+                      className="max-xl:h-auto max-xl:w-40 [filter:brightness(0)_invert(1)]"
                     />
                   </Link>
                 </div>
@@ -399,15 +399,15 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
                   ))}
                 </nav>
 
-                <div className="flex shrink-0 items-center gap-2">
+                <div className="ml-3 flex shrink-0 items-center justify-end xl:ml-4">
                   <div className="nb-cta-wrap rounded-full">
                     <Button
                       theme="outlined"
                       onClick={handleOpenSubmissionModal}
-                      className="!border-[#5f7151] !bg-[#526446] !text-white shadow-[0_14px_28px_-18px_rgba(56,70,45,0.55)] hover:!border-[#708463] hover:!bg-[#5c6f4f] hover:!text-white"
+                      className="nb-idea-btn !min-h-[44px] !rounded-full !border-white/20 !bg-transparent !px-4 !text-[14px] !font-bold !text-[#f4d35e] !shadow-none hover:!border-white/35 hover:!bg-transparent hover:!text-[#f4d35e] xl:!min-h-[46px] xl:!px-5"
                     >
-                      <Lightbulb size={16} className="idea-bulb mr-1.5" />
-                      Sizda g'oya bormi?
+                      <Lightbulb size={18} className="idea-bulb shrink-0" />
+                      <span>Sizda g'oya bormi?</span>
                     </Button>
                   </div>
                 </div>
@@ -505,7 +505,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           --nav-font: clamp(14px, 0.35vw + 13px, 18px);
           --nav-height: clamp(72px, 1.2vw + 66px, 88px);
           --nav-btn: clamp(38px, 0.8vw + 34px, 46px);
-          --nav-glow: 15, 23, 42;
+          --nav-glow: 8, 19, 39;
         }
 
         :global(.nb-font) {
@@ -542,60 +542,44 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
         }
 
         :global(.nb-dd-item) {
-          transition: background-color 160ms ease, box-shadow 160ms ease, color 160ms ease,
-            transform 160ms ease;
+          transition: background-color 120ms ease, color 120ms ease;
         }
         :global(.nb-dd-item:hover) {
           background: rgba(148, 163, 184, 0.08);
-          box-shadow: none;
-          transform: translateX(2px);
         }
         :global(.nb-dd-item:hover .nb-dd-arrow) {
           opacity: 1;
         }
         :global(.nb-dd-arrow) {
-          transition: opacity 160ms ease, transform 160ms ease;
+          transition: opacity 120ms ease;
           color: rgba(17, 24, 39, 0.55);
-        }
-        :global(.nb-dd-item:hover .nb-dd-arrow) {
-          transform: translateX(2px);
         }
 
         :global(.nb-plate) {
           background: transparent;
-          transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+          transition: background-color 120ms ease, border-color 120ms ease;
         }
         :global(.nb-item:hover .nb-plate) {
-          background: rgba(255, 255, 255, 0.82);
-          border-color: rgba(148, 163, 184, 0.18);
-          box-shadow: none;
-          backdrop-filter: blur(18px);
+          background: rgba(255, 255, 255, 0.12);
+          border-color: rgba(255, 255, 255, 0.14);
         }
         :global(.nb-plate-active) {
-          background: rgba(255, 255, 255, 0.92) !important;
-          border-color: rgba(148, 163, 184, 0.22) !important;
-          box-shadow: none;
-          backdrop-filter: blur(18px);
+          background: rgba(255, 255, 255, 0.1) !important;
+          border-color: rgba(255, 255, 255, 0.14) !important;
         }
 
         :global(.nb-glow) {
-          opacity: 0;
-          transition: opacity 160ms ease;
-          box-shadow: none;
-        }
-        :global(.nb-item:hover .nb-glow) {
-          opacity: 1;
-          box-shadow: none;
+          display: none;
         }
 
         :global(.nb-item:hover .nb-text),
         :global(.nb-item:hover .nb-text.nb-text) {
-          color: rgb(var(--nav-glow)) !important;
+          color: rgba(255, 255, 255, 1) !important;
           text-shadow: none;
         }
         :global(.nb-item:hover .nb-icon),
         :global(.nb-item:hover .nb-icon.nb-icon) {
-          color: rgb(var(--nav-glow)) !important;
+          color: rgba(255, 255, 255, 0.92) !important;
           filter: none;
         }
 
@@ -616,7 +600,7 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           transition: box-shadow 160ms ease, background-color 160ms ease;
         }
         :global(.nb-logo:hover) {
-          background: rgba(148, 163, 184, 0.08);
+          background: rgba(255, 255, 255, 0.08);
           box-shadow: none;
         }
 
@@ -634,6 +618,23 @@ export function MainNavbarDesktop({ menuItems }: MainNavbarDesktopProps) {
           color: #fcd34d;
           filter: drop-shadow(0 0 0 rgba(252, 211, 77, 0));
           animation: idea-bulb-glow 2s ease-in-out infinite;
+          transition: transform 140ms ease;
+        }
+        :global(.nb-idea-btn:hover .idea-bulb) {
+          transform: scale(1.18);
+        }
+        :global(.nb-idea-btn) {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 8px !important;
+          text-align: center;
+        }
+        :global(.nb-idea-btn > span) {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
         }
 
         @keyframes idea-bulb-glow {

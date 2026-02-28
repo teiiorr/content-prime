@@ -1,8 +1,8 @@
 "use client";
 
 import { memo, useEffect, useRef, useState } from "react";
-import { Play, Volume2, VolumeX } from "lucide-react";
-import { ROUTES } from "@/constants";
+import Image from "next/image";
+import { Volume2, VolumeX } from "lucide-react";
 import { Button, Container } from "@/components";
 import { FadeIn } from "@/components/effects/FadeIn";
 import { ScrollCard } from "@/components/motion/ScrollCard";
@@ -50,6 +50,22 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
     const video = videoRef.current;
     if (!video) return;
 
+    const syncSoundState = () => {
+      setIsSoundOn(!video.muted);
+    };
+
+    syncSoundState();
+    video.addEventListener("volumechange", syncSoundState);
+
+    return () => {
+      video.removeEventListener("volumechange", syncSoundState);
+    };
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
     if (playTimerRef.current) {
       window.clearTimeout(playTimerRef.current);
       playTimerRef.current = null;
@@ -63,13 +79,8 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
       return;
     }
 
-    if (!hasStartedByUser && !isDesktopViewport) {
-      setIsVideoPlaying(false);
-      video.pause();
-      return;
-    }
-
     if (!isVisible) {
+      video.muted = true;
       setIsSoundOn(false);
       setIsVideoPlaying(false);
       video.pause();
@@ -77,7 +88,7 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
     }
 
     playTimerRef.current = window.setTimeout(() => {
-      if (isDesktopViewport) {
+      if (isDesktopViewport || !hasStartedByUser) {
         video.muted = true;
         setIsSoundOn(false);
       }
@@ -112,14 +123,22 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
     const video = videoRef.current;
     if (!video) return;
     try {
-      const next = video.muted;
-      video.muted = !next;
+      video.muted = !video.muted;
       await video.play();
-      setIsSoundOn(next);
+      setIsSoundOn(!video.muted);
     } catch {
       video.muted = true;
       setIsSoundOn(false);
     }
+  };
+
+  const handleSoundButtonClick = async () => {
+    if (isDesktopViewport || hasStartedByUser) {
+      await handleToggleSound();
+      return;
+    }
+
+    await handleStartWithSound();
   };
 
   return (
@@ -132,9 +151,7 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
         <FadeIn>
           <div className="mb-6 text-center md:mb-8">
             <div className="mx-auto max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-600">
-                Biz haqimizda
-              </p>
+              <div className="h-[18px] sm:h-[20px]" aria-hidden="true" />
               <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
                 Markaz haqida
               </h2>
@@ -143,32 +160,41 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
         </FadeIn>
 
         <FadeIn>
-          <div className="rounded-[28px] border border-white/70 bg-white/50 p-3 sm:p-4 lg:p-5">
-            <div className="grid items-stretch gap-4 lg:grid-cols-[1.15fr_.85fr] lg:gap-5">
-              <ScrollCard className="h-full [&>div]:h-full" index={0} yFrom={72} scaleFrom={1.04} blurFrom={5}>
-              <div className="overflow-hidden rounded-[22px] border border-white/70 bg-white/72">
-                <div className="relative overflow-hidden border-b border-white/70">
+          <div className="rounded-[24px] border border-white/70 bg-transparent p-2.5 sm:rounded-[28px] sm:p-4 lg:p-5">
+            <div className="grid items-stretch gap-4 lg:grid-cols-[1.28fr_.72fr] lg:gap-5">
+              <ScrollCard
+                className="h-full [&>div]:h-full"
+                index={0}
+                yFrom={86}
+                scaleFrom={1.03}
+                blurFrom={6}
+                delayStep={0.12}
+              >
+              <div className="flex h-full flex-col overflow-hidden rounded-[20px] border border-white/70 bg-white/72 sm:rounded-[22px]">
+                <div className="relative overflow-hidden border-b border-white/70 bg-[#edf3f6]">
                   <img
                     src="/images/president.jpg"
                     alt="O‘zbekiston Respublikasi Prezidenti"
-                    className="block h-auto w-full object-cover"
+                    className="block h-auto w-full object-contain object-center"
                     loading="lazy"
                   />
                 </div>
-                <div className="p-4 sm:p-5 lg:p-6 xl:p-7">
-                  <div className="mb-3 inline-flex items-center rounded-full border border-white/80 bg-white/90 px-3 py-1.5 text-xs font-semibold tracking-[0.08em] text-slate-700 lg:text-[13px]">
-                    PQ-183 • 15-MAY, 2025
-                  </div>
-                  <p className="text-[14px] leading-7 text-slate-800 sm:text-[15px] sm:leading-7 lg:text-[17px] lg:leading-8 xl:text-[18px] xl:leading-9">
+                <div className="flex flex-1 flex-col p-4 sm:p-5 lg:p-6 xl:p-7">
+                  <p className="max-w-none text-[15px] leading-7 text-slate-800 sm:max-w-[95%] sm:text-[16px] sm:leading-8 lg:text-[18px] lg:leading-9 xl:text-[20px] xl:leading-10">
                     Bolalar kontentini rivojlantirish markazi O‘zbekiston Respublikasi
-                    Prezidentining 2025-yil 15-maydagi PQ-183-son qaroriga muvofiq tashkil
-                    etilgan bo‘lib, markazning asosiy maqsadi bolalarni zararli axborotdan
-                    himoya qilish, ta’limga keng jalb etish, kasbga yo‘naltirish va yuksak
-                    vatanparvarlik ruhida tarbiyalashga xizmat qiladigan milliy kontentlar
-                    yaratishni qo‘llab-quvvatlashdir.
+                    Prezidentining 2025-yil 15-maydagi{" "}
+                    <strong className="font-extrabold text-slate-950">PQ-183-son</strong>{" "}
+                    qaroriga muvofiq tashkil etilgan bo‘lib, bolalarni zararli axborotdan himoya
+                    qilish, ta’limga keng jalb etish va milliy qadriyatlar asosidagi zamonaviy
+                    kontentlarni yaratishni qo‘llab-quvvatlaydi.
                   </p>
-                  <div className="mt-4 lg:mt-5">
-                    <Button href={ROUTES.ABOUT} theme="primary">
+                  <div className="mt-6 flex justify-end lg:mt-auto lg:pt-8">
+                    <Button
+                      href="https://www.lex.uz/uz/docs/-7528758?ONDATE=17.09.2025"
+                      target="_blank"
+                      theme="primary"
+                      className="min-h-[52px] w-full justify-center px-6 text-base font-bold shadow-none before:opacity-0 before:transition-opacity before:duration-300 hover:shadow-none hover:before:opacity-100 sm:min-h-[56px] sm:w-auto sm:min-w-[220px] sm:px-7 sm:text-[15px] lg:min-w-[260px] lg:text-base xl:min-h-[60px] xl:min-w-[300px] xl:text-lg"
+                    >
                       Batafsil
                     </Button>
                   </div>
@@ -176,12 +202,31 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
               </div>
               </ScrollCard>
 
-              <ScrollCard className="h-full [&>div]:h-full" index={1} yFrom={88} scaleFrom={1.06} blurFrom={6}>
-              <div className="relative h-full overflow-hidden rounded-[22px] border border-white/70 bg-white/72">
-                <div className="relative h-full min-h-[500px] w-full overflow-hidden rounded-[22px] sm:min-h-[560px] lg:min-h-[640px]">
+              <ScrollCard
+                className="h-full [&>div]:h-full"
+                index={1}
+                yFrom={104}
+                scaleFrom={1.045}
+                blurFrom={8}
+                delayStep={0.12}
+              >
+              <div className="relative flex h-full flex-col overflow-hidden rounded-[20px] border border-white/70 bg-white/72 p-3 sm:rounded-[22px] sm:p-4 lg:p-5">
+                <div className="hidden pb-4 pt-2 sm:block">
+                  <div className="flex min-h-[132px] items-center justify-center lg:min-h-[164px] xl:min-h-[188px]">
+                    <Image
+                      src="/logo.svg"
+                      alt="Markaz logotipi"
+                      width={420}
+                      height={132}
+                      className="h-24 w-auto max-w-full object-contain lg:h-28 xl:h-32"
+                      priority={false}
+                    />
+                  </div>
+                </div>
+                <div className="relative mt-auto aspect-[9/12] min-h-[420px] w-full overflow-hidden rounded-[20px] sm:aspect-[4/5] sm:min-h-[500px] md:min-h-[560px] lg:min-h-[620px] lg:rounded-[22px] xl:min-h-[680px]">
                   <video
                     ref={videoRef}
-                    className="absolute inset-0 h-full w-full object-cover object-center"
+                    className="absolute inset-0 h-full w-full object-cover object-[center_52%] sm:object-[center_54%] lg:object-[center_56%]"
                     autoPlay={false}
                     muted
                     playsInline
@@ -194,24 +239,11 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
                     <source src="/videos/handbrake-mobile.mp4" type="video/mp4" />
                   </video>
 
-                  {!reduceMotion && !isDesktopViewport && !isVideoPlaying ? (
+                  {!reduceMotion ? (
                     <button
                       type="button"
-                      onClick={handleStartWithSound}
-                      className="absolute left-1/2 top-1/2 z-10 inline-flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-black/24 text-white backdrop-blur-sm transition duration-200 hover:scale-[1.02] hover:bg-black/32 active:scale-95"
-                      aria-label="Videoni ovoz bilan boshlash"
-                      aria-pressed={false}
-                    >
-                      <span className="pointer-events-none absolute -inset-2 rounded-full border border-white/18 opacity-70 [animation:ping_2.8s_cubic-bezier(0,0,0.2,1)_infinite]" />
-                      <span className="pointer-events-none absolute inset-[2px] rounded-full border border-white/12" />
-                      <Play className="relative h-[18px] w-[18px] translate-x-[1px]" />
-                    </button>
-                  ) : null}
-                  {!reduceMotion && isDesktopViewport ? (
-                    <button
-                      type="button"
-                      onClick={handleToggleSound}
-                      className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/40 px-3 py-2 text-white backdrop-blur-sm transition hover:bg-black/55 sm:bottom-4 sm:right-4"
+                      onClick={handleSoundButtonClick}
+                      className="absolute bottom-2.5 right-2.5 z-10 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-2.5 py-2 text-white backdrop-blur-sm transition hover:bg-black/55 sm:bottom-4 sm:right-4 sm:gap-2 sm:px-3"
                       aria-label={isSoundOn ? "Ovozni o‘chirish" : "Ovozni yoqish"}
                       aria-pressed={isSoundOn}
                     >
@@ -229,8 +261,8 @@ export const HomeSectionsAbout = memo(function HomeSectionsAbout() {
                           strokeWidth={2}
                         />
                       </span>
-                      <span className="text-xs font-medium leading-none">
-                        {isSoundOn ? "Ovozli" : "Ovoz bilan"}
+                      <span className="text-[11px] font-medium leading-none sm:text-xs">
+                        {isSoundOn ? "Ovoz bilan" : "Ovozsiz"}
                       </span>
                     </button>
                   ) : null}

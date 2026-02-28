@@ -9,46 +9,25 @@ import { ScrollCard } from "@/components/motion/ScrollCard";
 export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
   const [reduceMotion, setReduceMotion] = useState(false);
   const PARTNERS = [
-    {
-      id: 1,
-      name: "O'zbekiston Respublikasi Prezidenti huzuridagi Ijtimoiy Himoya Milliy Agentligi",
-      src: "/images/new-partners/ihma.avif",
-      srcSet: "/images/new-partners/ihma@2x.avif 2x",
-      width: 185,
-      height: 135,
-    },
-    {
-      id: 2,
-      name: "O'zbekiston Prokuraturasi",
-      src: "/images/new-partners/prokuratura.avif",
-      srcSet: "/images/new-partners/prokuratura@2x.avif 2x",
-      width: 135,
-      height: 135,
-    },
-    {
-      id: 3,
-      name: "O'zbekiston Respublikasi Ichki Ishlar Vazirligi",
-      src: "/images/new-partners/iiv.avif",
-      srcSet: "/images/new-partners/iiv@2x.avif 2x",
-      width: 135,
-      height: 135,
-    },
-    {
-      id: 18,
-      name: "O'zbekiston Davlat Aktivlarini Boshqarish Agentligi",
-      src: "/images/new-partners/uzsama.avif",
-      srcSet: "/images/new-partners/uzsama@2x.avif 2x",
-      width: 221,
-      height: 135,
-    },
-    {
-      id: 19,
-      name: "O'zbekiston Yoshlar Ishlari Agentligi",
-      src: "/images/new-partners/yoshlar-agentligi.avif",
-      srcSet: "/images/new-partners/yoshlar-agentligi@2x.avif 2x",
-      width: 221,
-      height: 135,
-    },
+    { id: 1, name: "IHMA", src: "/images/new-partners/ihma@2x.avif", srcSet: "/images/new-partners/ihma@2x.avif 2x", width: 185, height: 135 },
+    { id: 2, name: "Prokuratura", src: "/images/new-partners/prokuratura@2x.avif", srcSet: "/images/new-partners/prokuratura@2x.avif 2x", width: 135, height: 135 },
+    { id: 3, name: "IIV", src: "/images/new-partners/iiv@2x.avif", srcSet: "/images/new-partners/iiv@2x.avif 2x", width: 135, height: 135 },
+    { id: 4, name: "UZSAMA", src: "/images/new-partners/uzsama@2x.avif", srcSet: "/images/new-partners/uzsama@2x.avif 2x", width: 221, height: 135 },
+    { id: 5, name: "Yoshlar Agentligi", src: "/images/new-partners/yoshlar-agentligi@2x.avif", srcSet: "/images/new-partners/yoshlar-agentligi@2x.avif 2x", width: 221, height: 135 },
+    { id: 6, name: "DBV", src: "/images/new-partners/dbv@2x.avif", srcSet: "/images/new-partners/dbv@2x.avif 2x", width: 180, height: 135 },
+    { id: 7, name: "Ekologiya", src: "/images/new-partners/ekologiya@2x.avif", srcSet: "/images/new-partners/ekologiya@2x.avif 2x", width: 180, height: 135 },
+    { id: 8, name: "EV", src: "/images/new-partners/ev@2x.avif", srcSet: "/images/new-partners/ev@2x.avif 2x", width: 180, height: 135 },
+    { id: 9, name: "FVV", src: "/images/new-partners/fvv@2x.avif", srcSet: "/images/new-partners/fvv@2x.avif 2x", width: 180, height: 135 },
+    { id: 10, name: "Madaniyat", src: "/images/new-partners/madaniyat@2x.avif", srcSet: "/images/new-partners/madaniyat@2x.avif 2x", width: 180, height: 135 },
+    { id: 11, name: "MV", src: "/images/new-partners/mv@2x.avif", srcSet: "/images/new-partners/mv@2x.avif 2x", width: 180, height: 135 },
+    { id: 12, name: "OTFIV", src: "/images/new-partners/otfiv@2x.avif", srcSet: "/images/new-partners/otfiv@2x.avif 2x", width: 180, height: 135 },
+    { id: 13, name: "QXV", src: "/images/new-partners/qxv@2x.avif", srcSet: "/images/new-partners/qxv@2x.avif 2x", width: 180, height: 135 },
+    { id: 14, name: "RTV", src: "/images/new-partners/rtv@2x.avif", srcSet: "/images/new-partners/rtv@2x.avif 2x", width: 180, height: 135 },
+    { id: 15, name: "Soliq", src: "/images/new-partners/soliq@2x.avif", srcSet: "/images/new-partners/soliq@2x.avif 2x", width: 180, height: 135 },
+    { id: 16, name: "SRV", src: "/images/new-partners/srv@2x.avif", srcSet: "/images/new-partners/srv@2x.avif 2x", width: 180, height: 135 },
+    { id: 17, name: "SSV", src: "/images/new-partners/ssv@2x.avif", srcSet: "/images/new-partners/ssv@2x.avif 2x", width: 180, height: 135 },
+    { id: 18, name: "SXV", src: "/images/new-partners/sxv@2x.avif", srcSet: "/images/new-partners/sxv@2x.avif 2x", width: 180, height: 135 },
+    { id: 19, name: "TV", src: "/images/new-partners/tv@2x.avif", srcSet: "/images/new-partners/tv@2x.avif 2x", width: 180, height: 135 },
   ];
 
   useEffect(() => {
@@ -68,7 +47,7 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
         <HomeSectionShell className="border-[#d3d8cf] bg-[#fbfcfa] p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_22px_55px_-38px_rgba(44,58,36,0.16)]">
           <ScrollCard index={0} yFrom={42} scaleFrom={1.02} blurFrom={3}>
           <div className="mb-6 flex justify-center md:mb-8 lg:mb-10">
-            <div className="inline-flex items-center justify-center rounded-full border border-[#cfd8c9] bg-white px-5 py-2.5 text-center text-lg font-bold tracking-[-0.02em] text-[#45563a] shadow-[0_10px_24px_-18px_rgba(44,58,36,0.22)] sm:px-6 sm:text-xl lg:px-7 lg:py-3 lg:text-2xl">
+            <div className="text-center text-2xl font-semibold tracking-tight text-[#45563a] sm:text-3xl lg:text-4xl">
               Hamkor tashkilotlar
             </div>
           </div>
@@ -77,12 +56,12 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
           {/* Mobile marquee strip */}
           <div className="md:hidden">
             <ScrollCard index={1} yFrom={68} scaleFrom={1.04} blurFrom={5}>
-            <div className="rounded-2xl border border-slate-200/80 bg-transparent p-2.5 sm:p-3">
+            <div className="p-1">
               <Marquee speed={reduceMotion ? 0 : 28} gradient={false}>
                 {PARTNERS.map((partner) => (
                   <div
                     key={partner.id}
-                    className="mx-2 flex min-w-[220px] items-center justify-center rounded-2xl border border-slate-200/70 bg-transparent px-4 py-4"
+                    className="mx-4 flex min-w-[220px] items-center justify-center px-2 py-3"
                     title={partner.name}
                   >
                     <Image
@@ -90,7 +69,7 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
                       width={partner.width}
                       height={partner.height}
                       alt={partner.name}
-                      className="h-[88px] w-auto object-contain"
+                      className="h-[108px] w-auto object-contain"
                       sizes="220px"
                     />
                   </div>
@@ -103,12 +82,12 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
           {/* Desktop marquee strip */}
           <div className="hidden md:block">
             <ScrollCard index={1} yFrom={68} scaleFrom={1.04} blurFrom={5}>
-            <div className="rounded-2xl border border-slate-200/80 bg-transparent p-3 lg:p-4 xl:p-5">
+            <div className="p-1">
               <Marquee speed={reduceMotion ? 0 : 50} pauseOnHover gradient={false}>
                 {PARTNERS.map((partner) => (
                   <div
                     key={partner.id}
-                    className="mx-3 flex min-w-[240px] items-center justify-center rounded-2xl border border-slate-200/70 bg-transparent px-4 py-4 lg:min-w-[280px]"
+                    className="mx-5 flex min-w-[240px] items-center justify-center px-3 py-3 lg:min-w-[280px]"
                     title={partner.name}
                   >
                     <Image
@@ -116,7 +95,7 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
                       width={partner.width}
                       height={partner.height}
                       alt={partner.name}
-                      className="h-[104px] w-auto object-contain lg:h-[116px]"
+                      className="h-[124px] w-auto object-contain lg:h-[138px]"
                       sizes="280px"
                     />
                   </div>

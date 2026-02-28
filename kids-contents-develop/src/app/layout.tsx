@@ -14,7 +14,12 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+const metadataBase = new URL(
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() || "http://localhost:3000"
+);
+
 export const metadata: Metadata = {
+  metadataBase,
   title: "Bolalar kontentini rivojlantirish markazi",
   description:
     "Bolalar uchun mo‘ljallangan milliy kontentlar va ijodiy loyihalarni qo‘llab-quvvatlash platformasi.",

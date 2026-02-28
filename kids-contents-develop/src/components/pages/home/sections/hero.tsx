@@ -1,9 +1,7 @@
 "use client";
 
 import { memo, useEffect, useRef, useState } from "react";
-import { Play, Volume2, VolumeX } from "lucide-react";
-
-const HERO_VIDEO_SRC = "/videos/bola-logo.mp4";
+import { Volume2, VolumeX } from "lucide-react";
 
 export const HomeSectionsHero = memo(function HomeSectionsHero() {
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -46,6 +44,22 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
     const video = videoRef.current;
     if (!video) return;
 
+    const syncSoundState = () => {
+      setIsSoundOn(!video.muted);
+    };
+
+    syncSoundState();
+    video.addEventListener("volumechange", syncSoundState);
+
+    return () => {
+      video.removeEventListener("volumechange", syncSoundState);
+    };
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
     if (playTimerRef.current) {
       window.clearTimeout(playTimerRef.current);
       playTimerRef.current = null;
@@ -58,16 +72,8 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
       return;
     }
 
-    if (!hasStartedByUser && !isDesktopViewport) {
-      setIsVideoPlaying(false);
-      video.pause();
-      return;
-    }
-
     if (!isVisible) {
-      if (!hasStartedByUser || isDesktopViewport) {
-        video.muted = true;
-      }
+      video.muted = true;
       setIsSoundOn(false);
       setIsVideoPlaying(false);
       video.pause();
@@ -75,7 +81,7 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
     }
 
     playTimerRef.current = window.setTimeout(() => {
-      if (!hasStartedByUser || isDesktopViewport) {
+      if (isDesktopViewport || !hasStartedByUser) {
         video.muted = true;
       }
       setIsSoundOn(false);
@@ -118,14 +124,22 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
     const video = videoRef.current;
     if (!video) return;
     try {
-      const next = video.muted;
-      video.muted = !next;
+      video.muted = !video.muted;
       await video.play();
-      setIsSoundOn(next);
+      setIsSoundOn(!video.muted);
     } catch {
       video.muted = true;
       setIsSoundOn(false);
     }
+  };
+
+  const handleSoundButtonClick = async () => {
+    if (isDesktopViewport || hasStartedByUser) {
+      await handleToggleSound();
+      return;
+    }
+
+    await handleStartWithSound();
   };
 
   return (
@@ -135,10 +149,10 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
       className="relative w-full overflow-hidden bg-background"
       aria-label="Homepage hero"
     >
-      <div className="relative h-[calc(100svh-82px)] w-full min-h-[calc(100svh-82px)] sm:h-auto sm:min-h-[82svh] lg:min-h-[88svh] xl:min-h-[92svh] sm:max-h-[980px]">
+      <div className="relative h-[calc(100svh-82px-88px-env(safe-area-inset-bottom))] w-full min-h-[calc(100svh-82px-88px-env(safe-area-inset-bottom))] sm:h-auto sm:min-h-[82svh] lg:min-h-[88svh] xl:min-h-[92svh] sm:max-h-[980px]">
         <video
           ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover object-[center_45%] sm:object-center lg:object-[center_38%] 2xl:object-[center_34%]"
+          className="absolute inset-x-0 top-0 -bottom-2 h-[calc(100%+8px)] w-full object-cover object-center sm:inset-0 sm:h-full lg:object-[center_38%] 2xl:object-[center_34%]"
           autoPlay={false}
           muted
           playsInline
@@ -148,28 +162,16 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
           onPlay={() => setIsVideoPlaying(true)}
           onPause={() => setIsVideoPlaying(false)}
         >
-          <source src={HERO_VIDEO_SRC} type="video/mp4" />
+          <source media="(max-width: 639px)" src="/videos/bola-logo-mobile.mp4" type="video/mp4" />
+          <source src="/videos/bola-logo.mp4" type="video/mp4" />
         </video>
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/10" />
 
-        {!reduceMotion && !isDesktopViewport && !isVideoPlaying ? (
+        {!reduceMotion ? (
           <button
             type="button"
-            onClick={handleStartWithSound}
-            className="absolute left-1/2 top-1/2 z-10 inline-flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/35 bg-black/22 text-white backdrop-blur-sm transition duration-200 hover:scale-[1.02] hover:bg-black/30 active:scale-95"
-            aria-label="Videoni ovoz bilan boshlash"
-            aria-pressed={false}
-          >
-            <span className="pointer-events-none absolute -inset-2 rounded-full border border-white/18 opacity-70 [animation:ping_2.8s_cubic-bezier(0,0,0.2,1)_infinite]" />
-            <span className="pointer-events-none absolute inset-[2px] rounded-full border border-white/12" />
-            <Play className="relative h-[18px] w-[18px] translate-x-[1px]" />
-          </button>
-        ) : null}
-        {!reduceMotion && isDesktopViewport ? (
-          <button
-            type="button"
-            onClick={handleToggleSound}
+            onClick={handleSoundButtonClick}
             className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-3 py-2 text-white backdrop-blur-sm transition hover:bg-black/50 sm:bottom-5 sm:right-5"
             aria-label={isSoundOn ? "Ovozni o‘chirish" : "Ovozni yoqish"}
             aria-pressed={isSoundOn}
@@ -189,11 +191,10 @@ export const HomeSectionsHero = memo(function HomeSectionsHero() {
               />
             </span>
             <span className="text-xs font-medium leading-none">
-              {isSoundOn ? "Ovozli" : "Ovoz bilan"}
+              {isSoundOn ? "Ovoz bilan" : "Ovozsiz"}
             </span>
           </button>
         ) : null}
-
       </div>
     </section>
   );
