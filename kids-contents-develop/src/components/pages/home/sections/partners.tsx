@@ -47,7 +47,7 @@ export const HomeSectionsPartners = memo(function HomeSectionsPartners() {
         <HomeSectionShell className="border-[#d3d8cf] bg-[#fbfcfa] p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_22px_55px_-38px_rgba(44,58,36,0.16)]">
           <ScrollCard index={0} yFrom={42} scaleFrom={1.02} blurFrom={3}>
           <div className="mb-6 flex justify-center md:mb-8 lg:mb-10">
-            <div className="text-center text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:text-4xl">
+            <div className="text-center text-2xl font-semibold tracking-tight text-[#45563a] sm:text-3xl lg:text-4xl">
               Hamkor tashkilotlar
             </div>
           </div>

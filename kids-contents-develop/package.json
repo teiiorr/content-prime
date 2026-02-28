@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "bot:lab": "node scripts/lab-telegram-bot.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
