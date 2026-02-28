@@ -269,6 +269,14 @@ export const InternationalPartnershipSlugPage = memo(function InternationalPartn
         </div>
       </section>
 
+      <Image
+        src="/images/bg.avif"
+        alt="Background image"
+        width={1920}
+        height={663}
+        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-auto w-full object-cover object-center opacity-35"
+      />
+
       <style jsx global>{`
         .international-article-body {
           font-size: 16px;

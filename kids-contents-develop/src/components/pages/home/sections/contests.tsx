@@ -76,7 +76,7 @@ export const HomeSectionsContests = memo(function HomeSectionsContests() {
         <HomeSectionShell className="border-[#cfd5c6] bg-[#fcfcfa] p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(72,84,56,0.2)]">
           <div className="grid items-start gap-8 lg:min-h-[520px] lg:grid-cols-[1.05fr_.95fr] lg:items-stretch lg:gap-12 xl:min-h-[600px] xl:gap-16">
             <div className="order-2 flex h-full flex-col lg:order-1">
-              <div className="mb-5 text-center text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:text-4xl">
+              <div className="mb-5 text-center text-2xl font-semibold tracking-tight text-[#55614a] sm:text-3xl lg:text-4xl">
                 Ijodiy tanlovlar
               </div>
               <p className="max-w-2xl text-sm leading-6 text-slate-600 sm:text-base sm:leading-7 lg:text-[15px] lg:leading-7 xl:text-[17px] xl:leading-8">
