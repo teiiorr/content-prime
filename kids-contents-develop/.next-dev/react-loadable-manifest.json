@@ -1,0 +1,103 @@
+{
+  "../node_modules/@supabase/auth-js/dist/module/lib/helpers.js -> @supabase/node-fetch": {
+    "id": "../node_modules/@supabase/auth-js/dist/module/lib/helpers.js -> @supabase/node-fetch",
+    "files": []
+  },
+  "../node_modules/@supabase/functions-js/dist/module/helper.js -> @supabase/node-fetch": {
+    "id": "../node_modules/@supabase/functions-js/dist/module/helper.js -> @supabase/node-fetch",
+    "files": []
+  },
+  "../node_modules/@supabase/realtime-js/dist/module/RealtimeClient.js -> @supabase/node-fetch": {
+    "id": "../node_modules/@supabase/realtime-js/dist/module/RealtimeClient.js -> @supabase/node-fetch",
+    "files": []
+  },
+  "../node_modules/@supabase/storage-js/dist/module/lib/helpers.js -> @supabase/node-fetch": {
+    "id": "../node_modules/@supabase/storage-js/dist/module/lib/helpers.js -> @supabase/node-fetch",
+    "files": []
+  },
+  "../node_modules/@supabase/storage-js/dist/module/lib/vectors/helpers.js -> @supabase/node-fetch": {
+    "id": "../node_modules/@supabase/storage-js/dist/module/lib/vectors/helpers.js -> @supabase/node-fetch",
+    "files": []
+  },
+  "components/pages/about/index.tsx -> ./sections/functions": {
+    "id": "components/pages/about/index.tsx -> ./sections/functions",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_pages_about_sections_functions_tsx.js"
+    ]
+  },
+  "components/pages/about/index.tsx -> ./sections/international-parnership": {
+    "id": "components/pages/about/index.tsx -> ./sections/international-parnership",
+    "files": [
+      "static/css/_app-pages-browser_src_components_pages_about_sections_international-parnership_tsx.css",
+      "static/chunks/_app-pages-browser_src_components_pages_about_sections_international-parnership_tsx.js"
+    ]
+  },
+  "components/pages/about/index.tsx -> ./sections/team": {
+    "id": "components/pages/about/index.tsx -> ./sections/team",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_pages_about_sections_team_tsx.js"
+    ]
+  },
+  "components/pages/home/index.tsx -> ./sections/about": {
+    "id": "components/pages/home/index.tsx -> ./sections/about",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_pages_home_sections_about_tsx.js"
+    ]
+  },
+  "components/pages/home/index.tsx -> ./sections/announcements": {
+    "id": "components/pages/home/index.tsx -> ./sections/announcements",
+    "files": [
+      "static/css/_app-pages-browser_src_components_pages_home_sections_announcements_tsx.css",
+      "static/chunks/_app-pages-browser_src_components_pages_home_sections_announcements_tsx.js"
+    ]
+  },
+  "components/pages/home/index.tsx -> ./sections/contact": {
+    "id": "components/pages/home/index.tsx -> ./sections/contact",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_pages_home_sections_contact_tsx.js"
+    ]
+  },
+  "components/pages/home/index.tsx -> ./sections/contests": {
+    "id": "components/pages/home/index.tsx -> ./sections/contests",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_pages_home_sections_contests_tsx.js"
+    ]
+  },
+  "components/pages/home/index.tsx -> ./sections/lab": {
+    "id": "components/pages/home/index.tsx -> ./sections/lab",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_pages_home_sections_lab_tsx.js"
+    ]
+  },
+  "components/pages/home/index.tsx -> ./sections/news-new": {
+    "id": "components/pages/home/index.tsx -> ./sections/news-new",
+    "files": [
+      "static/css/_app-pages-browser_src_components_pages_home_sections_news-new_tsx.css",
+      "static/chunks/_app-pages-browser_src_components_pages_home_sections_news-new_tsx.js"
+    ]
+  },
+  "components/pages/home/index.tsx -> ./sections/partners": {
+    "id": "components/pages/home/index.tsx -> ./sections/partners",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_pages_home_sections_partners_tsx.js"
+    ]
+  },
+  "components/pages/news/index.tsx -> ./sections/gallery": {
+    "id": "components/pages/news/index.tsx -> ./sections/gallery",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_pages_news_sections_gallery_tsx.js"
+    ]
+  },
+  "components/pages/news/index.tsx -> ./sections/videoteka": {
+    "id": "components/pages/news/index.tsx -> ./sections/videoteka",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_pages_news_sections_videoteka_tsx.js"
+    ]
+  },
+  "providers/ScrollProvider.tsx -> lenis": {
+    "id": "providers/ScrollProvider.tsx -> lenis",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_lenis_dist_lenis_mjs.js"
+    ]
+  }
+}
