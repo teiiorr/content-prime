@@ -163,11 +163,11 @@ function FileField({
             </div>
           </div>
 
-          <div className="mt-4 flex items-end justify-end gap-3 border-t border-slate-200 pt-3">
-            <span className="max-w-[48%] truncate text-right text-sm text-slate-950">
+          <div className="mt-4 flex flex-col gap-2 border-t border-slate-200 pt-3 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
+            <span className="max-w-full truncate text-left text-sm text-slate-950 sm:max-w-[48%] sm:text-right">
               {file ? file.name : ""}
             </span>
-            <span className="inline-flex items-center gap-1.5 text-right text-sm font-medium text-slate-950">
+            <span className="inline-flex items-center gap-1.5 text-left text-sm font-medium text-slate-950 sm:text-right">
               {file ? <CheckCircle2 size={15} className="text-green-600" /> : <CircleX size={15} className="text-red-500" />}
               {file ? "Fayl tanlandi" : "Fayl tanlanmagan"}
             </span>
@@ -312,21 +312,21 @@ export const HomeSectionsLab = memo(function HomeSectionsLab() {
 
   return (
     <section id="yusuf-roziqov-laboratoriyasi" className="bg-gradient-to-b from-[#eef5e8] to-transparent">
-      <Container className="max-w-[1508px] py-8 md:py-12 lg:py-16 2xl:max-w-[88%]">
-        <div className="mx-auto mb-6 max-w-5xl text-center sm:mb-8">
+      <Container className="max-w-[1508px] px-2 py-6 sm:px-6 md:py-12 lg:py-16 2xl:max-w-[88%]">
+        <div className="mx-auto mb-6 max-w-5xl px-1 text-center sm:mb-8">
           <h2 className="text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl lg:text-4xl">
             Yusuf Roziqov ssenariy yozish laboratoriyasi
           </h2>
         </div>
 
-        <HomeSectionShell className="overflow-hidden border-[#d4e0ce] bg-[linear-gradient(135deg,#f9fdf6_0%,#f2f7ef_100%)] p-0 shadow-[0_30px_80px_-50px_rgba(67,89,55,0.3)]">
-          <div className="p-6 sm:p-8 xl:px-10 xl:py-8">
+        <HomeSectionShell className="overflow-hidden rounded-[20px] border-0 bg-[linear-gradient(135deg,#f9fdf6_0%,#f2f7ef_100%)] p-0 shadow-none sm:rounded-[24px] sm:border sm:border-[#d4e0ce] sm:shadow-[0_30px_80px_-50px_rgba(67,89,55,0.3)]">
+          <div className="p-2 sm:p-8 xl:px-10 xl:py-8">
             {status === "success" ? (
-              <div className="flex min-h-[520px] flex-col items-center justify-center rounded-[28px] border border-[#dce8d5] bg-white/85 px-6 py-10 text-center">
+              <div className="flex min-h-[520px] flex-col items-center justify-center rounded-[18px] bg-white/90 px-4 py-7 text-center sm:rounded-3xl sm:border sm:border-[#dce8d5] sm:px-6 sm:py-10">
                 <div className="inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-[#edf7ea] text-[#3d6b36]">
                   <CheckCircle2 size={30} />
                 </div>
-                <h3 className="mt-5 text-3xl font-semibold text-slate-950">
+                <h3 className="mt-5 text-2xl font-semibold text-slate-950 sm:text-3xl">
                   Rahmat! Sizning arizangiz qabul qilindi.
                 </h3>
                 <p className="mt-3 max-w-xl text-base leading-8 text-slate-600 sm:text-lg">
@@ -350,8 +350,8 @@ export const HomeSectionsLab = memo(function HomeSectionsLab() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="grid items-stretch gap-6 lg:grid-cols-[1fr_1fr]">
-                <div className="flex h-full flex-col rounded-[28px] border border-[#dde6d8] bg-white/82 p-5 sm:p-6 xl:p-7">
-                  <p className="mx-auto max-w-[34rem] text-center text-base leading-8 text-slate-700 sm:text-lg">
+                <div className="flex h-full flex-col rounded-[18px] bg-white/92 p-3 sm:rounded-3xl sm:border sm:border-[#dde6d8] sm:p-6 xl:p-7">
+                  <p className="mx-auto max-w-[34rem] text-center text-sm leading-7 text-slate-700 sm:text-lg sm:leading-8">
                     Assalomu alaykum!
                     <br />
                     <strong>Bolalar kontentini rivojlantirish markazi</strong> hamda
@@ -391,15 +391,15 @@ export const HomeSectionsLab = memo(function HomeSectionsLab() {
                       <Input name="occupation" value={form.occupation} onChange={handleChange} placeholder="Faoliyatingiz" className="py-4 text-base placeholder:text-slate-700 sm:text-lg sm:col-span-2" />
                     </div>
 
-                    <div className="rounded-3xl border border-[#d8e2d2] bg-[#f6faf3] p-4 sm:p-6">
-                      <div className="text-center text-base font-semibold leading-7 text-slate-950 sm:text-lg">
+                    <div className="rounded-[18px] bg-[#f6faf3] p-3 sm:rounded-3xl sm:border sm:border-[#d8e2d2] sm:p-6">
+                      <div className="text-left text-base font-semibold leading-7 text-slate-950 sm:text-center sm:text-lg">
                         Ilgari ssenariy yozish bo&apos;yicha tajribangiz bo&apos;lganmi?
                       </div>
-                      <div className="mt-4 flex flex-nowrap justify-center gap-3">
+                      <div className="mt-4 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap sm:justify-center">
                         <button
                           type="button"
                           onClick={() => setForm((current) => ({ ...current, hasExperience: "yes" }))}
-                          className={`min-w-[110px] rounded-full border px-5 py-3 text-base font-semibold transition ${
+                          className={`w-full rounded-2xl border px-5 py-3 text-base font-semibold transition sm:min-w-[110px] sm:w-auto sm:rounded-full ${
                             form.hasExperience === "yes"
                               ? "border-[#1f8f4c] bg-[#1f8f4c] text-white"
                               : "border-[#b9dec7] bg-white text-[#1f8f4c]"
@@ -417,7 +417,7 @@ export const HomeSectionsLab = memo(function HomeSectionsLab() {
                               publishedWorksUrl: "",
                             }))
                           }
-                          className={`min-w-[110px] rounded-full border px-5 py-3 text-base font-semibold transition ${
+                          className={`w-full rounded-2xl border px-5 py-3 text-base font-semibold transition sm:min-w-[110px] sm:w-auto sm:rounded-full ${
                             form.hasExperience === "no"
                               ? "border-[#d84a4a] bg-[#d84a4a] text-white"
                               : "border-[#efc2c2] bg-white text-[#c43d3d]"
@@ -460,26 +460,15 @@ export const HomeSectionsLab = memo(function HomeSectionsLab() {
 
                   <div className="mt-4">
                     {status === "error" && errorMessage ? (
-                      <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-base text-red-700">
+                      <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700 sm:text-base">
                         {errorMessage}
                       </div>
                     ) : null}
                   </div>
 
-                  <Button
-                    htmlType="submit"
-                    theme="primary"
-                    block
-                    disabled={!isValid || status === "submitting"}
-                    loading={status === "submitting"}
-                    className="mt-4 min-h-[58px] border-[#1d6fd6] bg-gradient-to-b from-[#2a8cff] to-[#0d6efd] text-lg text-white shadow-[0_18px_34px_-18px_rgba(13,110,253,0.75)] hover:from-[#4b9cff] hover:to-[#1d7bf2]"
-                  >
-                    <Send size={18} />
-                    Arizani yuborish
-                  </Button>
                 </div>
 
-                <div className="flex h-full flex-col rounded-[28px] border border-[#d8e2d2] bg-white/80 p-4 sm:p-6 xl:p-7">
+                <div className="flex h-full flex-col rounded-[18px] bg-white/92 p-3 sm:rounded-3xl sm:border sm:border-[#d8e2d2] sm:p-6 xl:p-7">
                   <div className="text-base font-semibold text-slate-950 sm:text-lg">Ijodiy ishlar</div>
                   <p className="mt-2 text-base leading-7 text-slate-600">
                     Har bir topshiriqni alohida fayl sifatida yuklang.
@@ -491,6 +480,20 @@ export const HomeSectionsLab = memo(function HomeSectionsLab() {
                     <FileField id="assignment3" file={form.assignment3} onChange={handleFileChange} title="3-topshiriq" hint="“Shum bola” filmiga yozilgan taqriz. (1 bet)" />
                     <FileField id="assignment4" file={form.assignment4} onChange={handleFileChange} title="4-topshiriq" hint="“Sen yetim emassan” filmiga taqriz. (1 bet)" />
                   </div>
+                </div>
+
+                <div className="lg:col-span-2">
+                  <Button
+                    htmlType="submit"
+                    theme="primary"
+                    block
+                    disabled={!isValid || status === "submitting"}
+                    loading={status === "submitting"}
+                    className="min-h-[58px] border-[#1d6fd6] bg-gradient-to-b from-[#2a8cff] to-[#0d6efd] text-lg text-white shadow-[0_18px_34px_-18px_rgba(13,110,253,0.75)] hover:from-[#4b9cff] hover:to-[#1d7bf2]"
+                  >
+                    <Send size={18} />
+                    Arizani yuborish
+                  </Button>
                 </div>
               </form>
             )}
