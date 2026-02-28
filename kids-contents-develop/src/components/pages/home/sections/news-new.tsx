@@ -37,7 +37,7 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
     async function loadNews() {
       try {
         setHasError(false);
-        const data = await fetchNewsLimited(4);
+        const data = await fetchNewsLimited(6);
         if (mounted) setNews(data);
       } catch (err) {
         console.error("Error loading news:", err);
@@ -68,7 +68,7 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
         <HomeSectionShell className="border-slate-300/70 bg-white/90 p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-46px_rgba(15,23,42,0.28)]">
           <HomeSectionHeader>
             <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-              <div className="inline-flex items-center justify-center rounded-full border border-slate-300/80 bg-white px-5 py-2.5 text-lg font-bold tracking-[-0.02em] text-slate-900 shadow-[0_10px_24px_-18px_rgba(15,23,42,0.25)] sm:px-6 sm:text-xl lg:px-7 lg:py-3 lg:text-2xl">
+              <div className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
                 Yangiliklar
               </div>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">
@@ -103,7 +103,7 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
               <>
                 <Swiper
                   spaceBetween={16}
-                  slidesPerView={1.08}
+                  slidesPerView={1.02}
                   speed={700}
                   loop={news.length > 1}
                   pagination={{
@@ -123,7 +123,8 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
                   }
                   modules={[Autoplay, Pagination]}
                   breakpoints={{
-                    640: { slidesPerView: 1.25, spaceBetween: 18 },
+                    480: { slidesPerView: 1.08, spaceBetween: 16 },
+                    640: { slidesPerView: 1.18, spaceBetween: 18 },
                     768: { slidesPerView: 2, spaceBetween: 20 },
                     1100: { slidesPerView: 3, spaceBetween: 22 },
                     1400: { slidesPerView: 4, spaceBetween: 24 },
@@ -140,7 +141,7 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
                           aria-label={`${item.title} - ${item.date_display}`}
                         >
                           <Card className="h-full overflow-hidden rounded-2xl border-slate-200/90 bg-white p-0 transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_-24px_rgba(15,23,42,0.28)] group-focus-visible:ring-2 group-focus-visible:ring-slate-400/60 group-focus-visible:ring-offset-2 xl:rounded-3xl">
-                            <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                            <div className="relative aspect-[16/11] overflow-hidden bg-slate-100">
                               <Image
                                 src={item.image_src}
                                 alt={item.title}
@@ -151,11 +152,11 @@ export const HomeSectionsNews = memo(function HomeSectionsNews() {
                               />
                             </div>
 
-                            <div className="flex h-[84px] flex-col p-3 sm:h-[94px] sm:p-3.5 xl:h-[106px] xl:p-4">
-                              <h3 className="line-clamp-2 text-[14px] font-semibold tracking-[-0.01em] leading-5 text-slate-900 transition-colors group-hover:text-slate-700 sm:text-[15px] sm:leading-5 xl:text-base xl:leading-6">
+                            <div className="flex h-[102px] flex-col p-4 sm:h-[94px] sm:p-3.5 xl:h-[106px] xl:p-4">
+                              <h3 className="line-clamp-2 text-[16px] font-semibold tracking-[-0.01em] leading-6 text-slate-900 transition-colors group-hover:text-slate-700 sm:text-[15px] sm:leading-5 xl:text-base xl:leading-6">
                                 {item.title}
                               </h3>
-                              <time className="mt-auto truncate whitespace-nowrap pt-1.5 text-xs leading-none font-medium text-slate-500 sm:pt-2 sm:text-sm">
+                              <time className="mt-auto truncate whitespace-nowrap pt-2 text-[13px] leading-none font-medium text-slate-500 sm:pt-2 sm:text-sm">
                                 {item.date_display}
                               </time>
                             </div>

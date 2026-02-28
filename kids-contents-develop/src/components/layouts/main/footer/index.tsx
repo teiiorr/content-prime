@@ -113,12 +113,9 @@ export function MainFooter() {
 
               <div className="flex items-center gap-2 text-sm leading-none text-slate-600">
                 <span className="leading-none">Designed & Developed by</span>
-                <span className="inline-flex items-baseline gap-1 leading-none tracking-[-0.02em]">
-                  <span className="text-[18px] font-extrabold leading-none text-slate-900 sm:text-[19px]">
-                    teiior
-                  </span>
-                  <span className="text-[14px] font-medium leading-none text-slate-500 sm:text-[15px]">
-                    dev
+                <span className="inline-flex items-baseline leading-none tracking-[-0.02em]">
+                  <span className="text-[15px] font-normal leading-none text-slate-900 sm:text-[16px]">
+                    teiiordev
                   </span>
                 </span>
               </div>

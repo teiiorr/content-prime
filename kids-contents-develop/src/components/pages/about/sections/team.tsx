@@ -53,7 +53,7 @@ export const AboutSectionsTeam = memo(function AboutSectionsTeam() {
       <div className="container max-w-[1508px] 2xl:max-w-[88%]">
         <HomeSectionShell className="border-[#cfd8cf] bg-[#fbfcfa] p-5 sm:p-6 lg:p-8 xl:p-10 shadow-[0_28px_70px_-48px_rgba(55,78,49,0.16)]">
           <div className="mb-6 flex justify-center md:mb-8">
-            <div className="inline-flex items-center rounded-full border border-slate-300/80 bg-white px-5 py-2.5 text-base font-bold tracking-[-0.01em] text-slate-900 shadow-sm sm:px-6 sm:py-3 sm:text-lg md:px-7 md:py-3.5 md:text-xl">
+            <div className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
               Rahbariyat
             </div>
           </div>

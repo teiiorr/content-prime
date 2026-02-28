@@ -18,7 +18,7 @@ export function MainNavbar() {
 
   return (
     <nav
-      className="bg-background"
+      className="bg-[#000014]"
       role="navigation"
       aria-label="Main navigation"
     >

@@ -5,14 +5,14 @@ import { memo, useMemo } from "react";
 
 export const VideotekaPage = memo(function NewsPage() {
   const allVideos = useMemo(() => {
-    return Array.from({ length: 15 }, (_, index) => ({
-      id: index + 1,
-      image: `/images/videoteka/${(index % 3) + 1}.avif`,
-      image2x: `/images/videoteka/${(index % 3) + 1}@2x.avif`,
-      title: `Bolalar kontentini`,
-      description: `Videoning tavsifi ${index + 1}`,
-      length: `${(index % 3) + 1}:0${(index % 2) + 1}`,
-    }));
+    return [
+      { id: 1, videoSrc: "/videos/amir-temur.mp4", title: "Amir Temur", description: "Videoning tavsifi 1" },
+      { id: 2, videoSrc: "/videos/bobur.mp4", title: "Zahiriddin Muhammad Bobur", description: "Videoning tavsifi 2" },
+      { id: 3, videoSrc: "/videos/bolakay.mp4", title: "Bolakay", description: "Videoning tavsifi 3" },
+      { id: 4, videoSrc: "/videos/bolalar-uchun-ijodiy-tanlov.mp4", title: "Bolalar uchun ijodiy tanlov", description: "Videoning tavsifi 4" },
+      { id: 5, videoSrc: "/videos/ibn-sino.mp4", title: "Ibn Sino", description: "Videoning tavsifi 5" },
+      { id: 6, videoSrc: "/videos/polapon.mp4", title: "Polapon", description: "Videoning tavsifi 6" },
+    ];
   }, []);
 
   return (
