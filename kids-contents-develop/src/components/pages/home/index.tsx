@@ -20,6 +20,12 @@ const HomeSectionsAnnouncements = lazy(() =>
   }))
 );
 
+const HomeSectionsLab = lazy(() =>
+  import("./sections/lab").then((module) => ({
+    default: module.HomeSectionsLab,
+  }))
+);
+
 // const HomeSectionsHaveAnIdea = lazy(() =>
 //   import("./sections/have-an-idea").then((module) => ({
 //     default: module.HomeSectionsHaveAnIdea,
@@ -73,11 +79,17 @@ export const HomePage = memo(function HomePage() {
         </Suspense>
       </ParallaxSection>
 
+      <ParallaxSection tone="emerald" intensity={1.08} accentSide="right">
+        <Suspense fallback={<SectionLoader />}>
+          <HomeSectionsLab />
+        </Suspense>
+      </ParallaxSection>
+
       {/* <Suspense fallback={<SectionLoader />}>
         <HomeSectionsHaveAnIdea />
       </Suspense> */}
 
-      <ParallaxSection tone="emerald" intensity={1.2} accentSide="right">
+      <ParallaxSection tone="emerald" intensity={1.2} accentSide="left">
         <Suspense fallback={<SectionLoader />}>
           <HomeSectionsContests />
         </Suspense>
