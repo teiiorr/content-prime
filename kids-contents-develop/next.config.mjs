@@ -7,7 +7,7 @@ export default function nextConfig(phase) {
   return {
     compress: true,
     output: "standalone",
-    distDir: isDev ? ".next-dev" : ".next-build",
+    distDir: isDev ? ".next-dev" : ".next",
     images: {
       remotePatterns: [
         {
